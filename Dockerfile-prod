@@ -21,10 +21,10 @@ FROM nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # 빌드된 앱 파일 복사
-COPY --from=build /app /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # 외부로 노출할 포트 설정
 EXPOSE 5173
 
 # Nginx 실행
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
