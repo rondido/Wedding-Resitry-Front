@@ -1,34 +1,23 @@
 import React from 'react'
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+import { Routes, Route } from "react-router-dom";
+// 페이지 불러오기
+import Layout from './pages/Layout'
+import Home from './pages/Home'
+import Admin from './pages/Admin'
+import NotFound from './pages/NotFound'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div className="App">
-      <div>
-        test feature
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        {/* url경로 별 랜더링 페이지 */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </div>
   )
 }
