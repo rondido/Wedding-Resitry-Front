@@ -1,5 +1,4 @@
 import React from 'react'
-import './App.css'
 import { Routes, Route } from "react-router-dom";
 // 페이지 불러오기
 import Layout from './pages/Layout'
