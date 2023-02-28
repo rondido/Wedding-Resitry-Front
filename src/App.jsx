@@ -4,7 +4,9 @@ import { Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout'
 import Home from './pages/Home'
 import Admin from './pages/Admin'
-import NotFound from './pages/NotFound'
+// 절대경로 설정 예시 // @사용
+import NotFound from '@/pages/NotFound'
+// import NotFound from './pages/NotFound'
 
 // 관리자 페이지 
 import AdminAlarmLists from './pages/AdminAlarmLists';
