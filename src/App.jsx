@@ -5,12 +5,19 @@ import Layout from './pages/Layout'
 import Home from './pages/Home'
 import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
+
 // 관리자 페이지 
 import AdminAlarmLists from './pages/AdminAlarmLists';
 import AdminAttendanceLists from './pages/AdminAttendanceLists';
 import AdminDonationLists from './pages/AdminDonationLists';
 import AdminMemo from './pages/AdminMemo';
 import AdminMain from './pages/AdminMain';
+
+// 상품 갤러리
+import GalleryWedding from './pages/GalleryWedding';
+import GallerySupport from './pages/GallerySupport';
+import GoodsSupport from './pages/GoodsSupport';
+import GoodsProduct from './pages/GoodsProduct';
 
 function App() {
   return (
@@ -28,6 +35,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route> 
           <Route path="*" element={<NotFound />} />
+          <Route path="/GalleryWedding" element={<GalleryWedding />} />
+          <Route path="/GallerySupport" element={<GallerySupport />} />
+          <Route path="/GoodsSupport" element={<GoodsSupport />} />
+          <Route path="/GoodsProduct" element={<GoodsProduct />} />
         </Route>
       </Routes>
     </div>
