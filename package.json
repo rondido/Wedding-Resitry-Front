@@ -15,7 +15,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
     "react-sortablejs": "^6.1.4",
-    "sortablejs": "^1.15.0"
+    "sortablejs": "^1.15.0",
+    "styled-components": "^5.3.8"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
