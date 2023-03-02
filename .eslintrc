@@ -13,6 +13,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended"
+  
   ],
   // eslint 규칙 추가
   "rules": { "react/prop-types": "off"  }
