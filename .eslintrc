@@ -15,5 +15,5 @@
     "plugin:react/recommended"
   ],
   // eslint 규칙 추가
-  "rules": {   }
+  "rules": { "react/prop-types": "off"  }
 }
