@@ -24,6 +24,9 @@ function Layout() {
         <li>
           <Link to="/GallerySupport">갤러리 후원 페이지</Link>
         </li>
+        <li>
+          <Link to="/Box">box</Link>
+        </li>
       </ul>
     </nav>
 

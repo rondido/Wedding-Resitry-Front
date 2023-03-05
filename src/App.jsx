@@ -25,6 +25,10 @@ import GallerySupport from './pages/GallerySupport';
 import GoodsSupport from './pages/GoodsSupport';
 import GoodsProduct from './pages/GoodsProduct';
 
+//상품 박스 Test
+import Box from '@/pages/components/box/Box'
+
+
 function App() {
   return (
     <div className="App">
@@ -46,7 +50,9 @@ function App() {
           <Route path="/GallerySupport" element={<GallerySupport />} />
           <Route path="/GoodsSupport" element={<GoodsSupport />} />
           <Route path="/GoodsProduct" element={<GoodsProduct />} />
+          <Route path="/Box" element={<Box />} />
         </Route>
+
       </Routes>
     </div>
   )
