@@ -1,7 +1,58 @@
 import React, {useState} from 'react'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+import styled from 'styled-components'
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 import AdminLists from '../components/AdminLists'
-// 결혼식 참석 여부 리스트 페이지
+
+
+const StyledSection = styled.section`
+margin: auto;
+width: 1285px;
+display: flex;
+flex-direction: column;
+align-items: space-around;
+padding: 20px;
+margin-top: 40px;
+margin-bottom: 80px;
+
+h3 {
+  color: #4B4B4B;
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+div.item {
+  display: flex;
+  align-items: center;
+  margin: 0 250px;
+}
+.right {
+  margin-left: auto;
+}
+
+span {
+  border-left: 1px solid #000;
+  height: fit-content;
+  padding: 8px 15px;
+  margin-left: 60px;
+  h4{
+    padding: 5px 0 2px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  p {
+    font-size: 14px;
+    margin: 7px 0 10px;
+  }
+}
+`
+
+// 결혼식 참석여부 리스트 페이지
 function AdminAttendanceLists() {
 
   const [attendance, setAttendance] = useState([
@@ -21,18 +72,56 @@ function AdminAttendanceLists() {
     { id: 8, name: "최우림" },
   ]);
 
+
+  const attendanceData = {
+    labels: ['참석', '불참석', '미정'],
+    datasets: [
+      {
+        data: [12, 2, 3],
+        backgroundColor: [
+          '#1552af',
+          '#6c97dc',
+          '#cfcfcf'
+        ],
+        borderWidth: 0,
+      },
+    ],
+  };
+  
+  const options = {
+    responsive: false,
+    layout: {
+      padding: 20
+    },
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  }
+
+
   return (
     <div>
+<StyledSection>
+        <div className='item'>
+          <div>
+            <h3>결혼식 참석 여부</h3>
+            <Doughnut options={options} data={attendanceData}  width="300px" height="300px" />
+          </div>
+          <span>
+            <h4>참석</h4>
+            <p>%, 명</p>
+            <h4>불참석</h4>
+            <p>%, 명</p>
+            <h4>미정</h4>
+            <p>%, 명</p>
+          </span>
+        </div>
+      </StyledSection>
 
-        <h3>결혼식 참석 여부</h3>
-        <p>차트 그래프</p>
-{/*     <p>결혼식 참석</p>
-        <p>%, 명</p>
-        <p>결혼식 불참석</p>
-        <p>%, 명</p> */}
-
-      <h3>참석자</h3>
       <AdminLists attendance={attendance} setAttendance={setAttendance} absence={absence} setAbsence={setAbsence} undecided={undecided} setUndecided={setUndecided} />
+
   </div>
   )
 }
