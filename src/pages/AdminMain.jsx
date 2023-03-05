@@ -51,8 +51,7 @@ span {
   }
 }
 `
-
-// 이후 실 data 받아 적용할 것
+// FIXME 이후 실 data 받아 적용
 const attendanceData = {
   labels: ['참석', '불참석', '미정'],
   datasets: [

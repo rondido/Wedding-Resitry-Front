@@ -2,11 +2,9 @@ import React, {useState} from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import styled from 'styled-components'
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
 import AdminLists from '../components/AdminLists'
 
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const StyledSection = styled.section`
 margin: auto;
@@ -54,7 +52,8 @@ span {
 
 // 결혼식 참석여부 리스트 페이지
 function AdminAttendanceLists() {
-
+  
+  // FIXME 이후 실 data 받아 적용
   const [attendance, setAttendance] = useState([
     { id: 1, name: "김미경" },
     { id: 2, name: "조수민" },
