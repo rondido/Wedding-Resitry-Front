@@ -1,5 +1,8 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
+//import background from '@/assets/icons/backgroundimage.png'
+
+
 // 페이지 불러오기
 import Layout from './pages/Layout'
 import Home from './pages/Home'
@@ -22,12 +25,13 @@ import GoodsSupport from './pages/GoodsSupport';
 import GoodsProduct from './pages/GoodsProduct';
 
 //상품 박스 Test
-import Box from '@/pages/components/box/Box'
+import Box from '@/components/box/Box'
+
 
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" >
       <Routes>
         {/* url경로 별 랜더링 페이지 */}
         <Route path="/" element={<Layout />}>
@@ -45,6 +49,7 @@ function App() {
           <Route path="/GallerySupport" element={<GallerySupport />} />
           <Route path="/GoodsSupport" element={<GoodsSupport />} />
           <Route path="/GoodsProduct" element={<GoodsProduct />} />
+
         </Route>
         <Route path="/Box" element={<Box />} />
 
