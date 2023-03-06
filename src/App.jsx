@@ -1,8 +1,10 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
 
+
 // Reset CSS
 import { Reset } from 'styled-reset'
+
 
 // 페이지 불러오기
 import Layout from './pages/Layout'
@@ -26,7 +28,8 @@ import GoodsSupport from './pages/GoodsSupport';
 import GoodsProduct from './pages/GoodsProduct';
 
 //상품 박스 Test
-import Box from '@/pages/components/box/Box'
+import Box from '@/components/box/Box'
+
 
 
 function App() {
@@ -52,7 +55,6 @@ function App() {
           <Route path="/GoodsProduct" element={<GoodsProduct />} />
           <Route path="/Box" element={<Box />} />
         </Route>
-
       </Routes>
     </div>
   )
