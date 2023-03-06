@@ -1,6 +1,9 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
-//import background from '@/assets/icons/backgroundimage.png'
+
+
+// Reset CSS
+import { Reset } from 'styled-reset'
 
 
 // 페이지 불러오기
@@ -31,7 +34,8 @@ import Box from '@/components/box/Box'
 
 function App() {
   return (
-    <div className="App" >
+    <div className="App">
+      <Reset />
       <Routes>
         {/* url경로 별 랜더링 페이지 */}
         <Route path="/" element={<Layout />}>
@@ -49,10 +53,8 @@ function App() {
           <Route path="/GallerySupport" element={<GallerySupport />} />
           <Route path="/GoodsSupport" element={<GoodsSupport />} />
           <Route path="/GoodsProduct" element={<GoodsProduct />} />
-
+          <Route path="/Box" element={<Box />} />
         </Route>
-        <Route path="/Box" element={<Box />} />
-
       </Routes>
     </div>
   )
