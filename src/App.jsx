@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
-
+import background from '@/assets/icons/backgroundimage.png';
 
 // Reset CSS
 import { Reset } from 'styled-reset'
@@ -34,7 +34,7 @@ import Box from '@/components/box/Box'
 
 function App() {
   return (
-    <div className="App">
+    <div style={{backgroundImage:`url(${background})`,backgroundSize:"cover",backgroundAttachment:"fixed"}}>
       <Reset />
       <Routes>
         {/* url경로 별 랜더링 페이지 */}

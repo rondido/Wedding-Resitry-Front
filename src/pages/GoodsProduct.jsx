@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import Share from '@/assets/icons/share.png';
 import ShareBox from '@/components/ShareBox';
 import styled from 'styled-components';
-//import background from '@/assets/icons/backgroundimage.png'
 
 const GoodsText = styled.input`
   border:0;
