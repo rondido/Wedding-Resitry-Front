@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import styled from 'styled-components'
 import AdminLists from '../components/AdminLists'
+import * as XLSX from 'xlsx';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -99,6 +100,14 @@ function AdminAttendanceLists() {
     }
   }
 
+  // FIXME 받아온 데이터를 다운받도록 변경 필요
+  const worksheet = XLSX.utils.json_to_sheet(attendance);
+  const workbook = XLSX.utils.book_new();
+
+  const onDownToExcel = ()=>{
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+    XLSX.writeFile(workbook, "test.xlsx", { compression: true });
+  }
 
   return (
     <div>
@@ -120,7 +129,7 @@ function AdminAttendanceLists() {
       </StyledSection>
 
       <AdminLists attendance={attendance} setAttendance={setAttendance} absence={absence} setAbsence={setAbsence} undecided={undecided} setUndecided={setUndecided} />
-
+    <button onClick={onDownToExcel}>Excel파일로 저장하기</button>
   </div>
   )
 }
