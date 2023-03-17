@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Share from '@/assets/icons/share.png';
 import ShareBox from '@/components/ShareBox';
 import styled from 'styled-components';
+import Box from '@/components/box/Box';
 
 const GoodsText = styled.input`
   border:0;
@@ -128,7 +129,8 @@ export default function GoodsProduct() {
           <div>
               <GoodsWeddingText placeholder='신랑 이름'/><GoodsWeddingbank placeholder='은행'/><GoodsWeddingaccountnumber placeholder='계좌번호'/>
           </div>                   
-      </GoodsContainer>     
+      </GoodsContainer>    
+      <Box/> 
     </div>
   )
 }

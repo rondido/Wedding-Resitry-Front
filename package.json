@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/parser": "^7.21.3",
+    "babel-preset-react": "^6.24.1",
     "chart.js": "^4.2.1",
     "msw": "^1.1.0",
     "react": "^18.2.0",
@@ -25,6 +27,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.5.4",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",

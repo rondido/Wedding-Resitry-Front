@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import Plus from '@/assets/icons/plus.png';
 import styled from 'styled-components';
 
@@ -34,11 +34,18 @@ const Boxcontainer = styled.div`
 // 상품 등록 api를 통해 box 생성하기
 
 export default function Box() {
-    //상품등록 modal open
+    const [fetchdata,SetFetchData] = useState([]);
+ //상품등록 modal open
   const modalopen = () =>{
     alert("상품 등록 modal 띄울 예정");
   }
-  
+  useEffect(()=>{
+    fetch("/GoodsProduct/all")
+    .then((res) => res.json())
+    .then((data) => {
+        SetFetchData(data);
+    });
+  },[])
     return (
     <>
         <Boxcontainer>
@@ -51,6 +58,13 @@ export default function Box() {
                 </Plusimg>
             </Divbox>
         </Boxcontainer>
+        <div>
+        {
+            fetchdata.data && fetchdata.data.map((value,idx)=>{
+                return <p key={idx}>{value.usersGoodsId} </p>;
+            })
+        }
+        </div>
     </>
   )
 }
