@@ -17,9 +17,6 @@ const banners = [
   1,2,3,4,5,6
 ];
 
-console.log(banners.indexOf(2));
-
-
 export default function GalleryWedding() {  
   return (
     <>
@@ -33,8 +30,7 @@ export default function GalleryWedding() {
         centeredSlides={true}
         pagination={{
           clickable: true,
-          el:'.swiper-pagination'
-          
+          el:'.swiper-pagination'          
         }}        
         coverflowEffect={{
           rotate: 0,

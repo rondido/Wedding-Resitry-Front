@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React from 'react'
 import Plus from '@/assets/icons/plus.png';
 import styled from 'styled-components';
 
@@ -9,62 +9,49 @@ const Divbox = styled.div`
     border-radius: 150px;
     display: flex;
     justify-content: center;
+    overflow:hidden;
+    margin:0 auto;
 `; 
 
 const Plusimg = styled.div`
     margin: auto;
-    display: block;
 
 `;
 
-const Editdiv = styled.div`
-    margin-bottom: 20px;
-    width: 220px;
-    text-align: center;
-`;
+
 
 const Boxcontainer = styled.div`
+    display: flex;    
 `;
 
-// 상품 등록 후 넘어온 상품의 이름과  기타 등등 여기서 관리
-// 게이지바
-// 상품 명
-// 가격
-// 총 후원 현황
-// 상품 등록 api를 통해 box 생성하기
 
-export default function Box() {
-    const [fetchdata,SetFetchData] = useState([]);
+
+
+//이미지 props로 받아오기
+
+export default function Box({url}) {
  //상품등록 modal open
   const modalopen = () =>{
     alert("상품 등록 modal 띄울 예정");
   }
-  useEffect(()=>{
-    fetch("/GoodsProduct/all")
-    .then((res) => res.json())
-    .then((data) => {
-        SetFetchData(data);
-    });
-  },[])
+
+  
     return (
     <>
-        <Boxcontainer>
-            <Editdiv>
-                EDIT
-            </Editdiv>        
+        <Boxcontainer>            
+            {
+                url.length === 0 ? <p>Edit</p> : null         
+            }
+            
             <Divbox onClick={modalopen}>
-                <Plusimg>
-                    <img src={Plus} style={{width:"20px",height:"20px"}}/>
-                </Plusimg>
-            </Divbox>
+                <Plusimg>                    
+                    {
+                        url.length === 0 ?  <img src={Plus} style={{width:"20px",height:"20px"}}/> : <img src={url} style={{objectFit:"none",width:"100%",height:"100%"}}/>    
+                    }
+                </Plusimg>                
+            </Divbox>                    
         </Boxcontainer>
-        <div>
-        {
-            fetchdata.data && fetchdata.data.map((value,idx)=>{
-                return <p key={idx}>{value.usersGoodsId} </p>;
-            })
-        }
-        </div>
     </>
   )
 }
+

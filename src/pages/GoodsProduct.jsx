@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState} from 'react';
 //공유 이미지 가져오기
 import Share from '@/assets/icons/share.png';
 import ShareBox from '@/components/ShareBox';
@@ -11,17 +11,14 @@ const GoodsText = styled.input`
   outline: none;
   width: 100px;
   margin-bottom: 5px;
-  text-align: center;
-  
-  
+  text-align: center;  
+  background-color: #E0E0E0;
 `;
 
 const GoodsContainer = styled.div`
   display: flex;
-  //justify-content: space-between;
   flex-direction: column;
   align-items: center;
-
 `;
 
 const GoodsWeddingText = styled.input`
@@ -84,13 +81,40 @@ const GoodsShareLinkdiv = styled.div`
 const GoodsWeddingdiv = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-end;  
   width: 100%;  
 `;
+
+const BoxContainer = styled.div`
+  display: flex;
+  
+`
+
+const BoxItem = styled.div`
+  display: flex;
+  
+`
+
+const ItemDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
 
 
 export default function GoodsProduct() {
   const [sharebox,setSharebox] = useState(false);  
+  const [fetchdata,SetFetchData] = useState([]);
+
+  useEffect(()=>{
+    fetch("/GoodsProduct/all")
+    .then((res) => res.json())
+    .then((data) => {
+        SetFetchData(data);
+    });
+  },[])
+
   return (
     <div>
       <GoodsContainer> 
@@ -128,9 +152,25 @@ export default function GoodsProduct() {
              <br/>
           <div>
               <GoodsWeddingText placeholder='신랑 이름'/><GoodsWeddingbank placeholder='은행'/><GoodsWeddingaccountnumber placeholder='계좌번호'/>
-          </div>                   
-      </GoodsContainer>    
-      <Box/> 
+          </div> 
+          <div>
+            <BoxContainer>
+            {
+              fetchdata.data && fetchdata.data.map((value,idx)=>(                
+                <BoxItem key={idx}>
+                    <Box url={value.usersGoodsImgUrl}/>
+                    <ItemDiv>
+                      <p>{value.usersGoodsName}</p>
+                      <p>{value.usersGoodsPrice}</p>
+                      <p>{value.totalDonation}</p>
+                      <p>{value.usersGoodsPercent}</p>
+                    </ItemDiv>
+                </BoxItem>                
+              ))
+            }
+            </BoxContainer>
+          </div>
+      </GoodsContainer>         
     </div>
   )
 }
