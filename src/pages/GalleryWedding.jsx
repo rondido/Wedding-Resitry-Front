@@ -17,6 +17,8 @@ const banners = [
   1,2,3,4,5,6
 ];
 
+
+
 export default function GalleryWedding() {  
   return (
     <>
@@ -49,7 +51,7 @@ export default function GalleryWedding() {
       {
         banners.map((value,idx)=>(
           <SwiperSlide key={idx}>
-            <GalleryWeddingBox className="swiper-image" />
+            <GalleryWeddingBox className="swiper-image"/>
           </SwiperSlide>
         ))
       }

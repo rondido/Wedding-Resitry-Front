@@ -19,6 +19,7 @@ const GoodsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 935px;
 `;
 
 const GoodsWeddingText = styled.input`
@@ -87,26 +88,54 @@ const GoodsWeddingdiv = styled.div`
 
 const BoxContainer = styled.div`
   display: flex;
-  
+  height: 500px;
+  margin-top:20px;
+ 
 `
 
 const BoxItem = styled.div`
   display: flex;
-  
+  &:nth-child(odd){
+   margin-top: auto;
+  }      
 `
 
 const ItemDiv = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: flex;  
   justify-content: center;
+  align-items: center;
+  &:nth-child(odd){
+    background-color: blue;
+  }
+`;
+
+
+
+const StyledTrack = styled.div`
+  width: 5px;
+  height: 100px;  
+  background-color: #EBEBEB;
+  border-radius: 15px;  
+  transform: rotate(180deg);
+
+
+`;
+
+const StyledRange = styled.div`
+  display: flex;
+  width: 100%;
+  height: ${({ width }) => `${width}%`};
+  background: linear-gradient(to right, blue, blue); 
+`;
+
+const ValueItem = styled.div`
+  width: 100px;
+
 `
-
-
-
 export default function GoodsProduct() {
   const [sharebox,setSharebox] = useState(false);  
   const [fetchdata,SetFetchData] = useState([]);
-
+  
   useEffect(()=>{
     fetch("/GoodsProduct/all")
     .then((res) => res.json())
@@ -158,12 +187,22 @@ export default function GoodsProduct() {
             {
               fetchdata.data && fetchdata.data.map((value,idx)=>(                
                 <BoxItem key={idx}>
-                    <Box url={value.usersGoodsImgUrl}/>
+                    <Box url={value.usersGoodsImgUrl}/>                    
                     <ItemDiv>
-                      <p>{value.usersGoodsName}</p>
-                      <p>{value.usersGoodsPrice}</p>
-                      <p>{value.totalDonation}</p>
-                      <p>{value.usersGoodsPercent}</p>
+                      <StyledTrack>
+                        <StyledRange width={value.usersGoodsPercent} />                       
+                      </StyledTrack>
+                      <ValueItem>
+                          <div>
+                            <p>{value.usersGoodsName}</p>
+                          </div>
+                          <div>
+                            <p>{value.usersGoodsPrice}원</p>
+                          </div>
+                          <div>
+                            <p>{value.totalDonation}원 후원</p>
+                          </div>
+                      </ValueItem>
                     </ItemDiv>
                 </BoxItem>                
               ))
