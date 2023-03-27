@@ -1,0 +1,6 @@
+#root {
+  background-image: url(./src/assets/icons/backgroundimage.png);
+  background-size: "cover";
+  background-attachment: fixed;
+  font-family: Inter;
+}
