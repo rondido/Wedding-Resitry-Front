@@ -153,7 +153,7 @@ const BoxSlider = styled.div`
   overflow: hidden;
 `;
 
-export default function GoodsProduct() {
+export default function GoodsProductContainer() {
   const [sharebox, setSharebox] = useState(false);
   const [fetchdata, SetFetchData] = useState([]);
   const slideRef = useRef(null);
