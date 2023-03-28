@@ -20,17 +20,17 @@ import AdminMemo from "./pages/AdminMemo";
 import AdminMain from "./pages/AdminMain";
 
 // 상품 갤러리
-import GalleryWedding from "./pages/GalleryWedding";
-import GallerySupport from "./pages/GallerySupport";
-import GoodsSupport from "./pages/GoodsSupport";
-import GoodsProduct from "./pages/GoodsProduct";
+import GalleryWedding from "./pages/gallery/GalleryWedding";
+import GallerySupport from "./pages/gallery/GallerySupport";
+import GoodsSupport from "./pages/goods/GoodsSupport";
+import GoodsProduct from "./pages/goods/GoodsProduct";
 
 //상품 박스 Test
 import Box from "@/components/box/Box";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Reset />
       <Routes>
         {/* url경로 별 랜더링 페이지 */}
