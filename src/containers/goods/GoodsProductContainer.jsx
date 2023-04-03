@@ -20,7 +20,6 @@ const GoodsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
 `;
 
 const GoodsWeddingText = styled.input`
@@ -75,7 +74,8 @@ const GoodsSharelink = styled.span`
 const GoodsShareLinkdiv = styled.div`
   width: 100%;
   text-align: right;
-  height: 80px;
+  margin-right: 8%;
+  height: 6rem;
 `;
 
 const GoodsWeddingdiv = styled.div`
@@ -83,18 +83,18 @@ const GoodsWeddingdiv = styled.div`
   flex-direction: column;
   align-items: flex-end;
   width: 100%;
+  margin-right: 8%;
 `;
 
 const BoxWapper = styled.div`
   display: flex;
-  height: 500px;
+  height: 68%;
   margin-top: 20px;
   width: 100%;
 `;
 
 const BoxContainer = styled.div`
   display: flex;
-  height: 800px;
   margin-top: 20px;
   width: 100%;
 `;
@@ -150,7 +150,13 @@ const ValueItem = styled.div`
 
 const BoxSlider = styled.div`
   width: 100%;
+  height: 100%;
   overflow: hidden;
+  margin-bottom: 10%;
+`;
+
+const CenterTextdiv = styled.div`
+  margin-bottom: 1%;
 `;
 
 export default function GoodsProductContainer() {
@@ -235,21 +241,23 @@ export default function GoodsProductContainer() {
             }}
           />
         </GoodsWeddingdiv>
-        <div
-          style={{
-            marginTop: "30px",
-          }}
-        >
-          <GoodsWeddingText placeholder="신부 이름" />
-          <GoodsWeddingbank placeholder="은행" />
-          <GoodsWeddingaccountnumber placeholder="계좌번호" />
-        </div>
-        <br />
-        <div>
-          <GoodsWeddingText placeholder="신랑 이름" />
-          <GoodsWeddingbank placeholder="은행" />
-          <GoodsWeddingaccountnumber placeholder="계좌번호" />
-        </div>
+        <CenterTextdiv>
+          <div
+            style={{
+              marginTop: "30px",
+            }}
+          >
+            <GoodsWeddingText placeholder="신부 이름" />
+            <GoodsWeddingbank placeholder="은행" />
+            <GoodsWeddingaccountnumber placeholder="계좌번호" />
+          </div>
+          <br />
+          <div>
+            <GoodsWeddingText placeholder="신랑 이름" />
+            <GoodsWeddingbank placeholder="은행" />
+            <GoodsWeddingaccountnumber placeholder="계좌번호" />
+          </div>
+        </CenterTextdiv>
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>

@@ -5,12 +5,15 @@ import { Routes, Route } from "react-router-dom";
 import { Reset } from "styled-reset";
 
 // 페이지 불러오기
-import Layout from "./pages/Layout";
+//import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 // 절대경로 설정 예시 // @사용
 import NotFound from "@/pages/NotFound";
 // import NotFound from './pages/NotFound'
+
+//메인 페이지
+import Main from "./pages/main/MainPage";
 
 // 관리자 페이지
 import AdminAlarmLists from "./pages/AdminAlarmLists";
@@ -34,7 +37,7 @@ function App() {
       <Reset />
       <Routes>
         {/* url경로 별 랜더링 페이지 */}
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Main />}>
           <Route index element={<Home />} />
           <Route path="admin" element={<Admin />}>
             <Route path="main" element={<AdminMain />} />
