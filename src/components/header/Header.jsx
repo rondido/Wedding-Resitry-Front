@@ -37,6 +37,7 @@ const RightLogo = styled.div`
   position: absolute;
   top: 1;
   right: 0;
+  margin-right: 5rem;
 `;
 
 export default function Header({ border }) {
