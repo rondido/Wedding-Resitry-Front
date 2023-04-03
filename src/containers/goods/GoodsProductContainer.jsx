@@ -188,7 +188,7 @@ export default function GoodsProductContainer() {
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
   return (
-    <div>
+    <>
       <GoodsContainer>
         <GoodsShareLinkdiv>
           <GoodsSharelink
@@ -281,6 +281,6 @@ export default function GoodsProductContainer() {
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
       </GoodsContainer>
-    </div>
+    </>
   );
 }
