@@ -6,7 +6,7 @@ import Menu from "@/assets/icons/menu.png";
 import Navbar from "../navbar/Navbar";
 
 const HeaderDiv = styled.header`
-  height: 5vh;
+  height: 7vh;
   display: flex;
   justify-content: center;
   align-items: center;
