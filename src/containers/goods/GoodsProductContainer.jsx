@@ -88,7 +88,7 @@ const GoodsWeddingdiv = styled.div`
 
 const BoxWapper = styled.div`
   display: flex;
-  height: 68%;
+  height: 50vh;
   margin-top: 20px;
   width: 100%;
 `;
@@ -134,7 +134,6 @@ const StyledTrack = styled.div`
 const StyledRange = styled.div`
   display: flex;
   width: 100%;
-
   height: ${({ width }) => `${width}%`};
   background: linear-gradient(to right, blue, blue);
 `;
