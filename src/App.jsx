@@ -30,6 +30,7 @@ import GoodsProduct from "./pages/goods/GoodsProduct";
 
 //상품 박스 Test
 import Box from "@/components/box/Box";
+// import Navbar from "@/components/navbar/Navbar";
 
 function App() {
   return (
@@ -52,6 +53,8 @@ function App() {
           <Route path="/GallerySupport" element={<GallerySupport />} />
           <Route path="/GoodsSupport" element={<GoodsSupport />} />
         </Route>
+
+        {/* <Route path="/nav" element={<Navbar />} /> */}
         <Route path="/GoodsProduct" element={<GoodsProduct />} />
         <Route path="/Box" element={<Box />} />
       </Routes>

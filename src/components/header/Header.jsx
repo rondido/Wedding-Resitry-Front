@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import logo from "@/assets/icons/logo.png";
 import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
+import Navbar from "../navbar/Navbar";
 
 const HeaderDiv = styled.header`
   height: 5vh;
@@ -41,6 +42,7 @@ const RightLogo = styled.div`
 `;
 
 export default function Header({ border }) {
+  const [navbar, setNavbar] = useState(false);
   return (
     <>
       <HeaderDiv isBoolean={border}>
@@ -50,10 +52,16 @@ export default function Header({ border }) {
           </div>
           <RightLogo>
             <PersonLogo src={Person} style={{ marginRight: "1vw" }} />
-            <HamberLogo src={Menu} />
+            <HamberLogo
+              src={Menu}
+              onClick={() => {
+                setNavbar(!navbar);
+              }}
+            />
           </RightLogo>
         </HeaderLogoDiv>
       </HeaderDiv>
+      {navbar ? <Navbar /> : null}
     </>
   );
 }
