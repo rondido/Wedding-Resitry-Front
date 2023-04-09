@@ -29,6 +29,8 @@ import GoodsProduct from "./pages/goods/GoodsProduct";
 
 //상품 박스 Test
 import Header from "./components/header/Header";
+import SignUp from "@/pages/signup/SignUp.jsx";
+import SignIn from "@/pages/signin/SignIn.jsx";
 
 function App() {
   //header 여기서 호출해야하나?
@@ -50,6 +52,8 @@ function App() {
         {/* url경로 별 랜더링 페이지 */}
         <Route path="/" element={<Main />} />
         <Route element={<Home />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="signin" element={<SignIn />} />
         <Route path="admin" element={<Admin />}>
           <Route path="main" element={<AdminMain />} />
           <Route path="alarm" element={<AdminAlarmLists />} />
