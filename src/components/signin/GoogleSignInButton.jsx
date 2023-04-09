@@ -14,24 +14,21 @@ const StyledButton = styled.button`
   }
 `;
 
-
-
-
 function GoogleButton() {
     const googleLogin = useGoogleLogin({
         onSuccess: async (res) => {
             console.log(res.access_token);
 
             const {
-                data: { email },
+                data: { email, sub },
             } = await axios.get("https://openidconnect.googleapis.com/v1/userinfo", {
                 params: {
                     access_token: res.access_token,
                 },
             });
 
-            // TODO 구글한테 받은 유저 이메일을 백에 전달할 것
-            console.log(email);
+            // TODO 구글한테 받은 유저 이메일 + sub를 백에 전달할 것
+            console.log(email, sub);
         },
         onError: () => {
             console.log("Login Failed");
@@ -46,7 +43,6 @@ function GoogleButton() {
                 width="19px"
                 className="icon google"
             />
-
             <span>구글 계정으로 로그인</span>
         </StyledButton>
     );

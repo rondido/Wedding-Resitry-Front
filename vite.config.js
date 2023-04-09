@@ -11,4 +11,15 @@ export default defineConfig({
       { find: "@", replacement: "/src" },
     ],
   },
+  server: {
+    proxy: {
+      '/kakao-oauth': {
+        target: 'https://kauth.kakao.com/oauth',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kakao-oauth/, ''),
+        secure: false,
+        ws: true
+      }
+    }
+  }
 })

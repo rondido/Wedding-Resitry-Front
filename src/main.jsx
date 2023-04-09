@@ -7,8 +7,6 @@ import { worker } from "./mocks/browsers";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
-console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
-
 //service worker 실행파일
 if (process.env.NODE_ENV === "development") {
   worker.start();

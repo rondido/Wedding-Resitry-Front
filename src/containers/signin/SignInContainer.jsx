@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import GoogleSignInButton from "../../components/signin/GoogleSignInButton.jsx";
 import SignInForm from "@/components/signin/SignInForm.jsx";
+import KakaoSignInButton from "../../components/signin/KakaoSignInButton.jsx";
 
 const SignInStyled = styled.div`
   background: rgba(234, 234, 234, 0.4);
@@ -23,6 +24,7 @@ export default function SignInContainer() {
     <div className="wrapper">
       <SignInForm></SignInForm>
       <GoogleSignInButton></GoogleSignInButton>
+      <KakaoSignInButton></KakaoSignInButton>
 
     </div>
     </SignInStyled>;
