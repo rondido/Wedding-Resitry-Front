@@ -36,7 +36,6 @@ function App() {
   // 페이지 에따른 header border 선 처리
   const location = useLocation();
   const [border, setBorder] = useState(false);
-  console.log(location.pathname);
   useEffect(() => {
     if (location.pathname === "/") {
       setBorder(true);
