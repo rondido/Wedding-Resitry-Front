@@ -42,6 +42,7 @@ const RightLogo = styled.div`
 `;
 
 export default function Header({ border }) {
+  //여기서 navbar api 호출해서 넘겨주면 독립적으로 테스트를 할 수 있다.
   const [navbar, setNavbar] = useState(false);
   return (
     <>
