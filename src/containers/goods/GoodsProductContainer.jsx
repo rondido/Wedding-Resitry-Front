@@ -5,6 +5,7 @@ import ShareBox from "@/components/ShareBox";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
+import GoodsModal from "@/components/goodsmodal/GoodsModal";
 
 const GoodsText = styled.input`
   border: 0;
@@ -149,8 +150,8 @@ const ValueItem = styled.div`
 
 const BoxSlider = styled.div`
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: 50%;
+  overflow-x: hidden;
   margin-bottom: 10%;
 `;
 
@@ -161,6 +162,7 @@ const CenterTextdiv = styled.div`
 export default function GoodsProductContainer() {
   const [sharebox, setSharebox] = useState(false);
   const [fetchdata, SetFetchData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const slideRef = useRef(null);
 
   const TOTAL_SLIDES = 1;
@@ -188,6 +190,7 @@ export default function GoodsProductContainer() {
       setCurrentSlide(currentSlide - 1);
     }
   };
+
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
@@ -263,8 +266,14 @@ export default function GoodsProductContainer() {
             <BoxWapper ref={slideRef}>
               {fetchdata.data &&
                 fetchdata.data.map((value, idx) => (
-                  <BoxItem key={idx}>
-                    <Box url={value.usersGoodsImgUrl} />
+                  <BoxItem
+                    key={idx}
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    {/* url={value.usersGoodsImgUrl}  */}
+                    <Box />
                     <ItemDiv>
                       <StyledTrack>
                         <StyledRange width={value.usersGoodsPercent} />
@@ -287,6 +296,7 @@ export default function GoodsProductContainer() {
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
+        {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
       </GoodsContainer>
     </>
   );

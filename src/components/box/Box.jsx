@@ -23,24 +23,17 @@ const Boxcontainer = styled.div`
 `;
 
 export default function Box({ url }) {
-  //상품등록 modal open
-  const modalopen = () => {
-    alert("상품 등록 modal 띄울 예정");
-  };
-
   return (
     <>
       <Boxcontainer>
-        {url.length === 0 ? <p>Edit</p> : null}
-
-        <Divbox onClick={modalopen}>
+        <Divbox>
           <Plusimg>
-            {url.length === 0 ? (
+            {url ? (
               <img src={Plus} style={{ width: "20px", height: "20px" }} />
             ) : (
               <img
                 src={url}
-                style={{ objectFit: "none", width: "100%", height: "100%" }}
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
             )}
           </Plusimg>
