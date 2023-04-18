@@ -9,4 +9,12 @@ export const handlers = [
   rest.get("/alarm/all", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(Alarm));
   }),
+  rest.post("/usersgoods/add", (req, res, ctx) => {
+    return res(
+      ctx.status(201),
+      ctx.json({
+        usersGoodsId: "123",
+      })
+    );
+  }),
 ];

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Box from "@/components/box/Box";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 import GoodsModal from "@/components/goodsmodal/GoodsModal";
+import { getGoodsProductApi } from "../../constants/Api";
 
 const GoodsText = styled.input`
   border: 0;
@@ -167,13 +168,16 @@ export default function GoodsProductContainer() {
 
   const TOTAL_SLIDES = 1;
 
+  async function renderProduct() {
+    const products = await getGoodsProductApi();
+    SetFetchData(products);
+  }
+
+  //비동기
   useEffect(() => {
-    fetch("/GoodsProduct/all")
-      .then((res) => res.json())
-      .then((data) => {
-        SetFetchData(data);
-      });
+    renderProduct();
   }, []);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
