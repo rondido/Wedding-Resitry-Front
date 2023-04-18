@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import logo from "@/assets/icons/logo.png";
 import { AiOutlineClose } from "react-icons/ai";
+import { postGoodsProductApi } from "../../constants/Api";
 
 const Base = styled.div`
   background: rgba(228, 230, 232, 0.7);
@@ -82,6 +83,9 @@ const ApiButton = styled.button`
 `;
 
 export default function GoodsModal(props) {
+  async function postGoodsList() {
+    postGoodsProductApi();
+  }
   return (
     <Base>
       <Container>
@@ -108,7 +112,8 @@ export default function GoodsModal(props) {
           </div>
           <div>
             <p>
-              <ApiButton>수정하기</ApiButton> | <ApiButton>삭제하기</ApiButton>
+              <ApiButton onClick={postGoodsList}>수정하기</ApiButton> |{" "}
+              <ApiButton>삭제하기</ApiButton>
             </p>
           </div>
         </TextDiv>
