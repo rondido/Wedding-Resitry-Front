@@ -4,13 +4,13 @@ import styled from "styled-components";
 const StyledWrapper = styled.div`
 width: 100%;
   min-width: 344px;
-  margin-top: 4rem;
+  margin-top: 4.5rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  background: rgba(234, 234, 234, 0.4);
   .left{
     margin-top: .5rem;
     width: 38%;
@@ -22,6 +22,7 @@ const StyledInput = styled.input`
   min-width: 344px;
   min-height: 44px;
   margin-bottom: .5rem;
+  border: 1px solid #818387;
   width: 30%;
   border-radius: 10px;
   padding-left: .8rem;
@@ -52,6 +53,7 @@ const StyledButton = styled.button`
   color: #fff;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   background-color: #000000B2;
+  border: none;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

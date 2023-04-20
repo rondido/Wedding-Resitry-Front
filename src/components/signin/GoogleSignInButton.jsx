@@ -5,12 +5,26 @@ import styled from "styled-components";
 import googlelogo from "../../assets/icons/google.svg";
 
 const StyledButton = styled.button`
-  border: 1px solid #000;
+  border: none;
   height: 45px;
-  width: 350px;
-  border-radius: 5px;
-  span {
-    margin-left: 5px;
+  width: 40%;
+  min-width: 350px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-top: 2rem;
+  position: relative;
+  
+  ::before {
+    content: '';
+    width: 32px;
+    display: block;
+    height: 33px;
+    top: 20%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    margin-left: .5rem;
+    background: url(${googlelogo}) no-repeat;
   }
 `;
 
@@ -37,13 +51,7 @@ function GoogleButton() {
 
     return (
         <StyledButton onClick={googleLogin}>
-            <img
-                src={googlelogo}
-                alt="googlelogo"
-                width="19px"
-                className="icon google"
-            />
-            <span>구글 계정으로 로그인</span>
+           구글 계정으로 로그인
         </StyledButton>
     );
 }
