@@ -73,8 +73,6 @@ width: 100%;
     }
     margin-bottom: 1rem;
   }
-  
-  
   span {
     margin-bottom: .5rem;
     display: flex;
@@ -105,11 +103,6 @@ const StyledButton = styled.button`
 function SignUpForm() {
     const navigate = useNavigate();
 
-    function onClickButton(event) {
-        event.preventDefault();
-        console.log("회원가입!");
-    }
-
     return (
         <StyledWrapper>
             <Formik
@@ -120,8 +113,8 @@ function SignUpForm() {
                     passwordCheck: ''
                 }}
                 validationSchema={signUpValidationSchema}
-                onSubmit={values => {
-                    console.log(values);
+                onSubmit={(values) => {
+                console.log(values)
                 }}
             >
                 {({ errors, touched }) => (
@@ -137,10 +130,10 @@ function SignUpForm() {
                         <div className="left">
                         <label>
                             <Field type="checkbox" name="agree-event" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
-                            <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.  </div>
+                            <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.</div>
                         </label>
                         </div>
-                        <StyledButton onClick={onClickButton} type="submit">회원가입 하기</StyledButton>
+                        <StyledButton type="submit">회원가입 하기</StyledButton>
                         <span>이미 계정이 있으세요?<span onClick={() => navigate(`/signin`)}>로그인</span></span>
                     </Form>
                 )}
