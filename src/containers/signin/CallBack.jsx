@@ -22,23 +22,14 @@ function Callback() {
                     )
                     .then((res) => {
                         const access_token = res.data.access_token
-                        axios
-                            .get(
-                                "https://kapi.kakao.com/v1/user/access_token_info",
-                                {
-                                    headers: {
-                                        "Content-Type": "application/x-www-form-urlencoded",
-                                        "Authorization": "Bearer " + access_token
-                                    },
-
-                                }
-                            )
-                            .then((res) => {
-                            //     res로 받은 id를 줄 것
-                                console.log(res.data.id);
-
-
-                            })
+                        axios.get('https://kapi.kakao.com/v2/user/me', {
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                "Authorization": "Bearer " + access_token
+                            },
+                        }).then((res)=> {
+                            console.log(res.data.id, res.data.kakao_account.email
+                        )})
                             .catch((err) => {
                                 console.log(err);
                             });
