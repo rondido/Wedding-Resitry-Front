@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 const StyledWrapper = styled.div`
 width: 100%;
@@ -12,8 +13,8 @@ width: 100%;
   align-items: center;
   background: rgba(234, 234, 234, 0.4);
   .left{
+    width: 50%;
     margin-top: .5rem;
-    width: 38%;
     justify-self: flex-start;
     margin-bottom: 2rem;
     
@@ -67,6 +68,7 @@ const StyledSpan = styled.span`
 `;
 
 function SignInForm() {
+    const navigate = useNavigate();
 
 
     const initInputValue = {
@@ -108,7 +110,7 @@ function SignInForm() {
                 placeholder="비밀번호"
             />
             <StyledDiv>
-                <StyledSpan>회원가입 하기</StyledSpan>
+                <StyledSpan onClick={() => navigate(`/signup`)}>회원가입 하기</StyledSpan>
                 <StyledSpan>아이디 찾기</StyledSpan>
                 <StyledSpan>비밀번호 찾기</StyledSpan>
             </StyledDiv>
