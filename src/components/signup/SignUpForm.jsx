@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 const StyledWrapper = styled.div`
 width: 100%;
@@ -13,10 +15,25 @@ width: 100%;
   background: rgba(234, 234, 234, 0.4);
   .left{
     margin-top: .5rem;
-    width: 38%;
+    label {
+      font-size: 10px;
+    }
     justify-self: flex-start;
-    margin-bottom: 2rem;
-    
+    div {
+      margin-top: .5rem;
+      font-size: 10px;
+      color: #6C6C6CEB;
+      line-height: .8rem;
+    }
+  }
+  
+  span:last-child {
+    span {
+      color: #3F80FF;
+      margin-left: .5rem;
+      cursor: pointer;
+    }
+    margin-bottom: 1rem;
   }
 `
 
@@ -56,38 +73,38 @@ const StyledButton = styled.button`
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   background-color: #000000B2;
   border: none;
-  font-size: 24px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 400;
-  margin-top: 1.5em;
+  margin-top: 3em;
+  margin-bottom: .5rem;
 `;
 
-const StyledSpan = styled.span`
 
-`;
-
-function SignInForm() {
-
+function SignUpForm() {
+    const navigate = useNavigate();
 
     const initInputValue = {
+        username: '',
         email: "",
         password: "",
+        passwordCheck: ''
     };
 
     const [inputValue, setInputValue] = useState(initInputValue);
-    const { email, password } = inputValue;
+    const { email, username, passwordCheck, password } = inputValue;
 
     const onChangeInputValue = (e) => {
         setInputValue({
             ...inputValue,
             [e.target.name]: e.target.value.toString().trim(),
         });
-        console.log(email, password)
+        console.log(username, email, password, passwordCheck)
     };
 
     function onClickButton(event) {
         event.preventDefault();
-        console.log("login!");
+        console.log("회원가입!");
 
     }
 
@@ -96,9 +113,16 @@ function SignInForm() {
             <StyledInput
                 type="text"
                 name="email"
+                value={inputValue.username}
+                onChange={onChangeInputValue}
+                placeholder="성/이름"
+            />
+            <StyledInput
+                type="text"
+                name="email"
                 value={inputValue.email}
                 onChange={onChangeInputValue}
-                placeholder="Email"
+                placeholder="이메일"
             />
             <StyledInput
                 type="text"
@@ -107,21 +131,28 @@ function SignInForm() {
                 onChange={onChangeInputValue}
                 placeholder="비밀번호"
             />
+            <StyledInput
+                type="text"
+                name="passwordCheck"
+                value={inputValue.passwordCheck}
+                onChange={onChangeInputValue}
+                placeholder="비밀번호 확인"
+            />
             <StyledDiv>
-                <StyledSpan>회원가입 하기</StyledSpan>
-                <StyledSpan>아이디 찾기</StyledSpan>
-                <StyledSpan>비밀번호 찾기</StyledSpan>
-            </StyledDiv>
-            <StyledButton onClick={onClickButton}>로그인 하기</StyledButton>
             <div className="left">
-            <input type={"checkbox"} id="remember-signin"/>
-            <label htmlFor="remember-signin">
-                로그인 상태 기억하기
+            <input type={"checkbox"} id="agree-event"/>
+            <label htmlFor="agree-event">
+                새 기능, 이벤트 홍보 안내 등의 알림 수신
             </label>
-
+                <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.  </div>
             </div>
+            </StyledDiv>
+            <StyledButton onClick={onClickButton}>회원가입 하기</StyledButton>
+            <span>이미 계정이 있으세요?<span onClick={() => navigate(`/signin`)}>로그인</span></span>
+
+
         </StyledWrapper>
     );
 }
 
-export default SignInForm;
+export default SignUpForm;

@@ -11,7 +11,7 @@ const StyledButton = styled.button`
   min-width: 350px;
   background-color: #fff;
   border-radius: 10px;
-  margin-top: 2rem;
+
   position: relative;
   
   ::before {
