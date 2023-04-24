@@ -29,12 +29,12 @@ export default function Box({ url }) {
         <Divbox>
           <Plusimg>
             {url ? (
-              <img src={Plus} style={{ width: "20px", height: "20px" }} />
-            ) : (
               <img
                 src={url}
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
+            ) : (
+              <img src={Plus} style={{ width: "20px", height: "20px" }} />
             )}
           </Plusimg>
         </Divbox>
