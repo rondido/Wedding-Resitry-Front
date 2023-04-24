@@ -163,23 +163,83 @@ const CenterTextdiv = styled.div`
   margin-bottom: 1%;
 `;
 
-export default function GoodsProductContainer() {
-  const [sharebox, setSharebox] = useState(false);
-  const [fetchdata, SetFetchData] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const slideRef = useRef(null);
-
-  const TOTAL_SLIDES = 1;
-
+function getGoodsData() {
+  const [didmount, setDidmount] = useState(false);
   async function renderProduct() {
     const products = await getGoodsProductApi();
     SetFetchData(products);
   }
-
-  //비동기
   useEffect(() => {
-    renderProduct();
+    setDidmount(true);
   }, []);
+
+  useEffect(() => {
+    if (didmount) {
+      renderProduct();
+    }
+  }, [didmount]);
+
+  const [fetchdata, SetFetchData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      {fetchdata
+        ? fetchdata.data &&
+          fetchdata.data.map((value, idx) => (
+            <BoxItem
+              key={idx}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Box url={value.usersGoodsImgUrl} />
+              <ItemDiv>
+                <StyledTrack isTrue={false}>
+                  <StyledRange width={value.usersGoodsPercent} />
+                </StyledTrack>
+                <ValueItem>
+                  <div>
+                    <p>{value.usersGoodsName}</p>
+                  </div>
+                  <div>
+                    <p>{value.usersGoodsPrice}원</p>
+                  </div>
+                  <div>
+                    <p style={{ marginTop: "50px" }}>
+                      {value.totalDonation}원 후원
+                    </p>
+                  </div>
+                </ValueItem>
+              </ItemDiv>
+            </BoxItem>
+          ))
+        : Array.from(Array(10), (_, index) => (
+            <BoxItem
+              key={index}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Box />
+              <ItemDiv>
+                <StyledTrack isTrue={true}>
+                  <StyledRange />
+                </StyledTrack>
+                <ValueItem></ValueItem>
+              </ItemDiv>
+            </BoxItem>
+          ))}
+      {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
+    </>
+  );
+}
+
+export default function GoodsProductContainer() {
+  const [sharebox, setSharebox] = useState(false);
+
+  const slideRef = useRef(null);
+
+  const TOTAL_SLIDES = 1;
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
@@ -270,56 +330,10 @@ export default function GoodsProductContainer() {
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
-            <BoxWapper ref={slideRef}>
-              {fetchdata
-                ? Array.from(Array(10), (_, index) => (
-                    <BoxItem
-                      key={index}
-                      onClick={() => {
-                        setIsOpen(true);
-                      }}
-                    >
-                      <Box />
-                      <ItemDiv>
-                        <StyledTrack isTrue={true}>
-                          <StyledRange />
-                        </StyledTrack>
-                        <ValueItem></ValueItem>
-                      </ItemDiv>
-                    </BoxItem>
-                  ))
-                : fetchdata.data &&
-                  fetchdata.data.map((value, idx) => (
-                    <BoxItem
-                      key={idx}
-                      onClick={() => {
-                        setIsOpen(true);
-                      }}
-                    >
-                      <Box url={value.usersGoodsImgUrl} />
-                      <ItemDiv>
-                        <StyledTrack isTrue={false}>
-                          <StyledRange width={value.usersGoodsPercent} />
-                        </StyledTrack>
-                        <ValueItem>
-                          <div>
-                            <p>{value.usersGoodsName}</p>
-                          </div>
-                          <div>
-                            <p>{value.usersGoodsPrice}원</p>
-                          </div>
-                          <div>
-                            <p>{value.totalDonation}원 후원</p>
-                          </div>
-                        </ValueItem>
-                      </ItemDiv>
-                    </BoxItem>
-                  ))}
-            </BoxWapper>
+            <BoxWapper ref={slideRef}>{getGoodsData()}</BoxWapper>
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
-        {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
       </GoodsContainer>
     </>
   );
