@@ -103,6 +103,9 @@ const BoxContainer = styled.div`
 
 const BoxItem = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+
   &:nth-child(odd) {
     margin-top: auto;
     display: flex;
@@ -127,7 +130,7 @@ const ItemDiv = styled.div`
 const StyledTrack = styled.div`
   width: 5px;
   height: 100px;
-  background-color: #ebebeb;
+  background-color: ${(props) => (props ? "" : `#ebebeb`)};
   border-radius: 15px;
   transform: rotate(180deg);
   margin-right: 10px;
@@ -268,34 +271,50 @@ export default function GoodsProductContainer() {
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
             <BoxWapper ref={slideRef}>
-              {fetchdata.data &&
-                fetchdata.data.map((value, idx) => (
-                  <BoxItem
-                    key={idx}
-                    onClick={() => {
-                      setIsOpen(true);
-                    }}
-                  >
-                    {/* url={value.usersGoodsImgUrl}  */}
-                    <Box />
-                    <ItemDiv>
-                      <StyledTrack>
-                        <StyledRange width={value.usersGoodsPercent} />
-                      </StyledTrack>
-                      <ValueItem>
-                        <div>
-                          <p>{value.usersGoodsName}</p>
-                        </div>
-                        <div>
-                          <p>{value.usersGoodsPrice}원</p>
-                        </div>
-                        <div>
-                          <p>{value.totalDonation}원 후원</p>
-                        </div>
-                      </ValueItem>
-                    </ItemDiv>
-                  </BoxItem>
-                ))}
+              {fetchdata
+                ? Array.from(Array(10), (_, index) => (
+                    <BoxItem
+                      key={index}
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}
+                    >
+                      <Box />
+                      <ItemDiv>
+                        <StyledTrack isTrue={true}>
+                          <StyledRange />
+                        </StyledTrack>
+                        <ValueItem></ValueItem>
+                      </ItemDiv>
+                    </BoxItem>
+                  ))
+                : fetchdata.data &&
+                  fetchdata.data.map((value, idx) => (
+                    <BoxItem
+                      key={idx}
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}
+                    >
+                      <Box url={value.usersGoodsImgUrl} />
+                      <ItemDiv>
+                        <StyledTrack isTrue={false}>
+                          <StyledRange width={value.usersGoodsPercent} />
+                        </StyledTrack>
+                        <ValueItem>
+                          <div>
+                            <p>{value.usersGoodsName}</p>
+                          </div>
+                          <div>
+                            <p>{value.usersGoodsPrice}원</p>
+                          </div>
+                          <div>
+                            <p>{value.totalDonation}원 후원</p>
+                          </div>
+                        </ValueItem>
+                      </ItemDiv>
+                    </BoxItem>
+                  ))}
             </BoxWapper>
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
