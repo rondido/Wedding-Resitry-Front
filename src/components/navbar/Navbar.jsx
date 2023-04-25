@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import styled from "styled-components";
 import {
   AiOutlineShoppingCart,
@@ -11,7 +13,6 @@ import {
   BsFillEnvelopeFill,
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
-
 import { CiMoneyBill } from "react-icons/ci";
 
 const Base = styled.div`
@@ -66,24 +67,6 @@ const TopItem = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
   padding: 5px;
   height: 210px;
-`;
-
-const TopItemInput = styled.button`
-  width: 210px;
-  height: 20px;
-  margin-top: 15px;
-  border-radius: 20px;
-  border: none;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background: #929292;
-  }
 `;
 
 const CenterItemDiv = styled.div`
@@ -143,6 +126,33 @@ const AlarmDonationText = styled.p`
     margin-right: auto;
     margin-top: 13px;
   }
+`;
+
+const LinkInput = styled(Link)`
+  text-decoration: none;
+  width: 240px;
+  color: black;
+  height: 20px;
+  margin-top: 15px;
+  border-radius: 20px;
+  border: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: #b5acac;
+  }
+`;
+
+const LogButton = styled.button`
+  border: none;
+  background-color: transparent;
 `;
 
 function NotificationItemList({ notifications }) {
@@ -213,34 +223,34 @@ export default function Navbar() {
         </NickNamediv>
         <TopItem>
           <TopTitleText>카테고리</TopTitleText>
-          <TopItemInput>
+          <LinkInput to="/GoodsProduct">
             <AiOutlineShoppingCart
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             상품 리스트
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </TopItemInput>
-          <TopItemInput>
+          </LinkInput>
+          <LinkInput to="/admin/main">
             <AiOutlineFileSync
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             관리 페이지
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </TopItemInput>
-          <TopItemInput>
+          </LinkInput>
+          <LinkInput to="/GalleryWedding">
             <AiOutlinePicture
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             갤러리 페이지
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </TopItemInput>
-          <TopItemInput>
+          </LinkInput>
+          <LinkInput to="/admin/memo">
             <BsCalendar2Heart
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             위시 리스트/메모장
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </TopItemInput>
+          </LinkInput>
         </TopItem>
         <CenterItemDiv>
           <div>
@@ -250,7 +260,10 @@ export default function Navbar() {
         </CenterItemDiv>
         <BottomItemDiv>
           <p>링크 공유하기</p>
-          <p>Log out</p>
+
+          <LogButton onClick={() => localStorage.removeItem("token")}>
+            Log out
+          </LogButton>
         </BottomItemDiv>
       </Base>
     </>
