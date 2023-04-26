@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import {useNavigate} from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -10,19 +9,12 @@ const signUpValidationSchema = Yup.object().shape({
         .max(50, '너무 길어요!')
         .required('필수입니다!'),
     email: Yup.string().email('유효하지 않은 이메일 형식입니다').required('필수입니다!'),
-    password: Yup.string().matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{9,}$/i, "특수문자 최소 하나, 숫자 최소 하나, 영문 최소 하나, 최소 9자리").required('필수입니다!'),
-    passwordCheck: Yup.string()
-        .oneOf(
-            [Yup.ref("password"), null],
-            "패스워드가 일치하지 않습니다"
-        )
-        .required("필수입니다!"),
 });
 
 const StyledWrapper = styled.div`
 width: 100%;
   min-width: 344px;
-  margin-top: 4.5rem;
+  margin-top: 2.5rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
@@ -100,8 +92,7 @@ const StyledButton = styled.button`
   margin-bottom: .5rem;
 `;
 
-function SignUpForm() {
-    const navigate = useNavigate();
+function SignUpMoreInfo() {
 
     return (
         <StyledWrapper>
@@ -109,8 +100,6 @@ function SignUpForm() {
                 initialValues={{
                     username: '',
                     email: '',
-                    password: '',
-                    passwordCheck: ''
                 }}
                 validationSchema={signUpValidationSchema}
                 onSubmit={(values) => {
@@ -123,18 +112,13 @@ function SignUpForm() {
                         {touched.username && errors.username && <div className="error">{errors.username}</div>}
                         <Field name="email" placeholder="이메일" />
                         {touched.email && errors.email && <div className="error">{errors.email}</div>}
-                        <Field name="password" placeholder="비밀번호" />
-                        {touched.password && errors.password && <div className="error">{errors.password}</div>}
-                        <Field name="passwordCheck" placeholder="비밀번호 확인" />
-                        {touched.passwordCheck && errors.passwordCheck && <div className="error">{errors.passwordCheck}</div>}
                         <div className="left">
                         <label>
                             <Field type="checkbox" name="agree-event" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
                             <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.</div>
                         </label>
                         </div>
-                        <StyledButton type="submit">회원가입 하기</StyledButton>
-                        <span>이미 계정이 있으세요?<span onClick={() => navigate(`/signin`)}>로그인</span></span>
+                        <StyledButton type="submit">로그인 하기</StyledButton>
                     </Form>
                 )}
             </Formik>
@@ -142,4 +126,4 @@ function SignUpForm() {
     );
 }
 
-export default SignUpForm;
+export default SignUpMoreInfo;

@@ -32,6 +32,7 @@ import Header from "./components/header/Header";
 import SignUp from "@/pages/signup/SignUp.jsx";
 import SignIn from "@/pages/signin/SignIn.jsx";
 import Callback from "@/containers/signin/CallBack.jsx";
+import SignUpMoreInfo from "@/pages/signup/SignUpMoreInfo.jsx";
 
 function App() {
   //header 여기서 호출해야하나?
@@ -54,6 +55,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route element={<Home />} />
         <Route path="signup" element={<SignUp />} />
+        <Route path="signup-moreinfo" element={<SignUpMoreInfo />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="callback" element={<Callback />} />
         <Route path="admin" element={<Admin />}>

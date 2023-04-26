@@ -13,7 +13,7 @@ width: 100%;
   align-items: center;
   background: rgba(234, 234, 234, 0.4);
   .left{
-    width: 50%;
+    //width: 50%;
     margin-top: .5rem;
     justify-self: flex-start;
     margin-bottom: 2rem;
@@ -26,7 +26,7 @@ const StyledInput = styled.input`
   min-height: 44px;
   margin-bottom: .5rem;
   border: 1px solid #818387;
-  width: 30%;
+  //width: 30%;
   border-radius: 10px;
   padding-left: .8rem;
 `;
@@ -35,7 +35,7 @@ const StyledInput = styled.input`
 const StyledDiv = styled.div`
  display: flex;
   min-width: 344px;
-  width: 38%;
+  //width: 38%;
   
   justify-content: center;
   align-items: center;
@@ -49,9 +49,8 @@ const StyledDiv = styled.div`
 `;
 
 const StyledButton = styled.button`
-  width: 38%;
+  min-width: 374px;
   min-height: 44px;
-  min-width: 344px;
   border-radius: 10px;
   color: #fff;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -69,8 +68,6 @@ const StyledSpan = styled.span`
 
 function SignInForm() {
     const navigate = useNavigate();
-
-
     const initInputValue = {
         email: "",
         password: "",
