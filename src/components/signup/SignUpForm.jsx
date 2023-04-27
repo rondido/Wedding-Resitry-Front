@@ -3,6 +3,8 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import {useRecoilValue} from "recoil";
+import {authState} from "@/containers/signin/atom.js";
 
 const signUpValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -102,9 +104,18 @@ const StyledButton = styled.button`
 
 function SignUpForm() {
     const navigate = useNavigate();
+    const { provider, id, email } = useRecoilValue(authState);
 
     return (
         <StyledWrapper>
+            <div>
+                {provider && id && email ? (
+                    <p>Welcome, {provider} {email} {id}!</p>
+                ) : (
+                    <p>fail?, {provider} {email} {id}</p>
+
+                )}
+            </div>
             <Formik
                 initialValues={{
                     username: '',
