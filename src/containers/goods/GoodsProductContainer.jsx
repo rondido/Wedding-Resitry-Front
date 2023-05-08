@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
+
 //공유 이미지 가져오기
 import Share from "@/assets/icons/share.png";
 import ShareBox from "@/components/ShareBox";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
-import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 import GoodsModal from "@/components/goodsmodal/GoodsModal";
 import { getGoodsProductApi } from "../../constants/Api";
 
@@ -165,10 +166,14 @@ const CenterTextdiv = styled.div`
 
 function getGoodsData() {
   const [didmount, setDidmount] = useState(false);
+  const [fetchdata, setFetchData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+
   async function renderProduct() {
     const products = await getGoodsProductApi();
-    SetFetchData(products);
+    setFetchData(products);
   }
+
   useEffect(() => {
     setDidmount(true);
   }, []);
@@ -179,12 +184,26 @@ function getGoodsData() {
     }
   }, [didmount]);
 
-  const [fetchdata, SetFetchData] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       {fetchdata
-        ? fetchdata.data &&
+        ? Array.from(Array(10), (_, index) => (
+            <BoxItem
+              key={index}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Box />
+              <ItemDiv>
+                <StyledTrack isTrue={true}>
+                  <StyledRange />
+                </StyledTrack>
+                <ValueItem></ValueItem>
+              </ItemDiv>
+            </BoxItem>
+          ))
+        : fetchdata.data &&
           fetchdata.data.map((value, idx) => (
             <BoxItem
               key={idx}
@@ -212,35 +231,20 @@ function getGoodsData() {
                 </ValueItem>
               </ItemDiv>
             </BoxItem>
-          ))
-        : Array.from(Array(10), (_, index) => (
-            <BoxItem
-              key={index}
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              <Box />
-              <ItemDiv>
-                <StyledTrack isTrue={true}>
-                  <StyledRange />
-                </StyledTrack>
-                <ValueItem></ValueItem>
-              </ItemDiv>
-            </BoxItem>
           ))}
-      {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
+      {isOpen ? (
+        <GoodsModal setIsOpen={setIsOpen} setFetchData={setFetchData} />
+      ) : (
+        <></>
+      )}
     </>
   );
 }
 
 export default function GoodsProductContainer() {
   const [sharebox, setSharebox] = useState(false);
-
   const slideRef = useRef(null);
-
   const TOTAL_SLIDES = 1;
-
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
@@ -262,6 +266,7 @@ export default function GoodsProductContainer() {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
+
   return (
     <>
       <GoodsContainer>

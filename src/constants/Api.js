@@ -7,7 +7,6 @@ async function getGoodsProductApi() {
     };
   } catch (error) {
     console.error(error);
-    throw error;
   }
 }
 
@@ -27,7 +26,6 @@ async function postGoodsProductApi() {
     };
   } catch (error) {
     console.error(error);
-    throw error;
   }
 }
 
