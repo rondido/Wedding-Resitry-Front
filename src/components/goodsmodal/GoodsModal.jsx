@@ -82,10 +82,18 @@ const ApiButton = styled.button`
   background: none;
 `;
 
+const OkorColsebuttonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
 export default function GoodsModal(props) {
   async function postGoodsList() {
-    postGoodsProductApi();
+    const goodsItems = await postGoodsProductApi();
+    props.setFetchData(goodsItems);
   }
+
   return (
     <Base>
       <Container>
@@ -110,11 +118,26 @@ export default function GoodsModal(props) {
               </p>
             </GoodsDonationDiv>
           </div>
-          <div>
-            <p>
-              <ApiButton onClick={postGoodsList}>수정하기</ApiButton> |{" "}
-              <ApiButton>삭제하기</ApiButton>
-            </p>
+          <div style={{ width: "100%" }}>
+            <OkorColsebuttonDiv>
+              {props.setModalState ? (
+                <>
+                  <ApiButton onClick={postGoodsList}>수정하기</ApiButton> |
+                  <ApiButton>삭제하기</ApiButton>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <ApiButton onClick={postGoodsList}>등록하기</ApiButton>
+                  </div>
+                  <div
+                    style={{ position: "absolute", top: "85%", right: "10%" }}
+                  >
+                    <ApiButton>확인</ApiButton>|<ApiButton>취소</ApiButton>
+                  </div>
+                </>
+              )}
+            </OkorColsebuttonDiv>
           </div>
         </TextDiv>
       </Container>
