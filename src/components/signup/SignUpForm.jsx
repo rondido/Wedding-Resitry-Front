@@ -110,9 +110,9 @@ function SignUpForm() {
         <StyledWrapper>
             <div>
                 {provider && id && email ? (
-                    <p>Welcome, {provider} {email} {id}!</p>
+                    <p>Welcome {provider} {email} {id}!</p>
                 ) : (
-                    <p>fail?, {provider} {email} {id}</p>
+                    <p>fail {provider} {email} {id}</p>
 
                 )}
             </div>

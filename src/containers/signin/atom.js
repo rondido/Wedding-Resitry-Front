@@ -10,7 +10,3 @@ export const authState = atom({
     default: initAuthState,
 });
 
-export const modalStateAtom = atom({
-    key: 'modalStateAtom',
-    default: false,
-});
