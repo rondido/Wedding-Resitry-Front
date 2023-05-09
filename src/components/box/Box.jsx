@@ -1,7 +1,15 @@
 import React from "react";
-import Plus from "@/assets/icons/plus.png";
 import styled from "styled-components";
 
+import Plus from "@/assets/icons/plus.png";
+
+//전체 컨테이너
+const Boxcontainer = styled.div`
+  display: flex;
+  margin-right: 6px;
+`;
+
+// //Box 모양
 const Divbox = styled.div`
   background-color: #d9d9d9;
   width: 228px;
@@ -17,18 +25,13 @@ const Plusimg = styled.div`
   margin: auto;
 `;
 
-const Boxcontainer = styled.div`
-  display: flex;
-  margin-right: 6px;
-`;
-
 export default function Box({ url }) {
   return (
     <>
       <Boxcontainer>
         <Divbox>
           <Plusimg>
-            {url ? (
+            {url && url ? (
               <img
                 src={url}
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}

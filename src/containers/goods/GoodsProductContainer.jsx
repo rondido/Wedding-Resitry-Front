@@ -134,7 +134,7 @@ const StyledTrack = styled.div`
   background-color: ${(props) => (props ? "" : `#ebebeb`)};
   border-radius: 15px;
   transform: rotate(180deg);
-  margin-right: 10px;
+  margin-right: 8px;
 `;
 
 const StyledRange = styled.div`
@@ -164,10 +164,17 @@ const CenterTextdiv = styled.div`
   margin-bottom: 1%;
 `;
 
-function getGoodsData() {
+export default function GoodsProductContainer() {
+  const [sharebox, setSharebox] = useState(false);
   const [didmount, setDidmount] = useState(false);
   const [fetchdata, setFetchData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  //state 상태에 따른 비동기 통신중 fetchdata의 값이 undefined일때 상태를 고려한 code
+  const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
+  const TOTAL_SLIDES = 1;
+  const FIX_SIZE = 10;
+  const slideRef = useRef(null);
 
   async function renderProduct() {
     const products = await getGoodsProductApi();
@@ -184,67 +191,19 @@ function getGoodsData() {
     }
   }, [didmount]);
 
-  return (
-    <>
-      {fetchdata
-        ? Array.from(Array(10), (_, index) => (
-            <BoxItem
-              key={index}
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              <Box />
-              <ItemDiv>
-                <StyledTrack isTrue={true}>
-                  <StyledRange />
-                </StyledTrack>
-                <ValueItem></ValueItem>
-              </ItemDiv>
-            </BoxItem>
-          ))
-        : fetchdata.data &&
-          fetchdata.data.map((value, idx) => (
-            <BoxItem
-              key={idx}
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              <Box url={value.usersGoodsImgUrl} />
-              <ItemDiv>
-                <StyledTrack isTrue={false}>
-                  <StyledRange width={value.usersGoodsPercent} />
-                </StyledTrack>
-                <ValueItem>
-                  <div>
-                    <p>{value.usersGoodsName}</p>
-                  </div>
-                  <div>
-                    <p>{value.usersGoodsPrice}원</p>
-                  </div>
-                  <div>
-                    <p style={{ marginTop: "50px" }}>
-                      {value.totalDonation}원 후원
-                    </p>
-                  </div>
-                </ValueItem>
-              </ItemDiv>
-            </BoxItem>
-          ))}
-      {isOpen ? (
-        <GoodsModal setIsOpen={setIsOpen} setFetchData={setFetchData} />
-      ) : (
-        <></>
-      )}
-    </>
-  );
-}
+  const GoodsElementList = () => {
+    let element = [];
+    for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
+      element.push(
+        <BoxItem style={{ width: "100%", marginRight: "150px" }}>
+          <Box />
+          <ItemDiv></ItemDiv>
+        </BoxItem>
+      );
+    }
+    return element;
+  };
 
-export default function GoodsProductContainer() {
-  const [sharebox, setSharebox] = useState(false);
-  const slideRef = useRef(null);
-  const TOTAL_SLIDES = 1;
   const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
@@ -266,7 +225,6 @@ export default function GoodsProductContainer() {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
-
   return (
     <>
       <GoodsContainer>
@@ -335,10 +293,48 @@ export default function GoodsProductContainer() {
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
-            <BoxWapper ref={slideRef}>{getGoodsData()}</BoxWapper>
+            <BoxWapper ref={slideRef}>
+              <>
+                {fetchdata.data &&
+                  fetchdata.data.map((value, idx) => (
+                    <BoxItem
+                      key={idx}
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}
+                    >
+                      <Box url={value.usersGoodsImgUrl} />
+                      <ItemDiv>
+                        <StyledTrack isTrue={false}>
+                          <StyledRange width={value.usersGoodsPercent} />
+                        </StyledTrack>
+                        <ValueItem>
+                          <div>
+                            <p>{value.usersGoodsName}</p>
+                          </div>
+                          <div>
+                            <p>{value.usersGoodsPrice}원</p>
+                          </div>
+                          <div>
+                            <p style={{ marginTop: "50px" }}>
+                              {value.totalDonation}원 후원
+                            </p>
+                          </div>
+                        </ValueItem>
+                      </ItemDiv>
+                    </BoxItem>
+                  ))}
+                {GoodsElementList()}
+              </>
+            </BoxWapper>
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
+        {isOpen ? (
+          <GoodsModal setIsOpen={setIsOpen} setFetchData={setFetchData} />
+        ) : (
+          <></>
+        )}
       </GoodsContainer>
     </>
   );
