@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "@/assets/icons/logo.png";
 import { AiOutlineClose } from "react-icons/ai";
+
+import logo from "@/assets/icons/logo.png";
 import { postGoodsProductApi } from "../../constants/Api";
 
 const Base = styled.div`
