@@ -14,11 +14,15 @@ const ModalContainer = styled.div`
 `;
 
 
-// const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-// const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-// const kakao_auth_url = `kakao-oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+const kakao_auth_url = `kakao-oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 export default function Modal () {
+// console.log(kakao_auth_url)
+    window.location.assign(kakao_auth_url)
+    // '_target'
+    // window.open(kakao_auth_url)
 
     return (
         <ModalContainer>

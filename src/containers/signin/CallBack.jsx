@@ -70,9 +70,10 @@ function Callback() {
             const currentUrl = window.location.href;
             const searchParams = new URL(currentUrl).searchParams;
             const code = searchParams.get('code');
+            console.log('code', code)
 
             if (code) {
-                if (modalState) {
+                // if (modalState) {
                 await axios
                     .post(
                         `/kakao-oauth/token`,
@@ -108,7 +109,7 @@ function Callback() {
                         console.log(err);
                     });
                 }
-            }
+            // }
         } catch (err) {
             console.log(err)
         }
