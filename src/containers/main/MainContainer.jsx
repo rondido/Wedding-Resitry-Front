@@ -1,18 +1,26 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+import CircleRadius from "@/assets/icons/radius.png";
+import FirstAnimation from "@/assets/icons/first.png";
+import SecoundAnimation from "@/assets/icons/secound.png";
+import ThreeAnimation from "@/assets/icons/three.png";
 
 const Base = styled.div`
   display: flex;
   justify-content: center;
-  height: 94.8vh;
+  height: 92.8vh;
   align-items: center;
   margin-left: 10%;
 `;
 
 const Centerdiv = styled.div`
-  border: 1px solid #000000;
   width: 339px;
   height: 508px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000000;
   border-radius: 230px;
 `;
 
@@ -20,8 +28,8 @@ const ZolabayoDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 50%;
-  margin-right: 1rem;
+  height: 80%;
+  position: relative;
 `;
 
 const ZolabayoText = styled.p`
@@ -63,6 +71,67 @@ const WeddingMemoText = styled.p`
   margin-top: 1rem;
 `;
 
+const ImgDiv = styled.div`
+  height: 80%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  position: absolute;
+  top: 15%;
+  left: 70%;
+`;
+
+const AniMove = keyframes`
+  0%{
+    background-image: url(${FirstAnimation});
+    background-size: cover;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+
+  }
+  25%{
+    background-image: url(${SecoundAnimation});
+    background-size: cover;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+
+  }
+  50%{
+    background-image: url(${ThreeAnimation});
+    background-size: cover;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+
+  }
+  100%{
+    background-image: url(${FirstAnimation});
+    background-size: cover;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+
+  }
+`;
+
+const MainImage = styled.div`
+  filter: drop-shadow(0px 20px 5px rgba(85, 91, 102, 0.3));
+  background: url(${FirstAnimation});
+  width: 400px;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  &:hover {
+    animation: ${AniMove} 1s steps(4, end) infinite;
+  }
+`;
+
 export default function MainContainer() {
   return (
     <>
@@ -76,8 +145,19 @@ export default function MainContainer() {
             <br />
             축복을 선물 해보세요.
           </ZolabayoMemoText>
+          <ImgDiv>
+            <img
+              src={CircleRadius}
+              style={{
+                width: "300px",
+                height: "300px",
+              }}
+            />
+          </ImgDiv>
         </ZolabayoDiv>
-        <Centerdiv></Centerdiv>
+        <Centerdiv>
+          <MainImage />
+        </Centerdiv>
         <Weddingdiv>
           <WeddingText>Wedding Registry</WeddingText>
           <WeddingMemoText>
