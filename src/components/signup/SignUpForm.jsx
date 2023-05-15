@@ -5,6 +5,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import {useRecoilValue} from "recoil";
 import {authState} from "@/containers/signin/atom.js";
+import axios from "axios";
 
 const signUpValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -121,11 +122,33 @@ function SignUpForm() {
                     username: '',
                     email: '',
                     password: '',
-                    passwordCheck: ''
+                    passwordCheck: '',
+                    agreeEvent: false,
                 }}
                 validationSchema={signUpValidationSchema}
                 onSubmit={(values) => {
+
                 console.log(values)
+                axios.post('http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/auth/signup', {
+                    name: values.username,
+                    email: values.email,
+                    password: values.password,
+                    passwordCheck: values.passwordCheck,
+                    notification: values.agreeEvent
+
+                }).then((res)=>{
+                    console.log(res.data.success )
+                    if (res.data.success === true) {
+                        alert(`회원가입 성공, ${res.data}`)
+                    }else if (res.data.status === 400){
+                        alert(`${res.data.message}`)
+                    }else {
+                        alert(`${res.data.message}`)
+                    }
+                }).catch((res)=>{
+                    console.log('error::: ', res)
+                })
+
                 }}
             >
                 {({ errors, touched }) => (
@@ -140,7 +163,7 @@ function SignUpForm() {
                         {touched.passwordCheck && errors.passwordCheck && <div className="error">{errors.passwordCheck}</div>}
                         <div className="left">
                         <label>
-                            <Field type="checkbox" name="agree-event" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
+                            <Field type="checkbox" name="agreeEvent" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
                             <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.</div>
                         </label>
                         </div>
