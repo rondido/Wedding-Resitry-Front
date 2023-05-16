@@ -182,27 +182,19 @@ function CheckBoxOne() {
 export default function GoodsSupportContainer() {
   const [fetchdata, SetFetchData] = useState([]);
   const [didMount, setDidMount] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   const slideRef = useRef(null);
 
   const TOTAL_SLIDES = 1;
+  const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
+  const FIX_SIZE = 10;
 
   async function renderProduct() {
     const products = await getGoodsProductApi();
     SetFetchData(products);
   }
-  //Api 2번 호출 막기
-  useEffect(() => {
-    setDidMount(true);
-    return () => {};
-  }, []);
 
-  useEffect(() => {
-    if (didMount) {
-      renderProduct();
-    }
-  }, [didMount]);
-
-  const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
       // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.
@@ -218,6 +210,29 @@ export default function GoodsSupportContainer() {
       setCurrentSlide(currentSlide - 1);
     }
   };
+  const goodsElemntList = () => {
+    let element = [];
+    for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
+      element.push(
+        <BoxItem style={{ width: "100%", marginRight: "150px" }}>
+          <Box />
+          <ItemDiv></ItemDiv>
+        </BoxItem>
+      );
+    }
+    return element;
+  };
+  //Api 2번 호출 막기
+  useEffect(() => {
+    setDidMount(true);
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (didMount) {
+      renderProduct();
+    }
+  }, [didMount]);
 
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
@@ -255,8 +270,7 @@ export default function GoodsSupportContainer() {
               {fetchdata.data &&
                 fetchdata.data.map((value, idx) => (
                   <BoxItem key={idx}>
-                    {/* url={value.usersGoodsImgUrl}  */}
-                    <Box />
+                    <Box url={value.usersGoodsImgUrl} />
                     <ItemDiv>
                       <StyledTrack>
                         <StyledRange width={value.usersGoodsPercent} />
@@ -275,6 +289,7 @@ export default function GoodsSupportContainer() {
                     </ItemDiv>
                   </BoxItem>
                 ))}
+              {goodsElemntList()}
             </BoxWapper>
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
