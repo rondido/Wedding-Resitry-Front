@@ -169,6 +169,7 @@ export default function GoodsProductContainer() {
   const [didmount, setDidmount] = useState(false);
   const [fetchdata, setFetchData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   //state 상태에 따른 비동기 통신중 fetchdata의 값이 undefined일때 상태를 고려한 code
   const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
@@ -204,7 +205,6 @@ export default function GoodsProductContainer() {
     return element;
   };
 
-  const [currentSlide, setCurrentSlide] = useState(0);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
       // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.
