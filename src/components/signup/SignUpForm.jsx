@@ -3,8 +3,8 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import {useRecoilValue} from "recoil";
-import {authState} from "@/containers/signin/atom.js";
+import { useSetRecoilState} from "recoil";
+import {authStateAtom} from "@/state/authState.js";
 import axios from "axios";
 
 const signUpValidationSchema = Yup.object().shape({
@@ -105,18 +105,10 @@ const StyledButton = styled.button`
 
 function SignUpForm() {
     const navigate = useNavigate();
-    const { provider, id, email } = useRecoilValue(authState);
-
+    const setAuthState = useSetRecoilState(authStateAtom);
+    // const { provider, id, email } = useRecoilValue(authStateAtom);
     return (
         <StyledWrapper>
-            <div>
-                {provider && id && email ? (
-                    <p>Welcome {provider} {email} {id}!</p>
-                ) : (
-                    <p>fail {provider} {email} {id}</p>
-
-                )}
-            </div>
             <Formik
                 initialValues={{
                     username: '',
@@ -137,9 +129,20 @@ function SignUpForm() {
                     notification: values.agreeEvent
 
                 }).then((res)=>{
-                    console.log(res.data.success )
+                    console.log(res.data.data )
                     if (res.data.success === true) {
-                        alert(`회원가입 성공, ${res.data}`)
+                        setAuthState({userId: res.data.data.userId,
+                            userName: res.data.data.userName,
+                            boardsId: res.data.data.boardsId,
+                            accessToken: res.data.data.accessToken,
+                            refreshToken: res.data.data.refreshToken,
+                            needMoreInfo: res.data.data.needMoreInfo })
+
+                        localStorage.setItem('refreshToken', res.data.data.refreshToken)
+                        localStorage.setItem('accessToken', res.data.data.accessToken)
+
+                        alert(`회원가입 성공`)
+                        navigate('/')
                     }else if (res.data.status === 400){
                         alert(`${res.data.message}`)
                     }else {
@@ -148,7 +151,6 @@ function SignUpForm() {
                 }).catch((res)=>{
                     console.log('error::: ', res)
                 })
-
                 }}
             >
                 {({ errors, touched }) => (
