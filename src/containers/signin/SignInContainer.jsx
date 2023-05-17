@@ -20,9 +20,8 @@ const SignInStyled = styled.div`
   width: 50%;
   min-width: 653px;
   }
-
-  
 `
+
 export default function SignInContainer() {
   return <SignInStyled>
     <div className="wrapper">

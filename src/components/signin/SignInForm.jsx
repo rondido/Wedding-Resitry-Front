@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import {authTokenAtom} from "@/state/authState.js";
+import axios from "axios";
 
 const StyledWrapper = styled.div`
 width: 100%;
@@ -63,10 +66,12 @@ const StyledButton = styled.button`
 `;
 
 const StyledSpan = styled.span`
-
 `;
 
 function SignInForm() {
+
+    // const authToken = useRecoilValue(authTokenAtom);
+    const setAuthToken = useSetRecoilState(authTokenAtom);
     const navigate = useNavigate();
     const initInputValue = {
         email: "",
@@ -84,10 +89,26 @@ function SignInForm() {
         console.log(email, password)
     };
 
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/login/service', { email: inputValue.email, password: inputValue.password });
+            const { accessToken, refreshToken } = response.data.data;
+            setAuthToken({accessToken: accessToken, refreshToken: refreshToken});
+
+            localStorage.setItem('refreshToken', accessToken)
+            localStorage.setItem('accessToken', refreshToken)
+
+            alert(`로그인 성공`)
+            navigate('/')
+
+        } catch (error) {
+            console.error('Login 실패:', error);
+        }
+    };
+
     function onClickButton(event) {
         event.preventDefault();
-        console.log("login!");
-
+        handleLogin()
     }
 
     return (
@@ -117,7 +138,6 @@ function SignInForm() {
             <label htmlFor="remember-signin">
                 로그인 상태 기억하기
             </label>
-
             </div>
         </StyledWrapper>
     );
