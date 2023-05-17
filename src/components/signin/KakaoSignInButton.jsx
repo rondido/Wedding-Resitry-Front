@@ -1,6 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import kakao from '@/assets/icons/kakao.svg';
+import KakaoLogin from "react-kakao-login";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import {authTokenAtom} from "@/state/authState.js";
+
 
 const StyledDiv = styled.div`
   border: none;
@@ -25,14 +31,39 @@ const StyledDiv = styled.div`
   }
 `;
 
-
-import KakaoLogin from "react-kakao-login";
-
 const KakaoSignInButton =()=>{
+
+    const navigate = useNavigate();
+    const setAuthToken = useSetRecoilState(authTokenAtom);
 
     const kakaoClientId = import.meta.env.VITE_KAKAO_JS_KEY;
     const kakaoOnSuccess = async (data)=>{
-        console.log(data)
+        console.log(data.profile.id)
+        console.log(data.profile.kakao_account.email)
+
+
+        const response = await axios.post('http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/login/oauth/kakao', {
+            email : data.profile.kakao_account.email,
+            password: 'K' + data.profile.id
+        })
+        // sns 로그인 최초
+        if (response.data.data.needMoreInfo) {
+            console.log('needMore?', response.data.data.needMoreInfo)
+            navigate('/signup-moreinfo', { state: { password: 'K'+ data.profile.id, email: data.profile.kakao_account.email } })
+        } else {
+            alert('로그인 성공!')
+
+            const { accessToken, refreshToken } = response.data.data;
+
+            setAuthToken({accessToken: accessToken, refreshToken: refreshToken});
+
+            localStorage.setItem('refreshToken', accessToken)
+            localStorage.setItem('accessToken', refreshToken)
+
+            navigate('/')
+        }
+
+
     }
     const kakaoOnFailure = (error) => {
         console.log(error);
