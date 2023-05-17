@@ -3,6 +3,9 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import styled from "styled-components";
 import googlelogo from "../../assets/icons/google.svg";
+import {useNavigate} from "react-router-dom";
+import {authTokenAtom} from "@/state/authState.js";
+import {useSetRecoilState} from "recoil";
 
 const StyledButton = styled.button`
   border: none;
@@ -29,6 +32,9 @@ const StyledButton = styled.button`
 `;
 
 function GoogleButton() {
+    const navigate = useNavigate();
+    const setAuthToken = useSetRecoilState(authTokenAtom);
+
     const googleLogin = useGoogleLogin({
         onSuccess: async (res) => {
             console.log(res.access_token);
@@ -41,8 +47,27 @@ function GoogleButton() {
                 },
             });
 
-            // TODO 구글한테 받은 유저 이메일 + sub를 백에 전달할 것
-            console.log(email, sub);
+            const response = await axios.post('http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/login/oauth/google', {
+                email : email,
+                password: 'G' + sub
+            })
+            // sns 로그인 최초
+                if (response.data.data.needMoreInfo) {
+                    console.log('needMore?', response.data.data.needMoreInfo)
+                    navigate('/signup-moreinfo', { state: { password: 'G'+sub, email: email } })
+                } else {
+                    alert('로그인 성공!')
+
+                    const { accessToken, refreshToken } = response.data.data;
+
+                    setAuthToken({accessToken: accessToken, refreshToken: refreshToken});
+
+                    localStorage.setItem('refreshToken', accessToken)
+                    localStorage.setItem('accessToken', refreshToken)
+
+                    navigate('/')
+                }
+
         },
         onError: () => {
             console.log("Login Failed");

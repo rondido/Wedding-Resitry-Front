@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import {useSetRecoilState} from "recoil";
+import {authTokenAtom} from "@/state/authState.js";
 
 const signUpValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -93,32 +97,63 @@ const StyledButton = styled.button`
 `;
 
 function SignUpMoreInfo() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const setAuthToken = useSetRecoilState(authTokenAtom);
 
     return (
         <StyledWrapper>
             <Formik
                 initialValues={{
                     username: '',
-                    email: '',
+                    email: location.state.email || '',
+                    agreeEvent: false
                 }}
                 validationSchema={signUpValidationSchema}
-                onSubmit={(values) => {
-                console.log(values)
+                onSubmit={async (values) => {
+                try {
+                    const response = await axios.post('http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/auth/social/info', {
+                        email : values.email,
+                        name: values.username,
+                        password: location.state.password || '',
+                        notification: values.agreeEvent
+                    })
+
+                    if (response.data.status === 200 || response.data.status === 201) {
+                        const { accessToken, refreshToken } = response.data.data;
+
+                        setAuthToken({accessToken: accessToken, refreshToken: refreshToken});
+
+                        localStorage.setItem('refreshToken', accessToken)
+                        localStorage.setItem('accessToken', refreshToken)
+
+                        alert(`회원가입 완료!`)
+                        navigate('/')
+
+                    }else {
+                        alert(response.data.message)
+                        navigate('/signin')
+                    }
+
+                } catch (error) {
+                    console.error('Login 실패:', error);
+                }
+
                 }}
             >
                 {({ errors, touched }) => (
                     <Form>
                         <Field name="username" placeholder="성/이름" />
                         {touched.username && errors.username && <div className="error">{errors.username}</div>}
-                        <Field name="email" placeholder="이메일" />
+                        <Field name="email"  placeholder="이메일"/>
                         {touched.email && errors.email && <div className="error">{errors.email}</div>}
                         <div className="left">
                         <label>
-                            <Field type="checkbox" name="agree-event" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
+                            <Field type="checkbox" name="agreeEvent" /> 새 기능, 이벤트 홍보 안내 등의 알림 수신
                             <div>이용약관의 변경이나 관계 법령에 따라 회원님께 안내되어야 할 중요 고지 사항은 메일 수신 동의 여무에 상관없이 안내될수 있습니다.</div>
                         </label>
                         </div>
-                        <StyledButton type="submit">로그인 하기</StyledButton>
+                        <StyledButton type="submit">회원가입 하기</StyledButton>
                     </Form>
                 )}
             </Formik>
