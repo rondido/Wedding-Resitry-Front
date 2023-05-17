@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import kakao from '@/assets/icons/kakao.svg';
 
-const StyledButton = styled.button`
+const StyledDiv = styled.div`
   border: none;
   height: 45px;
   width: 40%;
@@ -38,16 +38,20 @@ const KakaoSignInButton =()=>{
         console.log(error);
     };
     return(
-        <StyledButton>
+        <StyledDiv>
             <KakaoLogin
                 token={kakaoClientId}
                 onSuccess={kakaoOnSuccess}
                 onFail={kakaoOnFailure}
                 onLogout={console.info}
-                style={{backgroundColor: "#fee500", border: "none", height: "30px", width: "100%", minWidth: "140px"}}
+                style={{backgroundColor: "#fee500",
+                    border: "none",
+                    height: "3.2em",
+                    width: "100%",
+                    minWidth: "140px"}}
             >
             </KakaoLogin>
-        </StyledButton>
+        </StyledDiv>
 
     )
 }
