@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
+
 //공유 이미지 가져오기
 import Share from "@/assets/icons/share.png";
 import ShareBox from "@/components/ShareBox";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
-import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
+import GoodsModal from "@/components/goodsmodal/GoodsModal";
+import { getGoodsProductApi } from "../../constants/Api";
 
 const GoodsText = styled.input`
   border: 0;
@@ -101,6 +104,9 @@ const BoxContainer = styled.div`
 
 const BoxItem = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+
   &:nth-child(odd) {
     margin-top: auto;
     display: flex;
@@ -125,10 +131,10 @@ const ItemDiv = styled.div`
 const StyledTrack = styled.div`
   width: 5px;
   height: 100px;
-  background-color: #ebebeb;
+  background-color: ${(props) => (props ? "" : `#ebebeb`)};
   border-radius: 15px;
   transform: rotate(180deg);
-  margin-right: 10px;
+  margin-right: 8px;
 `;
 
 const StyledRange = styled.div`
@@ -149,8 +155,8 @@ const ValueItem = styled.div`
 
 const BoxSlider = styled.div`
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: 50%;
+  overflow-x: hidden;
   margin-bottom: 10%;
 `;
 
@@ -160,19 +166,45 @@ const CenterTextdiv = styled.div`
 
 export default function GoodsProductContainer() {
   const [sharebox, setSharebox] = useState(false);
-  const [fetchdata, SetFetchData] = useState([]);
+  const [didmount, setDidmount] = useState(false);
+  const [fetchdata, setFetchData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  //state 상태에 따른 비동기 통신중 fetchdata의 값이 undefined일때 상태를 고려한 code
+  const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
+  const TOTAL_SLIDES = 1;
+  const FIX_SIZE = 10;
   const slideRef = useRef(null);
 
-  const TOTAL_SLIDES = 1;
+  async function renderProduct() {
+    const products = await getGoodsProductApi();
+    setFetchData(products);
+  }
 
   useEffect(() => {
-    fetch("/GoodsProduct/all")
-      .then((res) => res.json())
-      .then((data) => {
-        SetFetchData(data);
-      });
+    setDidmount(true);
   }, []);
-  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    if (didmount) {
+      renderProduct();
+    }
+  }, [didmount]);
+
+  const GoodsElementList = () => {
+    let element = [];
+    for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
+      element.push(
+        <BoxItem style={{ width: "100%", marginRight: "150px" }}>
+          <Box />
+          <ItemDiv></ItemDiv>
+        </BoxItem>
+      );
+    }
+    return element;
+  };
+
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
       // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.
@@ -188,6 +220,7 @@ export default function GoodsProductContainer() {
       setCurrentSlide(currentSlide - 1);
     }
   };
+
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
@@ -261,32 +294,47 @@ export default function GoodsProductContainer() {
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
             <BoxWapper ref={slideRef}>
-              {fetchdata.data &&
-                fetchdata.data.map((value, idx) => (
-                  <BoxItem key={idx}>
-                    <Box url={value.usersGoodsImgUrl} />
-                    <ItemDiv>
-                      <StyledTrack>
-                        <StyledRange width={value.usersGoodsPercent} />
-                      </StyledTrack>
-                      <ValueItem>
-                        <div>
-                          <p>{value.usersGoodsName}</p>
-                        </div>
-                        <div>
-                          <p>{value.usersGoodsPrice}원</p>
-                        </div>
-                        <div>
-                          <p>{value.totalDonation}원 후원</p>
-                        </div>
-                      </ValueItem>
-                    </ItemDiv>
-                  </BoxItem>
-                ))}
+              <>
+                {fetchdata.data &&
+                  fetchdata.data.map((value, idx) => (
+                    <BoxItem
+                      key={idx}
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}
+                    >
+                      <Box url={value.usersGoodsImgUrl} />
+                      <ItemDiv>
+                        <StyledTrack isTrue={false}>
+                          <StyledRange width={value.usersGoodsPercent} />
+                        </StyledTrack>
+                        <ValueItem>
+                          <div>
+                            <p>{value.usersGoodsName}</p>
+                          </div>
+                          <div>
+                            <p>{value.usersGoodsPrice}원</p>
+                          </div>
+                          <div>
+                            <p style={{ marginTop: "50px" }}>
+                              {value.totalDonation}원 후원
+                            </p>
+                          </div>
+                        </ValueItem>
+                      </ItemDiv>
+                    </BoxItem>
+                  ))}
+                {GoodsElementList()}
+              </>
             </BoxWapper>
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
+        {isOpen ? (
+          <GoodsModal setIsOpen={setIsOpen} setFetchData={setFetchData} />
+        ) : (
+          <></>
+        )}
       </GoodsContainer>
     </>
   );
