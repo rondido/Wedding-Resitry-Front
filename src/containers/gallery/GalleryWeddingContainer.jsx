@@ -1,7 +1,9 @@
 import React from "react";
-//import {RiArrowDropLeftLine,RiArrowDropRightLine} from 'react-icons/ri';
 import { Swiper, SwiperSlide } from "swiper/react"; // basic
 import { EffectCoverflow, Navigation } from "swiper";
+import styled from "styled-components";
+
+import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox";
 
 // Import Swiper styles
 
@@ -10,13 +12,16 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "../style/styles.css";
-import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox";
 
-const banners = [1, 2, 3, 4, 5, 6];
+const banners = [1, 2, 3, 4, 5, 6, 7];
+
+const Base = styled.div`
+  height: 93vh;
+`;
 
 export default function GalleryWeddingContainer() {
   return (
-    <>
+    <Base>
       <Swiper
         effect={"coverflow"}
         slidesPerView={3} // 동시에 보여줄 슬라이드 갯수
@@ -42,10 +47,10 @@ export default function GalleryWeddingContainer() {
       >
         {banners.map((value, idx) => (
           <SwiperSlide key={idx}>
-            <GalleryWeddingBox className="swiper-image" />
+            <GalleryWeddingBox className="swiper-image" banners={banners} />
           </SwiperSlide>
         ))}
       </Swiper>
-    </>
+    </Base>
   );
 }
