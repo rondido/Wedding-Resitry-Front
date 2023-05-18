@@ -23,7 +23,7 @@ const Base = styled.div`
   border: 1px solid black;
   border-radius: 10px;
   box-shadow: 1px 1px 1px 1px;
-  z-index: 1;
+  z-index: 100;
   right: 3%;
   position: absolute;
   background: #eaeaeb;
