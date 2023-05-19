@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 
 import logo from "@/assets/icons/logo.png";
-import { postGoodsProductApi } from "../../constants/Api";
+import { postGoodsProductApi } from "../../apis/Api";
 
 const Base = styled.div`
   background: rgba(228, 230, 232, 0.7);
@@ -90,10 +90,20 @@ const OkorColsebuttonDiv = styled.div`
 `;
 
 export default function GoodsModal(props) {
+  const [data, setData] = useState([]);
+  const [getGoodsApiBody, setGetGoodsApiBody] = useState("");
+  console.log(data);
   async function postGoodsList() {
-    const goodsItems = await postGoodsProductApi();
-    props.setFetchData(goodsItems);
+    const goodsItems = await postGoodsProductApi(getGoodsApiBody);
+    setData(goodsItems);
   }
+
+  const getGoodsUrl = (e) => {
+    setGetGoodsApiBody(e.target.value);
+  };
+  useEffect(() => {
+    console.log(123);
+  }, [data]);
 
   return (
     <Base>
@@ -108,17 +118,32 @@ export default function GoodsModal(props) {
               props.setIsOpen(false);
             }}
           />
-          <Text />
-          <div>
-            <p>
-              상품 이름 : <GoodsNameInput />
-            </p>
-            <GoodsDonationDiv>
-              <p>
-                후&nbsp; 원 &nbsp; 가 : <GoodsDonationInput />원
-              </p>
-            </GoodsDonationDiv>
-          </div>
+          {data.length > 0 && data ? (
+            data.map((value, index) => (
+              <>
+                <div key={index}>
+                  {value.usersGoodsImgUrl}
+                  {value.usersGoodsName}
+                  {value.usersGoodsPrice}
+                </div>
+              </>
+            ))
+          ) : (
+            <>
+              <Text onChange={getGoodsUrl} />
+              <div>
+                <p>
+                  상품 이름 : <GoodsNameInput />
+                </p>
+                <GoodsDonationDiv>
+                  <p>
+                    후&nbsp; 원 &nbsp; 가 : <GoodsDonationInput />원
+                  </p>
+                </GoodsDonationDiv>
+              </div>
+            </>
+          )}
+
           <div style={{ width: "100%" }}>
             <OkorColsebuttonDiv>
               {props.setModalState ? (

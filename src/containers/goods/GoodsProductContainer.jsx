@@ -7,7 +7,7 @@ import ShareBox from "@/components/ShareBox";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
 import GoodsModal from "@/components/goodsmodal/GoodsModal";
-import { getGoodsProductApi } from "../../constants/Api";
+import { getGoodsProductApi } from "../../apis/Api";
 
 const GoodsText = styled.input`
   border: 0;
@@ -170,7 +170,6 @@ export default function GoodsProductContainer() {
   const [fetchdata, setFetchData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-
   //state 상태에 따른 비동기 통신중 fetchdata의 값이 undefined일때 상태를 고려한 code
   const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
   const TOTAL_SLIDES = 1;
@@ -196,7 +195,13 @@ export default function GoodsProductContainer() {
     let element = [];
     for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
       element.push(
-        <BoxItem style={{ width: "100%", marginRight: "150px" }}>
+        <BoxItem
+          style={{ width: "100%", marginRight: "150px" }}
+          onClick={() => {
+            setIsOpen(true);
+          }}
+          key={i}
+        >
           <Box />
           <ItemDiv></ItemDiv>
         </BoxItem>

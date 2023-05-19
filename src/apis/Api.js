@@ -10,14 +10,18 @@ async function getGoodsProductApi() {
   }
 }
 
-async function postGoodsProductApi() {
+async function postGoodsProductApi(url) {
   try {
-    const response = await fetch("/usersgoods/add/", {
+    const response = await fetch("/usersgoods/add/products", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        url: `${url}`,
+      }),
     });
     const { data } = await response.json();
 
