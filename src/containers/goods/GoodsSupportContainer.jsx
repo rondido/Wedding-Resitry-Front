@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
-import { getGoodsProductApi } from "../../constants/Api";
+import { getGoodsProductApi } from "../../apis/Api";
 
 const GoodsContainer = styled.div`
   display: flex;

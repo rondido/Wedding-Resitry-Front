@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 
 import logo from "@/assets/icons/logo.png";
-import { postGoodsProductApi } from "../../constants/Api";
+import { postGoodsProductApi, deleteGoodsAdd } from "../../apis/Api";
 
 const Base = styled.div`
   background: rgba(228, 230, 232, 0.7);
@@ -33,6 +33,7 @@ const Container = styled.div`
   height: 242px;
   display: flex;
   justify-content: center;
+  position: relative;
 `;
 
 const Logo = styled.img`
@@ -89,36 +90,98 @@ const OkorColsebuttonDiv = styled.div`
   width: 100%;
 `;
 
+const GoodsDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 479px;
+`;
+
+const GoodsImage = styled.div`
+  background-color: blue;
+  width: 135px;
+  height: 135px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: ${(props) => props.url};
+  margin-bottom: 10px;
+`;
+
+const GoodsText = styled.p`
+  width: 100%;
+  justify-content: center;
+  display: flex;
+`;
+
 export default function GoodsModal(props) {
+  const [data, setData] = useState([]);
+  const [getGoodsUrlItem, setGetGoodsUrlItem] = useState("");
   async function postGoodsList() {
-    const goodsItems = await postGoodsProductApi();
-    props.setFetchData(goodsItems);
+    const goodsItems = await postGoodsProductApi(getGoodsUrlItem);
+    setData(goodsItems);
   }
+
+  const getGoodsUrl = (e) => {
+    setGetGoodsUrlItem(e.target.value);
+  };
+
+  const okButton = () => {
+    props.setIsOpen(false);
+  };
+
+  const deleteButton = () => {
+    deleteGoodsAdd();
+    props.setIsOpen(false);
+  };
 
   return (
     <Base>
       <Container>
         <TextDiv>
-          <Logo src={logo} />
+          {data.data && data.data ? null : <Logo src={logo} />}
           <AiOutlineClose
             style={{
               marginLeft: "auto",
+              position: "absolute",
+              top: "10%",
+              right: "5%",
             }}
             onClick={() => {
               props.setIsOpen(false);
             }}
           />
-          <Text />
-          <div>
-            <p>
-              상품 이름 : <GoodsNameInput />
-            </p>
-            <GoodsDonationDiv>
-              <p>
-                후&nbsp; 원 &nbsp; 가 : <GoodsDonationInput />원
-              </p>
-            </GoodsDonationDiv>
-          </div>
+          {data.data && data.data ? (
+            Object.values(data).map((key, value) => (
+              <>
+                <GoodsDiv key={value}>
+                  <GoodsImage url={key.usersGoodsImgUrl} />
+                  <GoodsText>상품 이름 : {key.usersGoodsName}</GoodsText>
+                  <GoodsDonationDiv>
+                    <GoodsText>
+                      후&nbsp; 원 &nbsp; 가 : {key.usersGoodsPrice}원
+                    </GoodsText>
+                  </GoodsDonationDiv>
+                </GoodsDiv>
+              </>
+            ))
+          ) : (
+            <>
+              <Text onChange={getGoodsUrl} />
+              <div>
+                <p>
+                  상품 이름 : <GoodsNameInput />
+                </p>
+                <GoodsDonationDiv>
+                  <p>
+                    후&nbsp; 원 &nbsp; 가 : <GoodsDonationInput />원
+                  </p>
+                </GoodsDonationDiv>
+              </div>
+            </>
+          )}
+
           <div style={{ width: "100%" }}>
             <OkorColsebuttonDiv>
               {props.setModalState ? (
@@ -134,7 +197,8 @@ export default function GoodsModal(props) {
                   <div
                     style={{ position: "absolute", top: "85%", right: "10%" }}
                   >
-                    <ApiButton>확인</ApiButton>|<ApiButton>취소</ApiButton>
+                    <ApiButton onClick={okButton}>확인</ApiButton>|
+                    <ApiButton onClick={deleteButton}>취소</ApiButton>
                   </div>
                 </>
               )}
