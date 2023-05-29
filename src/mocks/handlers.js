@@ -12,4 +12,8 @@ export const handlers = [
   rest.post("/usersgoods/add/products", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(Goods));
   }),
+  rest.delete("/usersgoods", (req, res, ctx) => {
+    const url = req.url.searchParams.get("usersGoodsId");
+    return res(ctx.json({ url }, null));
+  }),
 ];

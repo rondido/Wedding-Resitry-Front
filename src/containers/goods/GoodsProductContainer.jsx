@@ -191,6 +191,12 @@ export default function GoodsProductContainer() {
     }
   }, [didmount]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      console.log(123);
+      renderProduct();
+    }
+  }, [isOpen]);
   const GoodsElementList = () => {
     let element = [];
     for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
@@ -335,11 +341,7 @@ export default function GoodsProductContainer() {
           </BoxSlider>
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
-        {isOpen ? (
-          <GoodsModal setIsOpen={setIsOpen} setFetchData={setFetchData} />
-        ) : (
-          <></>
-        )}
+        {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
       </GoodsContainer>
     </>
   );
