@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+const token = '';
+
 //상품 전체 조회
 async function getGoodsProductApi() {
   try {
@@ -43,6 +47,7 @@ async function deleteGoodsAdd(userGoodsId) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization:`Bearer ${token}`
       },
     });
     const { data } = await response.json();
@@ -52,4 +57,37 @@ async function deleteGoodsAdd(userGoodsId) {
   }
 }
 
-export { getGoodsProductApi, postGoodsProductApi, deleteGoodsAdd };
+//사진 등록 
+async function postGalleryWeddingImageAdd(formData){  
+  try{
+    const res = await axios.post(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,formData,{      
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: "application/json",
+        Authorization:`Bearer ${token}`
+      },
+    });
+    const data = res.data;
+    return data;
+  }catch(e){
+    console.error(e);
+  }
+}
+
+async function deleteGalleryWeddingImage(){  
+  try{
+    const res = await axios.delete(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,{      
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: "application/json",
+        Authorization:`Bearer ${token}`
+      },
+    });
+    const data = res.data;
+    return data;
+  }catch(e){
+    console.error(e);
+  }
+}
+
+export { getGoodsProductApi, postGoodsProductApi, deleteGoodsAdd, postGalleryWeddingImageAdd };
