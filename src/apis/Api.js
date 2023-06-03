@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
-const token = '';
+const token =
+  "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODU3MzEwMTYsImV4cCI6MTcxNzI2NzAxNiwidXNlcklkIjo5LCJ1c2VyTmFtZSI6IuuwleynhO2YhCIsImJvYXJkc0lkIjoyLCJyb2xlIjoiVVNFUiJ9.y2NAnucYGVjzBLp3pYlEL1gBK5bFJU0AxHkMYc-P_C-_dvW_-xeLZ0NOa3IN2dNCLrtjI3jRwgXHmNLRaP5Npg";
 
 //상품 전체 조회
 async function getGoodsProductApi() {
@@ -47,7 +48,7 @@ async function deleteGoodsAdd(userGoodsId) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization:`Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
     const { data } = await response.json();
@@ -57,37 +58,70 @@ async function deleteGoodsAdd(userGoodsId) {
   }
 }
 
-//사진 등록 
-async function postGalleryWeddingImageAdd(formData){  
-  try{
-    const res = await axios.post(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,formData,{      
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Accept: "application/json",
-        Authorization:`Bearer ${token}`
-      },
-    });
+//사진 조회
+async function getGalleryWeddingImage() {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = res.data;
     return data;
-  }catch(e){
+  } catch (e) {
     console.error(e);
   }
 }
 
-async function deleteGalleryWeddingImage(){  
-  try{
-    const res = await axios.delete(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,{      
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Accept: "application/json",
-        Authorization:`Bearer ${token}`
-      },
-    });
+//사진 등록
+async function postGalleryWeddingImageAdd(formData) {
+  try {
+    const res = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = res.data;
     return data;
-  }catch(e){
+  } catch (e) {
+    console.error(e);
+  }
+}
+//사진 삭제
+async function deleteGalleryWeddingImage(galleryImgId) {
+  try {
+    const res = await axios.delete(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img/?galleryImgId=${galleryImgId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
     console.error(e);
   }
 }
 
-export { getGoodsProductApi, postGoodsProductApi, deleteGoodsAdd, postGalleryWeddingImageAdd };
+export {
+  getGoodsProductApi,
+  postGoodsProductApi,
+  deleteGoodsAdd,
+  postGalleryWeddingImageAdd,
+  deleteGalleryWeddingImage,
+  getGalleryWeddingImage,
+};
