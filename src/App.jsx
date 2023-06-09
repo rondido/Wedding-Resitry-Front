@@ -6,7 +6,6 @@ import { Reset } from "styled-reset";
 // 페이지 불러오기
 //import Layout from "./pages/Layout";
 import Home from "./pages/Home";
-import Admin from "./pages/admin/Admin.jsx";
 // 절대경로 설정 예시 // @사용
 import NotFound from "@/pages/NotFound";
 // import NotFound from './pages/NotFound'
@@ -15,11 +14,11 @@ import NotFound from "@/pages/NotFound";
 import Main from "./pages/main/MainPage";
 
 // 관리자 페이지
+import AdminMain from "@/pages/admin/AdminMain.jsx";
 import AdminAlarmLists from "./pages/admin/AdminAlarmLists.jsx";
 import AdminAttendanceLists from "./pages/admin/AdminAttendanceLists.jsx";
 import AdminDonationLists from "./pages/admin/AdminDonationLists.jsx";
 import AdminMemo from "./pages/admin/AdminMemo.jsx";
-import AdminMain from "./pages/admin/AdminMain.jsx";
 
 // 상품 갤러리
 import GalleryWedding from "./pages/gallery/GalleryWedding";
@@ -57,13 +56,11 @@ function App() {
         <Route path="signup-moreinfo" element={<SignUpMoreInfo />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="callback" element={<Callback />} />
-        <Route path="admin" element={<Admin />}>
-          <Route path="main" element={<AdminMain />} />
-          <Route path="alarm" element={<AdminAlarmLists />} />
-          <Route path="attendance" element={<AdminAttendanceLists />} />
-          <Route path="donation" element={<AdminDonationLists />} />
-          <Route path="memo" element={<AdminMemo />} />
-        </Route>
+        <Route path="admin" element={<AdminMain />} />
+        <Route path="admin/alarm" element={<AdminAlarmLists />} />
+        <Route path="admin/attendance" element={<AdminAttendanceLists />} />
+        <Route path="admin/donation" element={<AdminDonationLists />} />
+        <Route path="admin/memo" element={<AdminMemo />} />
         <Route path="/GalleryWedding" element={<GalleryWedding />} />
         <Route path="/GallerySupport" element={<GallerySupport />} />
         <Route path="/GoodsSupport" element={<GoodsSupport />} />
