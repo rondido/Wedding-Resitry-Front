@@ -1,8 +1,10 @@
-import React, { useCallback,  useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import {postGalleryWeddingImageAdd} from '../../apis/Api';
 
 import Plus from '@/assets/icons/plus.png';
+import { useSetRecoilState } from 'recoil';
+import { galleryWeddingImageState } from '../../state/galleryWeddingImageState';
+import { postGalleryWeddingImageAdd } from '../../apis/Api';
 
 const Base = styled.div`
   display: flex;
@@ -14,7 +16,6 @@ const Base = styled.div`
   background: rgba(228, 230, 232, 0.7);
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 50px;
-
 `;
 
 const Imageinput = styled.div`
@@ -44,27 +45,27 @@ const Imageinput = styled.div`
 `;
 
 
-export default function GalleryWeddingimageBox({getIsTrued,getIsImageData}) {  
-  const [image,setImage] = useState(false);
-
+export default function GalleryWeddingimageBox({getIsTrued}) {
+  
+  const setImgData  = useSetRecoilState(galleryWeddingImageState);    
   const imageInput = useRef();
+  
   async function postImageRender(dataImage){
-    const data = await postGalleryWeddingImageAdd(dataImage);    
-    getIsImageData(data);
-  }
-  const onUploadImage = useCallback((e)=>{    
+    const postImgData = await postGalleryWeddingImageAdd(dataImage);
+    setImgData((prev)=> [...prev, postImgData.data]);
+  }  
+ 
+  const onUploadImage = useCallback((e)=>{ 
     if(!e.target.files[0]){
       return;
     }
     if(e.target.files[0]){
       const formData = new FormData();
-      formData.append('galleryImg',e.target.files[0]);
+      formData.append('galleryImg',e.target.files[0]);  
       postImageRender(formData);
-      setImage(false);
-      getIsTrued(image);      
+      getIsTrued(false);      
     }
   },[])
-
 
   const onClickImage = useCallback(() => {
     if(!imageInput.current){
@@ -77,10 +78,11 @@ export default function GalleryWeddingimageBox({getIsTrued,getIsImageData}) {
     <>
       <Base >
           <Imageinput>      
-                <input type="file" name="thumbnail" accept="image/jpg, image/png, image/jpeg" id="ex_file" ref={imageInput} onChange={onUploadImage} />
+                <input type="file" name="thumbnail" accept="image/jpg, image/png, image/jpeg" id="ex_file" ref={imageInput} onChange={onUploadImage} />                
                 <img src={Plus} onClick={onClickImage}  />                         
           </Imageinput>
       </Base>
     </>
   )
 }
+

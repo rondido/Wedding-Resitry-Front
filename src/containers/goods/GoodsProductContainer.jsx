@@ -193,7 +193,6 @@ export default function GoodsProductContainer() {
 
   useEffect(() => {
     if (!isOpen) {
-      console.log(123);
       renderProduct();
     }
   }, [isOpen]);

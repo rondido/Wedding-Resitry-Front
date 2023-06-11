@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const token =
-  "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODU3MzEwMTYsImV4cCI6MTcxNzI2NzAxNiwidXNlcklkIjo5LCJ1c2VyTmFtZSI6IuuwleynhO2YhCIsImJvYXJkc0lkIjoyLCJyb2xlIjoiVVNFUiJ9.y2NAnucYGVjzBLp3pYlEL1gBK5bFJU0AxHkMYc-P_C-_dvW_-xeLZ0NOa3IN2dNCLrtjI3jRwgXHmNLRaP5Npg";
+  "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODYyMjk0MjMsImV4cCI6MTcxNzc2NTQyMywidXNlcklkIjoyLCJ1c2VyTmFtZSI6IuuwleynhO2YhCIsImJvYXJkc0lkIjo0LCJyb2xlIjoiVVNFUiJ9.vU1QGURdtEYq9vWk239GdLJzG2tvRYqYrOQL6ZcC3KABT9Mkx5LahgPvnplMIzYC6EBp3iv7Q3qV3QU-ARHMkw";
 
 //상품 전체 조회
 async function getGoodsProductApi() {
@@ -97,10 +97,11 @@ async function postGalleryWeddingImageAdd(formData) {
     console.error(e);
   }
 }
+
 //사진 삭제
 async function deleteGalleryWeddingImage(galleryImgId) {
   try {
-    const res = await axios.delete(
+    await axios.delete(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img/?galleryImgId=${galleryImgId}`,
       {
         headers: {
@@ -108,10 +109,8 @@ async function deleteGalleryWeddingImage(galleryImgId) {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    const data = res.data;
-    return data;
+      }      
+    );      
   } catch (e) {
     console.error(e);
   }

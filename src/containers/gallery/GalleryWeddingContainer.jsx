@@ -1,9 +1,16 @@
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react"; // basic
+import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react"; 
 import { EffectCoverflow, Navigation } from "swiper";
 import styled from "styled-components";
 
+import { galleryWeddingImageState } from '../../state/galleryWeddingImageState';
+import { useRecoilState } from 'recoil';
 import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox";
+import {
+  deleteGalleryWeddingImage,
+  getGalleryWeddingImage, 
+} from "../../apis/Api";
+
 
 // Import Swiper styles
 
@@ -12,14 +19,66 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import "../style/styles.css";
-
-const banners = [1, 2, 3, 4, 5, 6, 7];
+import { AiOutlineClose } from 'react-icons/ai';
 
 const Base = styled.div`
-  height: 93vh;
+  height: 92vh;
 `;
 
+
+
 export default function GalleryWeddingContainer() {
+
+  const [imgData,setImgData]  = useRecoilState(galleryWeddingImageState);
+  const [didMount,setDidMount] = useState(false);    
+  const arrayLength = imgData ? imgData.length : 0;  
+  const FIX_SIZE = 6;
+  
+  const GallyElementList = () => {
+    let element = [];   
+    for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
+      element.push(
+        <SwiperSlide key={i}>   
+          <GalleryWeddingBox key={i} className="swiper-image" />   
+          <AiOutlineClose              
+              style={{
+                zIndex: "1",
+                position: "absolute",
+                top:"200",
+                right:"80"
+            }}
+          />   
+        </SwiperSlide>
+      );
+    }
+    return element;
+  };
+
+  async function getImageDataRender() {    
+    const data = await getGalleryWeddingImage();    
+    setImgData(data.data);
+  }   
+
+
+  const deleteImageOnClick = async (id) =>{     
+    await deleteGalleryWeddingImage(id);    
+    getImageDataRender();
+  }  
+
+
+  useEffect(() => {
+    setDidMount(true);
+  }, []);
+
+
+  useEffect(()=>{
+    if(didMount){
+      getImageDataRender();
+    }
+  },[didMount])
+
+
+
   return (
     <Base>
       <Swiper
@@ -45,11 +104,29 @@ export default function GalleryWeddingContainer() {
         className="swiper-container two"
         grabCursor={true}
       >
-        {banners.map((value, idx) => (
-          <SwiperSlide key={idx}>
-            <GalleryWeddingBox className="swiper-image" banners={banners} />
-          </SwiperSlide>
-        ))}
+      {
+        imgData && imgData.map((v)=>(
+          <SwiperSlide key={v.galleryImgId}>   
+              <GalleryWeddingBox 
+                className="swiper-image" 
+                url={v.galleryImgUrl} 
+              />            
+              <AiOutlineClose
+                key={v.galleryImgId}
+                style={{
+                  zIndex: "1",
+                  position:"absolute",
+                  top:"200",
+                  right:"80"
+                }}
+              onClick={() => {
+                 deleteImageOnClick(v.galleryImgId)
+              }}                  
+           />   
+          </SwiperSlide>                 
+         ))
+      }     
+      {GallyElementList()}     
       </Swiper>
     </Base>
   );
