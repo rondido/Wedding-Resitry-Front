@@ -1,7 +1,29 @@
 import axios from "axios";
+import { getAccessToken } from '../tokens/token';
 
-const token =
-  "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODYyMjk0MjMsImV4cCI6MTcxNzc2NTQyMywidXNlcklkIjoyLCJ1c2VyTmFtZSI6IuuwleynhO2YhCIsImJvYXJkc0lkIjo0LCJyb2xlIjoiVVNFUiJ9.vU1QGURdtEYq9vWk239GdLJzG2tvRYqYrOQL6ZcC3KABT9Mkx5LahgPvnplMIzYC6EBp3iv7Q3qV3QU-ARHMkw";
+const token1 = getAccessToken();
+
+
+//상품 등록 게시판 생성
+async function addBorderIdApi(token){
+  try {
+    const res = await axios(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/add/board`,
+    {  
+      method:"GET",
+      headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = res.data;
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 //상품 전체 조회
 async function getGoodsProductApi() {
@@ -48,7 +70,7 @@ async function deleteGoodsAdd(userGoodsId) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token1}`,
       },
     });
     const { data } = await response.json();
@@ -66,7 +88,7 @@ async function getGalleryWeddingImage() {
       {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token1}`,
         },
       }
     );
@@ -87,7 +109,7 @@ async function postGalleryWeddingImageAdd(formData) {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token1}`,
         },
       }
     );
@@ -107,7 +129,7 @@ async function deleteGalleryWeddingImage(galleryImgId) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token1}`,
         },
       }      
     );      
@@ -123,4 +145,5 @@ export {
   postGalleryWeddingImageAdd,
   deleteGalleryWeddingImage,
   getGalleryWeddingImage,
+  addBorderIdApi
 };
