@@ -4,6 +4,7 @@ import logo from "@/assets/icons/logo.png";
 import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
 import Navbar from "../navbar/Navbar";
+import { Link } from 'react-router-dom';
 
 const HeaderDiv = styled.header`
   height: 7vh;
@@ -44,15 +45,21 @@ const RightLogo = styled.div`
 export default function Header({ border }) {
   //여기서 navbar api 호출해서 넘겨주면 독립적으로 테스트를 할 수 있다.
   const [navbar, setNavbar] = useState(false);
+
+
   return (
     <>
       <HeaderDiv isBoolean={border}>
         <HeaderLogoDiv>
           <div>
-            <Logo src={logo} />
+            <Link to="/">
+              <Logo src={logo}/>
+            </Link>
           </div>
           <RightLogo>
-            <PersonLogo src={Person} style={{ marginRight: "1vw" }} />
+            <Link to="/signin">
+              <PersonLogo src={Person} style={{ marginRight: "1vw" }}/>
+            </Link>
             <HamberLogo
               src={Menu}
               onClick={() => {

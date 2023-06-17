@@ -36,6 +36,7 @@ const Button = styled.button`
   width: 300px;
   height: 100px;
   border:none;
+  box-shadow: 10px 5px 5px darkgray;
   &:hover{
     background-color: gray;
   }
@@ -69,7 +70,7 @@ export default function BorderIdModal({setBorderIdModal,token}) {
       return;
     }
   }
-  
+
   const borderAddButton = () =>{
     addBorderIdrender(token);
     setBorderIdModal(false);
