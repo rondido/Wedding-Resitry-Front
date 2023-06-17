@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 import CircleRadius from "@/assets/icons/radius.png";
 import FirstAnimation from "@/assets/icons/first.png";
 import SecoundAnimation from "@/assets/icons/secound.png";
 import ThreeAnimation from "@/assets/icons/three.png";
+import { getAccessToken } from '../../tokens/token';
+import BorderIdModal from '../../components/borderid/BorderIdModal';
 
 const Base = styled.div`
   display: flex;
@@ -12,6 +14,7 @@ const Base = styled.div`
   height: 92.8vh;
   align-items: center;
   margin-left: 10%;
+  position: relative;
 `;
 
 const Centerdiv = styled.div`
@@ -132,7 +135,17 @@ const MainImage = styled.div`
   }
 `;
 
-export default function MainContainer() {
+
+export default function MainContainer({token}) {
+  const [bordorIdModal,setBorderIdModal] = useState(false);
+
+  useEffect(()=>{
+    const token = getAccessToken();    
+    if(token !== null){
+      setBorderIdModal(true);
+    }
+  },[])
+  
   return (
     <>
       <Base>
@@ -166,6 +179,7 @@ export default function MainContainer() {
           </WeddingMemoText>
         </Weddingdiv>
       </Base>
+      {bordorIdModal ? <BorderIdModal setBorderIdModal={setBorderIdModal} token={token}/> : <></>}
     </>
   );
 }
