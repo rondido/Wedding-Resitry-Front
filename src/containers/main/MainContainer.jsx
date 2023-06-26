@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import base64 from "base-64";
 
 import CircleRadius from "@/assets/icons/radius.png";
 import FirstAnimation from "@/assets/icons/first.png";
 import SecoundAnimation from "@/assets/icons/secound.png";
 import ThreeAnimation from "@/assets/icons/three.png";
-import { getAccessToken } from '../../tokens/token';
-import BorderIdModal from '../../components/borderid/BorderIdModal';
+import BorderIdModal from "../../components/borderid/BorderIdModal";
 
 const Base = styled.div`
   display: flex;
@@ -135,17 +135,23 @@ const MainImage = styled.div`
   }
 `;
 
-
-export default function MainContainer({token}) {
-  const [bordorIdModal,setBorderIdModal] = useState(false);
-
-  useEffect(()=>{
-    const token = getAccessToken();    
-    if(token !== null){
-      setBorderIdModal(true);
+export default function MainContainer({ token }) {
+  const [bordorIdModal, setBorderIdModal] = useState(false);
+  useEffect(() => {
+    if (token != null) {
+      const [hader, payload] = token.split(".");
+      console.log(hader);
+      const decodePayload = JSON.parse(base64.decode(payload));
+      if (decodePayload.boardsId == undefined) {
+        setBorderIdModal(true);
+        return;
+      }
+      if (decodePayload.boardsId != undefined) {
+        setBorderIdModal(false);
+        return;
+      }
     }
-  },[])
-  
+  }, [token]);
   return (
     <>
       <Base>
@@ -179,7 +185,11 @@ export default function MainContainer({token}) {
           </WeddingMemoText>
         </Weddingdiv>
       </Base>
-      {bordorIdModal ? <BorderIdModal setBorderIdModal={setBorderIdModal} token={token}/> : <></>}
+      {bordorIdModal ? (
+        <BorderIdModal setBorderIdModal={setBorderIdModal} token={token} />
+      ) : (
+        <></>
+      )}
     </>
   );
 }

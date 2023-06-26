@@ -10,7 +10,7 @@ export function getAccessToken(){
 }
 
 export function removeAccessToken() {
-	localStorage.clear();
+	return localStorage.clear();
 }
 
 export function hasAccessToken() {
