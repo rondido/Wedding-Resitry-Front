@@ -52,12 +52,12 @@ export default function Header({ border }) {
       <HeaderDiv isBoolean={border}>
         <HeaderLogoDiv>
           <div>
-            <Link to="/">
+            <Link to="/" onClick={()=>setNavbar(false)}>
               <Logo src={logo}/>
             </Link>
           </div>
           <RightLogo>
-            <Link to="/signin">
+            <Link to="/signin" onClick={()=>setNavbar(false)}>
               <PersonLogo src={Person} style={{ marginRight: "1vw" }}/>
             </Link>
             <HamberLogo

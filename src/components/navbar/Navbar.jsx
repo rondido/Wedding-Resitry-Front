@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 
 import styled from "styled-components";
 import {
@@ -203,6 +203,7 @@ function NotificationItem({ data }) {
 
 export default function Navbar({setNavbar}) {
   const [fetchdata, setFetchData] = useState([]);
+  const navigator = useNavigate();
   useEffect(() => {
     fetch("/alarm/all")
       .then((res) => res.json())
@@ -210,6 +211,20 @@ export default function Navbar({setNavbar}) {
         setFetchData(data);
       });
   }, []);
+  const removeAcctokenRender =()=>{
+    const tokenRemove = removeAccessToken()
+    if(tokenRemove){
+      navigator('/');
+      setNavbar(false);
+      return;
+    }
+    if(!tokenRemove){
+      navigator('/');
+      setNavbar(false);
+      alert('로그인정보가 존재하지 않습니다.')
+      return;
+    }
+  }
   return (
     <>
       <Base>
@@ -261,7 +276,7 @@ export default function Navbar({setNavbar}) {
         </CenterItemDiv>
         <BottomItemDiv>
           <p>링크 공유하기</p>
-          <LogButton onClick={() => removeAccessToken()}>
+          <LogButton onClick={() => removeAcctokenRender()}>
             Log out
           </LogButton>
         </BottomItemDiv>
