@@ -138,6 +138,28 @@ async function deleteGalleryWeddingImage(galleryImgId) {
   }
 }
 
+// 공유할 링크 가져오기
+
+async function getGoodsUrlUUID(token) {
+  console.log(token);
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/uuids`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
 export {
   getGoodsProductApi,
   postGoodsProductApi,
@@ -145,5 +167,6 @@ export {
   postGalleryWeddingImageAdd,
   deleteGalleryWeddingImage,
   getGalleryWeddingImage,
-  addBorderIdApi
+  addBorderIdApi,
+  getGoodsUrlUUID
 };

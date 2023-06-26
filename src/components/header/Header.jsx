@@ -69,7 +69,7 @@ export default function Header({ border }) {
           </RightLogo>
         </HeaderLogoDiv>
       </HeaderDiv>
-      {navbar ? <Navbar /> : null}
+      {navbar ? <Navbar setNavbar={setNavbar}/> : null}
     </>
   );
 }

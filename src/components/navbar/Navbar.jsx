@@ -14,6 +14,7 @@ import {
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
+import { removeAccessToken } from '../../tokens/token';
 
 const Base = styled.div`
   display: flex;
@@ -200,7 +201,7 @@ function NotificationItem({ data }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({setNavbar}) {
   const [fetchdata, setFetchData] = useState([]);
   useEffect(() => {
     fetch("/alarm/all")
@@ -223,28 +224,28 @@ export default function Navbar() {
         </NickNamediv>
         <TopItem>
           <TopTitleText>카테고리</TopTitleText>
-          <LinkInput to="/GoodsProduct">
+          <LinkInput to="/GoodsProduct" onClick={()=>setNavbar(false)}>
             <AiOutlineShoppingCart
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             상품 리스트
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
           </LinkInput>
-          <LinkInput to="/admin/main">
+          <LinkInput to="/admin/main" onClick={()=>setNavbar(false)}>
             <AiOutlineFileSync
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             관리 페이지
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
           </LinkInput>
-          <LinkInput to="/GalleryWedding">
+          <LinkInput to="/GalleryWedding" onClick={()=>setNavbar(false)}>
             <AiOutlinePicture
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
             갤러리 페이지
             <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
           </LinkInput>
-          <LinkInput to="/admin/memo">
+          <LinkInput to="/admin/memo" onClick={()=>setNavbar(false)}> 
             <BsCalendar2Heart
               style={{ marginRight: "5px", marginLeft: "3px" }}
             />
@@ -260,8 +261,7 @@ export default function Navbar() {
         </CenterItemDiv>
         <BottomItemDiv>
           <p>링크 공유하기</p>
-
-          <LogButton onClick={() => localStorage.removeItem("token")}>
+          <LogButton onClick={() => removeAccessToken()}>
             Log out
           </LogButton>
         </BottomItemDiv>
