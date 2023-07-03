@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import {
@@ -14,7 +14,10 @@ import {
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
-import { removeAccessToken } from '../../tokens/token';
+import { hasAccessToken, removeAccessToken } from "../../tokens/token";
+import { headerNavbarApi } from "../../apis/Api";
+
+import useTokenDecode from "../../hooks/useTokenDecode";
 
 const Base = styled.div`
   display: flex;
@@ -41,7 +44,7 @@ const NickNamediv = styled.div`
   margin-top: 10px;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 36px;
   display: flex;
   align-items: center;
@@ -87,7 +90,8 @@ const CenterItemTitle = styled.div`
 const BottomItemDiv = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  height: 30px;
+  align-items: center;
 `;
 
 const AlarmDiv = styled.div`
@@ -201,30 +205,111 @@ function NotificationItem({ data }) {
   );
 }
 
-export default function Navbar({setNavbar}) {
-  const [fetchdata, setFetchData] = useState([]);
-  const navigator = useNavigate();
-  useEffect(() => {
-    fetch("/alarm/all")
-      .then((res) => res.json())
-      .then((data) => {
-        setFetchData(data);
-      });
-  }, []);
-  const removeAcctokenRender =()=>{
-    const tokenRemove = removeAccessToken()
-    if(tokenRemove){
-      navigator('/');
+function TokenStateLink({ token, setNavbar }) {
+  const navbarClose = () => {
+    if (token === null || token === undefined || token === false) {
+      alert("로그인 정보가 올바르지 못합니다.");
       setNavbar(false);
       return;
     }
-    if(!tokenRemove){
-      navigator('/');
-      setNavbar(false);
-      alert('로그인정보가 존재하지 않습니다.')
-      return;
-    }
+    setNavbar(false);
+  };
+
+  if (token === null || token === undefined || token === false) {
+    return (
+      <TopItem>
+        <TopTitleText>카테고리</TopTitleText>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlineShoppingCart
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          상품 리스트
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlineFileSync
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          관리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
+          갤러리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <BsCalendar2Heart style={{ marginRight: "5px", marginLeft: "3px" }} />
+          위시 리스트/메모장
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+      </TopItem>
+    );
+  } else {
+    return (
+      <TopItem>
+        <TopTitleText>카테고리</TopTitleText>
+        <LinkInput to="/GoodsProduct" onClick={navbarClose}>
+          <AiOutlineShoppingCart
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          상품 리스트
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/admin/main" onClick={navbarClose}>
+          <AiOutlineFileSync
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          관리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/GalleryWedding" onClick={navbarClose}>
+          <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
+          갤러리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/admin/memo" onClick={navbarClose}>
+          <BsCalendar2Heart style={{ marginRight: "5px", marginLeft: "3px" }} />
+          위시 리스트/메모장
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+      </TopItem>
+    );
   }
+}
+
+export default function Navbar({ setNavbar, token }) {
+  const [navbarNotification, setNavbarNotification] = useState([]);
+  const [_, nickName] = useTokenDecode(token);
+  console.log(_);
+  const useLinkToken = token;
+
+  const navigator = useNavigate();
+
+  async function getNavibarNotificationRender(token) {
+    const navbarItemData = await headerNavbarApi(token);
+    setNavbarNotification(navbarItemData.data);
+  }
+
+  useEffect(() => {
+    getNavibarNotificationRender(token);
+  }, []);
+
+  const removeAcctokenRender = () => {
+    const tokenStatus = hasAccessToken();
+    if (tokenStatus) {
+      removeAccessToken();
+      navigator("/");
+      setNavbar(false);
+      return;
+    }
+    if (!tokenStatus) {
+      navigator("/");
+      setNavbar(false);
+      alert("로그인정보가 존재하지 않습니다.");
+      return;
+    }
+  };
   return (
     <>
       <Base>
@@ -234,51 +319,26 @@ export default function Navbar({setNavbar}) {
             <BsPersonGear
               style={{ width: "25px", height: "27px", marginRight: "5px" }}
             />
-            000님 환영합니다.
+            {nickName ? (
+              <span>{nickName}님을 환영합니다.</span>
+            ) : (
+              <span>로그인을 진행해주세요.</span>
+            )}
           </NickNameText>
         </NickNamediv>
-        <TopItem>
-          <TopTitleText>카테고리</TopTitleText>
-          <LinkInput to="/GoodsProduct" onClick={()=>setNavbar(false)}>
-            <AiOutlineShoppingCart
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            상품 리스트
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/admin/main" onClick={()=>setNavbar(false)}>
-            <AiOutlineFileSync
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            관리 페이지
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/GalleryWedding" onClick={()=>setNavbar(false)}>
-            <AiOutlinePicture
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            갤러리 페이지
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/admin/memo" onClick={()=>setNavbar(false)}> 
-            <BsCalendar2Heart
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            위시 리스트/메모장
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-        </TopItem>
+        <TokenStateLink token={useLinkToken} />
         <CenterItemDiv>
           <div>
             <CenterItemTitle>알림 목록</CenterItemTitle>
           </div>
-          <NotificationItemList notifications={fetchdata.data} />
+          <NotificationItemList
+            notifications={navbarNotification}
+            setNavbar={setNavbar}
+          />
         </CenterItemDiv>
         <BottomItemDiv>
-          <p>링크 공유하기</p>
-          <LogButton onClick={() => removeAcctokenRender()}>
-            Log out
-          </LogButton>
+          <span style={{ fontSize: "13px" }}>링크 공유하기</span>
+          <LogButton onClick={() => removeAcctokenRender()}>Log out</LogButton>
         </BottomItemDiv>
       </Base>
     </>

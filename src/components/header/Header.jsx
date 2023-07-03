@@ -4,7 +4,8 @@ import logo from "@/assets/icons/logo.png";
 import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
 import Navbar from "../navbar/Navbar";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { getAccessToken } from "../../tokens/token";
 
 const HeaderDiv = styled.header`
   height: 7vh;
@@ -42,34 +43,60 @@ const RightLogo = styled.div`
   margin-right: 5rem;
 `;
 
+function TokenStatusLink({ token, setNavbar, navbar }) {
+  if (token === null || token === undefined || token === false) {
+    return (
+      <RightLogo>
+        <Link to="/signin" onClick={() => setNavbar(false)}>
+          <PersonLogo src={Person} style={{ marginRight: "1vw" }} />
+        </Link>
+        <HamberLogo
+          src={Menu}
+          onClick={() => {
+            setNavbar(!navbar);
+          }}
+        />
+      </RightLogo>
+    );
+  } else {
+    return (
+      <RightLogo>
+        <Link onClick={() => setNavbar(false)}>
+          <PersonLogo src={Person} style={{ marginRight: "1vw" }} />
+        </Link>
+        <HamberLogo
+          src={Menu}
+          onClick={() => {
+            setNavbar(!navbar);
+          }}
+        />
+      </RightLogo>
+    );
+  }
+}
+
 export default function Header({ border }) {
   //여기서 navbar api 호출해서 넘겨주면 독립적으로 테스트를 할 수 있다.
   const [navbar, setNavbar] = useState(false);
-
+  const token = getAccessToken();
 
   return (
     <>
       <HeaderDiv isBoolean={border}>
         <HeaderLogoDiv>
           <div>
-            <Link to="/" onClick={()=>setNavbar(false)}>
-              <Logo src={logo}/>
+            <Link to="/" onClick={() => setNavbar(false)}>
+              <Logo src={logo} />
             </Link>
           </div>
-          <RightLogo>
-            <Link to="/signin" onClick={()=>setNavbar(false)}>
-              <PersonLogo src={Person} style={{ marginRight: "1vw" }}/>
-            </Link>
-            <HamberLogo
-              src={Menu}
-              onClick={() => {
-                setNavbar(!navbar);
-              }}
-            />
-          </RightLogo>
+          <TokenStatusLink
+            setNavbar={setNavbar}
+            token={token}
+            navbar={navbar}
+          />
         </HeaderLogoDiv>
       </HeaderDiv>
-      {navbar ? <Navbar setNavbar={setNavbar}/> : null}
+      {navbar ? <Navbar setNavbar={setNavbar} token={token} /> : null}
     </>
   );
 }

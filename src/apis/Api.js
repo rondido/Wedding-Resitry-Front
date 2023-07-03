@@ -1,16 +1,37 @@
 import axios from "axios";
-import { getAccessToken } from '../tokens/token';
+import { getAccessToken } from "../tokens/token";
 
 const token1 = getAccessToken();
 
+//navbar 알림
+async function headerNavbarApi(token) {
+  try {
+    const res = await axios(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/navbar/alarm/all`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 //상품 등록 게시판 생성
-async function addBorderIdApi(token){
+async function addBorderIdApi(token) {
   try {
-    const res = await axios(`http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/add/board`,
-    {  
-      method:"GET",
-      headers: {
+    const res = await axios(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/add/board`,
+      {
+        method: "GET",
+        headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -130,8 +151,8 @@ async function deleteGalleryWeddingImage(galleryImgId) {
           Accept: "application/json",
           Authorization: `Bearer ${token1}`,
         },
-      }      
-    );      
+      }
+    );
   } catch (e) {
     console.error(e);
   }
@@ -158,7 +179,6 @@ async function getGoodsUrlUUID(token) {
   }
 }
 
-
 export {
   getGoodsProductApi,
   postGoodsProductApi,
@@ -167,5 +187,6 @@ export {
   deleteGalleryWeddingImage,
   getGalleryWeddingImage,
   addBorderIdApi,
-  getGoodsUrlUUID
+  getGoodsUrlUUID,
+  headerNavbarApi,
 };
