@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authTokenAtom } from "@/state/authState.js";
 import axios from "axios";
+import { authStateAtom } from "../../state/authState";
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -68,6 +69,8 @@ const StyledSpan = styled.span``;
 function SignInForm() {
   // const authToken = useRecoilValue(authTokenAtom);
   const setAuthToken = useSetRecoilState(authTokenAtom);
+  const setAuthState = useSetRecoilState(authStateAtom);
+
   const navigate = useNavigate();
   const initInputValue = {
     email: "",
@@ -93,7 +96,9 @@ function SignInForm() {
       );
       const { accessToken, refreshToken } = response.data.data;
       setAuthToken({ accessToken: accessToken, refreshToken: refreshToken });
-
+      setAuthState({
+        userName: response.data.data.userName,
+      });
       localStorage.setItem("refreshToken", accessToken);
       localStorage.setItem("accessToken", refreshToken);
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import base64 from "base-64";
 
 import CircleRadius from "@/assets/icons/radius.png";
 import FirstAnimation from "@/assets/icons/first.png";
 import SecoundAnimation from "@/assets/icons/secound.png";
 import ThreeAnimation from "@/assets/icons/three.png";
 import BorderIdModal from "../../components/borderid/BorderIdModal";
+import useTokenDecode from "../../hooks/useTokenDecode";
 
 const Base = styled.div`
   display: flex;
@@ -137,21 +137,18 @@ const MainImage = styled.div`
 
 export default function MainContainer({ token }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
+  const [borderId, _] = useTokenDecode(token);
+  console.log(borderId);
+  console.log(_);
   useEffect(() => {
-    if (token != null) {
-      const [hader, payload] = token.split(".");
-      console.log(hader);
-      const decodePayload = JSON.parse(base64.decode(payload));
-      if (decodePayload.boardsId == undefined) {
-        setBorderIdModal(true);
-        return;
-      }
-      if (decodePayload.boardsId != undefined) {
-        setBorderIdModal(false);
-        return;
-      }
+    if (borderId === undefined) {
+      setBorderIdModal(true);
+      return;
+    } else {
+      setBorderIdModal(false);
+      return;
     }
-  }, [token]);
+  }, []);
   return (
     <>
       <Base>
