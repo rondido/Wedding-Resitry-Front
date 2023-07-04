@@ -141,14 +141,15 @@ export default function MainContainer({ token }) {
   console.log(borderId);
   console.log(_);
   useEffect(() => {
-    if (borderId === undefined) {
+    if (borderId === undefined || borderId === null || borderId === "") {
       setBorderIdModal(true);
       return;
     } else {
       setBorderIdModal(false);
       return;
     }
-  }, []);
+  }, [borderId]);
+
   return (
     <>
       <Base>
