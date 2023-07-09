@@ -15,7 +15,7 @@ import {
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
 import { hasAccessToken, removeAccessToken } from "../../tokens/token";
-import { headerNavbarApi } from "../../apis/Api";
+import { getGoodsUrlUUID, headerNavbarApi } from "../../apis/Api";
 
 import useTokenDecode from "../../hooks/useTokenDecode";
 
@@ -281,33 +281,51 @@ function TokenStateLink({ token, setNavbar }) {
 export default function Navbar({ setNavbar, token }) {
   const [navbarNotification, setNavbarNotification] = useState([]);
   const [_, nickName] = useTokenDecode(token);
-  console.log(_);
+  const [uuid, setUUID] = useState([]);
   const useLinkToken = token;
+  const navigate = useNavigate();
 
-  const navigator = useNavigate();
+  async function getGoodsUrlUuidRender(token) {
+    const UUID = await getGoodsUrlUUID(token);
+    setUUID(UUID.data);
+  }
+  console.log(_);
 
   async function getNavibarNotificationRender(token) {
     const navbarItemData = await headerNavbarApi(token);
     setNavbarNotification(navbarItemData.data);
   }
-
-  useEffect(() => {
-    getNavibarNotificationRender(token);
-  }, []);
-
   const removeAcctokenRender = () => {
     const tokenStatus = hasAccessToken();
     if (tokenStatus) {
       removeAccessToken();
-      navigator("/");
+      navigate("/");
       setNavbar(false);
       return;
     }
     if (!tokenStatus) {
-      navigator("/");
+      navigate("/");
       setNavbar(false);
       alert("로그인정보가 존재하지 않습니다.");
       return;
+    }
+  };
+  useEffect(() => {
+    getNavibarNotificationRender(token);
+  }, []);
+  useEffect(() => {
+    getGoodsUrlUuidRender(token);
+  }, []);
+  const urlLinkClick = () => {
+    try {
+      navigator.clipboard.writeText(
+        `도메인주소/GallerySupport/${uuid.uuidFirst}/${uuid.uuidSecond}`
+      );
+      alert("링크주소가 복사되었습니다.");
+      setNavbar(false);
+    } catch (e) {
+      console.error(e);
+      alert("다시 시도해주세요.");
     }
   };
   return (
@@ -337,7 +355,9 @@ export default function Navbar({ setNavbar, token }) {
           />
         </CenterItemDiv>
         <BottomItemDiv>
-          <span style={{ fontSize: "13px" }}>링크 공유하기</span>
+          <span style={{ fontSize: "13px" }} onClick={urlLinkClick}>
+            링크 공유하기
+          </span>
           <LogButton onClick={() => removeAcctokenRender()}>Log out</LogButton>
         </BottomItemDiv>
       </Base>

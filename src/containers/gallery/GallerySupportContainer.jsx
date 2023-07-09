@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { galleryWeddingImageState } from "../../state/galleryWeddingImageState";
 import { useRecoilState } from "recoil";
 import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox";
-import { getGallerySupportImage, postGallerySupportUUID } from "../../apis/Api";
+import { getGallerySupportImage, getGallerySupportUUID } from "../../apis/Api";
 import { useLocation } from "react-router";
 
 // Import Swiper styles
@@ -23,11 +23,10 @@ const Base = styled.div`
 
 export default function GallerySupportContainer({ token }) {
   const [imgData, setImgData] = useRecoilState(galleryWeddingImageState);
+  const [invitationStatus, setInvitationStatus] = useState(true);
+
   const [didMount, setDidMount] = useState(false);
-  // const [urlPathUuid, setUrlPathUuid] = useState({
-  //   uuidFirst: "",
-  //   uuidSecond: "",
-  // });
+
   const location = useLocation();
 
   const arrayLength = imgData ? imgData.length : 0;
@@ -47,14 +46,16 @@ export default function GallerySupportContainer({ token }) {
   };
   async function getImageDataRender(token) {
     const getImage = await getGallerySupportImage(token);
-    console.log(getImage.success + "처음접속했을떄");
     if (getImage.success === false) {
-      const postStatus = await postGallerySupportUUID(token, uuid1, uuid2);
-      console.log("uuid 제공 후 값", postStatus.success);
-      if (postStatus.success === true) {
-        const imgData = await getGallerySupportImage(token);
-        console.log(imgData);
-        setImgData(imgData.data);
+      const postStatus = await getGallerySupportUUID(token, uuid1, uuid2);
+      localStorage.setItem("Guest-Info", Object.values(postStatus.data));
+      const getLocalGeustInfo = localStorage.getItem("Guest-Info");
+      if (getLocalGeustInfo) {
+        const guestImgData = await getGallerySupportImage(
+          token,
+          getLocalGeustInfo
+        );
+        setImgData(guestImgData.data);
       }
     } else {
       setImgData(getImage.data);
@@ -101,6 +102,8 @@ export default function GallerySupportContainer({ token }) {
               <GalleryWeddingBox
                 className="swiper-image"
                 url={v.galleryImgUrl}
+                setInvitationStatus={setInvitationStatus}
+                invitationStatus={invitationStatus}
               />
             </SwiperSlide>
           ))}

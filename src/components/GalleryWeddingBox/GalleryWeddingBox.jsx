@@ -26,7 +26,8 @@ const Image = styled.div`
   background-size: cover;
 `;
 
-export default function GalleryWeddingBox({ url }) {
+export default function GalleryWeddingBox({ url, invitationStatus }) {
+  console.log(invitationStatus);
   const token = getAccessToken();
   const [isOpen, setIsOpen] = useState(false);
 

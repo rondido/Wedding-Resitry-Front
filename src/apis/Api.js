@@ -160,7 +160,7 @@ async function deleteGalleryWeddingImage(galleryImgId, token) {
 }
 
 //후원 사진 요청
-async function getGallerySupportImage(token) {
+async function getGallerySupportImage(token, getLocalGeustInfo) {
   try {
     const res = await axios.get(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/gallery/images`,
@@ -169,6 +169,7 @@ async function getGallerySupportImage(token) {
           "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
+          "Guest-Info": `${getLocalGeustInfo}`,
         },
       },
       { withCredentials: true }
@@ -180,15 +181,10 @@ async function getGallerySupportImage(token) {
 }
 
 //후원 uuid 제공
-async function postGallerySupportUUID(token, uuidFirst, uuidSecond) {
-  console.log(token, uuidFirst, uuidSecond);
+async function getGallerySupportUUID(token, uuidFirst, uuidSecond) {
   try {
-    const res = await axios.post(
-      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/uuids`,
-      {
-        uuidFirst: uuidFirst,
-        uuidSecond: uuidSecond,
-      },
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/uuids/info?uuidFirst=${uuidFirst}&uuidSecond=${uuidSecond}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +194,6 @@ async function postGallerySupportUUID(token, uuidFirst, uuidSecond) {
       },
       { withCredentials: true }
     );
-
     console.log(res);
     return res.data;
   } catch (e) {
@@ -238,5 +233,5 @@ export {
   getGoodsUrlUUID,
   headerNavbarApi,
   getGallerySupportImage,
-  postGallerySupportUUID,
+  getGallerySupportUUID,
 };
