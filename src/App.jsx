@@ -65,7 +65,10 @@ function App() {
           <Route path="memo" element={<AdminMemo />} />
         </Route>
         <Route path="/GalleryWedding" element={<GalleryWedding />} />
-        <Route path="/GallerySupport" element={<GallerySupport />} />
+        <Route
+          path="/GallerySupport/:uuid1/:uuid2"
+          element={<GallerySupport />}
+        />
         <Route path="/GoodsSupport" element={<GoodsSupport />} />
         <Route path="/GoodsProduct" element={<GoodsProduct />} />
         <Route path="*" element={<NotFound />} />

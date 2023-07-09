@@ -6,6 +6,7 @@ export default function useTokenDecode(token) {
     boardsId: "",
     userName: "",
   });
+
   useEffect(() => {
     if (token != null) {
       const [hader, payload] = token.split(".");

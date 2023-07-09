@@ -101,14 +101,15 @@ async function deleteGoodsAdd(userGoodsId) {
 }
 
 //사진 조회
-async function getGalleryWeddingImage() {
+async function getGalleryWeddingImage(token) {
+  console.log(token);
   try {
     const res = await axios.get(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
       {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token1}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -120,7 +121,7 @@ async function getGalleryWeddingImage() {
 }
 
 //사진 등록
-async function postGalleryWeddingImageAdd(formData) {
+async function postGalleryWeddingImageAdd(formData, token) {
   try {
     const res = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
@@ -129,7 +130,7 @@ async function postGalleryWeddingImageAdd(formData) {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${token1}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -141,7 +142,7 @@ async function postGalleryWeddingImageAdd(formData) {
 }
 
 //사진 삭제
-async function deleteGalleryWeddingImage(galleryImgId) {
+async function deleteGalleryWeddingImage(galleryImgId, token) {
   try {
     await axios.delete(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img/?galleryImgId=${galleryImgId}`,
@@ -149,10 +150,52 @@ async function deleteGalleryWeddingImage(galleryImgId) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${token1}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//후원 사진 요청
+async function getGallerySupportImage(token, getLocalGeustInfo) {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/gallery/images`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${getLocalGeustInfo}`,
+        },
+      },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//후원 uuid 제공
+async function getGallerySupportUUID(token, uuidFirst, uuidSecond) {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/uuids/info?uuidFirst=${uuidFirst}&uuidSecond=${uuidSecond}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      { withCredentials: true }
+    );
+    console.log(res);
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -189,4 +232,6 @@ export {
   addBorderIdApi,
   getGoodsUrlUUID,
   headerNavbarApi,
+  getGallerySupportImage,
+  getGallerySupportUUID,
 };
