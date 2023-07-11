@@ -194,17 +194,102 @@ async function getGallerySupportUUID(token, uuidFirst, uuidSecond) {
       },
       { withCredentials: true }
     );
-    console.log(res);
     return res.data;
   } catch (e) {
     console.error(e);
   }
 }
 
-// 공유할 링크 가져오기
+//후원 페이지 상품 조회
+async function getGoodsSupportItemsList(token, guestToken) {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/weddingHall/products`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${guestToken}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
+// 후원 페이지 이름,계좌,장소,시간
+async function getInforMationList(token, guestToken) {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/weddingHall/info`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${guestToken}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//참석 정보
+async function getWeddingAttendList(token, guestToken) {
+  try {
+    const res = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/weddingHall/attendance`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${guestToken}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//참석,불참석,미정
+async function postWeddingAttendList(token, radioButtonValue, guestToken) {
+  try {
+    const res = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/weddingHall/attendance`,
+      {
+        attend: radioButtonValue,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${guestToken}`,
+        },
+      }
+    );
+    const data = res.data;
+
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 공유할 링크 가져오기
 async function getGoodsUrlUUID(token) {
-  console.log(token);
   try {
     const res = await axios.get(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/uuids`,
@@ -234,4 +319,8 @@ export {
   headerNavbarApi,
   getGallerySupportImage,
   getGallerySupportUUID,
+  getGoodsSupportItemsList,
+  getInforMationList,
+  postWeddingAttendList,
+  getWeddingAttendList,
 };

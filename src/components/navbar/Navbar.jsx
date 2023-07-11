@@ -161,13 +161,14 @@ const LogButton = styled.button`
 `;
 
 function NotificationItemList({ notifications }) {
+  console.log(notifications);
   if (notifications === undefined || notifications === null) {
     return <></>;
   }
   if (notifications.length === 0) {
     return <></>;
   }
-  return notifications.all.map((value, index) => (
+  return notifications.map((value, index) => (
     <NotificationItem data={value} key={index} />
   ));
 }

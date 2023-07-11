@@ -69,7 +69,7 @@ function App() {
           path="/GallerySupport/:uuid1/:uuid2"
           element={<GallerySupport />}
         />
-        <Route path="/GoodsSupport" element={<GoodsSupport />} />
+        <Route path="/GoodsSupport/:uuid1/:uuid2" element={<GoodsSupport />} />
         <Route path="/GoodsProduct" element={<GoodsProduct />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
