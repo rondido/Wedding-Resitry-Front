@@ -3,7 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
-import { getGoodsProductApi } from "../../apis/Api";
+import {
+  getGoodsSupportItemsList,
+  getInforMationList,
+  getWeddingAttendList,
+  postWeddingAttendList,
+} from "../../apis/Api";
 
 const GoodsContainer = styled.div`
   display: flex;
@@ -134,43 +139,91 @@ const TitleText = styled.div`
   line-height: 29px;
 `;
 
-function CheckBoxOne() {
-  const checkOnlyOne = (checkThis) => {
-    const checkboxes = document.getElementsByName("test");
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== checkThis) {
-        checkboxes[i].checked = false;
-      }
-    }
+const GoodsWeddingdiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+  margin-right: 8%;
+`;
+const GoodsWeddingadress = styled.input`
+  outline: none;
+  border: none;
+  background-color: #ebebeb;
+  width: 200px;
+  border-radius: 10px;
+  margin-left: 5px;
+  height: 33px;
+  text-align: center;
+`;
+
+//라디오 버튼
+function WeddingAttendJudgment({ token, guestToken }) {
+  const [attendData, setAttendData] = useState([]);
+
+  //radiobutton change 값
+  const radioWeddingAdttendChange = (e) => {
+    const radioButtonValue = e.target.value;
+    postWeddingAttnedListRender(token, radioButtonValue, guestToken);
   };
+  // 첫페이지 렌더링시 참석 여부 불러오기
+  async function getWeddingAttnedListRender(token, guestToken) {
+    const getAttendData = await getWeddingAttendList(token, guestToken);
+    setAttendData(getAttendData.data.attend);
+  }
+  //참석 여부 post
+  async function postWeddingAttnedListRender(
+    token,
+    radioButtonValue,
+    guestToken
+  ) {
+    const postAttendData = await postWeddingAttendList(
+      token,
+      radioButtonValue,
+      guestToken
+    );
+    setAttendData(postAttendData.data.attend);
+  }
+
+  useEffect(() => {
+    getWeddingAttnedListRender(token, guestToken);
+  }, []);
+
   return (
     <WeddingYn>
       <div>
         <p>결혼식 참석 여부를 알려주세요.</p>
         <input
-          type="checkbox"
-          name="test"
-          value="참석"
-          onChange={(e) => checkOnlyOne(e.target)}
+          type="radio"
+          name="attend"
+          id="yesAttend"
+          value="yes"
+          checked={attendData === "yes"}
+          onChange={radioWeddingAdttendChange}
           style={{ marginTop: "10px" }}
         />
         참석
         <br />
         <input
-          type="checkbox"
-          name="test"
-          value="불참석"
-          onChange={(e) => checkOnlyOne(e.target)}
+          type="radio"
+          name="attend"
+          id="noAttend"
+          value="no"
+          onChange={radioWeddingAdttendChange}
+          checked={attendData === "no"}
           style={{ marginTop: "10px" }}
         />
         불참석
         <br />
         <input
-          type="checkbox"
-          name="test"
-          value="미정"
-          onChange={(e) => checkOnlyOne(e.target)}
+          type="radio"
+          name="attend"
+          id="unknownAttend"
+          value="unknown"
+          onChange={radioWeddingAdttendChange}
+          checked={attendData === "unknown"}
           style={{ marginTop: "10px" }}
+          readOnly
         />
         미정
         <br />
@@ -179,20 +232,152 @@ function CheckBoxOne() {
   );
 }
 
-export default function GoodsSupportContainer() {
-  const [fetchdata, SetFetchData] = useState([]);
+function MarriedInforMation({ token, guestToken }) {
+  //신랑 신부 statae
+  const [merriedNameData, setMerriedNameData] = useState([]);
+  // 은행 state
+  const [accountData, setAccountData] = useState([]);
+  //도로명주소 및 날짜
+  const [addressData, setAdressData] = useState([]);
+  //신랑 신부 내용 조회
+  async function getInforMationListRender(token, guestToken) {
+    const getMerriedInfoMationData = await getInforMationList(
+      token,
+      guestToken
+    );
+    setMerriedNameData(getMerriedInfoMationData.data.users);
+    setAccountData(getMerriedInfoMationData.data.account);
+    setAdressData(getMerriedInfoMationData.data);
+  }
+  useEffect(() => {
+    getInforMationListRender(token, guestToken);
+  }, []);
+  return (
+    <>
+      <>
+        <TitleDiv>
+          {merriedNameData &&
+            merriedNameData.map((v) => (
+              <>
+                <TitleText>
+                  {v.name}님과 {v.name}을 결혼 축하 드립니다.
+                </TitleText>
+              </>
+            ))}
+        </TitleDiv>
+        <GoodsWeddingdiv>
+          {addressData && addressData ? (
+            addressData.map((v, idx) => (
+              <div key={idx}>
+                <GoodsWeddingadress
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                  disabled={true}
+                  value={v.location}
+                />
+                <input
+                  type="datetime-local"
+                  style={{
+                    width: "200px",
+                    borderRadius: "10px",
+                    backgroundColor: "#EBEBEB",
+                    height: "33px",
+                    border: "1px solid #EBEBEB",
+                  }}
+                  value={v.weddingData + v.weddingTime}
+                  disabled={true}
+                />
+              </div>
+            ))
+          ) : (
+            <div>
+              <GoodsWeddingadress
+                style={{
+                  marginBottom: "20px",
+                }}
+                disabled={true}
+              />
+              <input
+                type="datetime-local"
+                style={{
+                  width: "200px",
+                  borderRadius: "10px",
+                  backgroundColor: "#EBEBEB",
+                  height: "33px",
+                  border: "1px solid #EBEBEB",
+                }}
+                disabled={true}
+              />
+            </div>
+          )}
+        </GoodsWeddingdiv>
+        <CenterTextdiv>
+          <WeddingAttendJudgment token={token} guestToken={guestToken} />
+          {accountData && accountData ? (
+            accountData.map((v) => (
+              <>
+                <div
+                  style={{
+                    marginTop: "30px",
+                  }}
+                >
+                  <GoodsWeddingText disabled={true} value={v.name} />
+                  <GoodsWeddingbank disabled={true} value={v.bank} />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={v.account}
+                  />
+                </div>
+                <br />
+                <div>
+                  <GoodsWeddingText disabled={true} value={v.name} />
+                  <GoodsWeddingbank disabled={true} value={v.bank} />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={v.account}
+                  />
+                </div>
+              </>
+            ))
+          ) : (
+            <>
+              <div
+                style={{
+                  marginTop: "30px",
+                }}
+              >
+                <GoodsWeddingText disabled={true} />
+                <GoodsWeddingbank disabled={true} />
+                <GoodsWeddingaccountnumber disabled={true} />
+              </div>
+              <br />
+              <div>
+                <GoodsWeddingText disabled={true} />
+                <GoodsWeddingbank disabled={true} />
+                <GoodsWeddingaccountnumber disabled={true} />
+              </div>
+            </>
+          )}
+        </CenterTextdiv>
+      </>
+    </>
+  );
+}
+
+export default function GoodsSupportContainer({ token, guestToken }) {
+  const [goodsSupportData, setGoodsSupportData] = useState([]);
   const [didMount, setDidMount] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const slideRef = useRef(null);
-
   const TOTAL_SLIDES = 1;
-  const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
+  const arrayLength = goodsSupportData ? goodsSupportData.length : 0;
   const FIX_SIZE = 10;
 
-  async function renderProduct() {
-    const products = await getGoodsProductApi();
-    SetFetchData(products);
+  // 상품 조회
+  async function getGoodsListRender(token, guestToken) {
+    const goodsSupportData = await getGoodsSupportItemsList(token, guestToken);
+    setGoodsSupportData(goodsSupportData.data);
   }
 
   const nextSlide = () => {
@@ -225,12 +410,11 @@ export default function GoodsSupportContainer() {
   //Api 2번 호출 막기
   useEffect(() => {
     setDidMount(true);
-    return () => {};
   }, []);
 
   useEffect(() => {
     if (didMount) {
-      renderProduct();
+      getGoodsListRender(token, guestToken);
     }
   }, [didMount]);
 
@@ -242,34 +426,14 @@ export default function GoodsSupportContainer() {
   return (
     <>
       <GoodsContainer>
-        <TitleDiv>
-          <TitleText>000님과 000을 결혼 축하 드립니다.</TitleText>
-        </TitleDiv>
-        <CenterTextdiv>
-          {CheckBoxOne()}
-          <div
-            style={{
-              marginTop: "30px",
-            }}
-          >
-            <GoodsWeddingText placeholder="신부 이름" />
-            <GoodsWeddingbank placeholder="은행" />
-            <GoodsWeddingaccountnumber placeholder="계좌번호" />
-          </div>
-          <br />
-          <div>
-            <GoodsWeddingText placeholder="신랑 이름" />
-            <GoodsWeddingbank placeholder="은행" />
-            <GoodsWeddingaccountnumber placeholder="계좌번호" />
-          </div>
-        </CenterTextdiv>
+        <MarriedInforMation token={token} guestToken={guestToken} />
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
             <BoxWapper ref={slideRef}>
-              {fetchdata.data &&
-                fetchdata.data.map((value, idx) => (
-                  <BoxItem key={idx}>
+              {goodsSupportData &&
+                goodsSupportData.map((value) => (
+                  <BoxItem key={value.id}>
                     <Box url={value.usersGoodsImgUrl} />
                     <ItemDiv>
                       <StyledTrack>

@@ -164,7 +164,7 @@ const CenterTextdiv = styled.div`
   margin-bottom: 1%;
 `;
 
-export default function GoodsProductContainer({token}) {
+export default function GoodsProductContainer({ token }) {
   const [sharebox, setSharebox] = useState(false);
   const [didmount, setDidmount] = useState(false);
   const [fetchdata, setFetchData] = useState([]);
@@ -253,7 +253,11 @@ export default function GoodsProductContainer({token}) {
             />
             링크 공유하기
           </GoodsSharelink>
-          <div>{sharebox ? <ShareBox token={token} setSharebox={setSharebox}/> : null}</div>
+          <div>
+            {sharebox ? (
+              <ShareBox token={token} setSharebox={setSharebox} />
+            ) : null}
+          </div>
         </GoodsShareLinkdiv>
         <div>
           <GoodsText
@@ -280,6 +284,9 @@ export default function GoodsProductContainer({token}) {
               backgroundColor: "#EBEBEB",
               height: "33px",
               border: "1px solid #EBEBEB",
+            }}
+            onChange={(e) => {
+              console.log(e.target.value);
             }}
           />
         </GoodsWeddingdiv>
