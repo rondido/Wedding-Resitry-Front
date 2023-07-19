@@ -37,10 +37,10 @@ function AdminAttendanceLists() {
     return data.data;
   };
 
-  const { isLoading, error } = useQuery(
-    "attendanceDetailData",
-    fetchAttendanceDetailData
-  );
+  const { isLoading, error } = useQuery({
+    queryKey: ["attendanceDetailData"],
+    queryFn: fetchAttendanceDetailData,
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
