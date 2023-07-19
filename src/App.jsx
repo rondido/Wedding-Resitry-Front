@@ -62,8 +62,11 @@ function App() {
         <Route path="admin/donation" element={<AdminDonationLists />} />
         <Route path="admin/memo" element={<AdminMemo />} />
         <Route path="/GalleryWedding" element={<GalleryWedding />} />
-        <Route path="/GallerySupport" element={<GallerySupport />} />
-        <Route path="/GoodsSupport" element={<GoodsSupport />} />
+        <Route
+          path="/GallerySupport/:uuid1/:uuid2"
+          element={<GallerySupport />}
+        />
+        <Route path="/GoodsSupport/:uuid1/:uuid2" element={<GoodsSupport />} />
         <Route path="/GoodsProduct" element={<GoodsProduct />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

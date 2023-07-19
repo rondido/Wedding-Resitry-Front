@@ -164,7 +164,7 @@ const CenterTextdiv = styled.div`
   margin-bottom: 1%;
 `;
 
-export default function GoodsProductContainer() {
+export default function GoodsProductContainer({ token }) {
   const [sharebox, setSharebox] = useState(false);
   const [didmount, setDidmount] = useState(false);
   const [fetchdata, setFetchData] = useState([]);
@@ -193,7 +193,6 @@ export default function GoodsProductContainer() {
 
   useEffect(() => {
     if (!isOpen) {
-      console.log(123);
       renderProduct();
     }
   }, [isOpen]);
@@ -254,7 +253,11 @@ export default function GoodsProductContainer() {
             />
             링크 공유하기
           </GoodsSharelink>
-          <div>{sharebox ? <ShareBox /> : null}</div>
+          <div>
+            {sharebox ? (
+              <ShareBox token={token} setSharebox={setSharebox} />
+            ) : null}
+          </div>
         </GoodsShareLinkdiv>
         <div>
           <GoodsText
@@ -281,6 +284,9 @@ export default function GoodsProductContainer() {
               backgroundColor: "#EBEBEB",
               height: "33px",
               border: "1px solid #EBEBEB",
+            }}
+            onChange={(e) => {
+              console.log(e.target.value);
             }}
           />
         </GoodsWeddingdiv>
@@ -335,7 +341,7 @@ export default function GoodsProductContainer() {
                       </ItemDiv>
                     </BoxItem>
                   ))}
-                {GoodsElementList()}
+                {GoodsElementList(token)}
               </>
             </BoxWapper>
           </BoxSlider>

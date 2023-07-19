@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import {
@@ -14,6 +14,10 @@ import {
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
+import { hasAccessToken, removeAccessToken } from "../../tokens/token";
+import { getGoodsUrlUUID, headerNavbarApi } from "../../apis/Api";
+
+import useTokenDecode from "../../hooks/useTokenDecode";
 
 const Base = styled.div`
   display: flex;
@@ -40,7 +44,7 @@ const NickNamediv = styled.div`
   margin-top: 10px;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 36px;
   display: flex;
   align-items: center;
@@ -86,7 +90,8 @@ const CenterItemTitle = styled.div`
 const BottomItemDiv = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  height: 30px;
+  align-items: center;
 `;
 
 const AlarmDiv = styled.div`
@@ -156,13 +161,14 @@ const LogButton = styled.button`
 `;
 
 function NotificationItemList({ notifications }) {
+  console.log(notifications);
   if (notifications === undefined || notifications === null) {
     return <></>;
   }
   if (notifications.length === 0) {
     return <></>;
   }
-  return notifications.all.map((value, index) => (
+  return notifications.map((value, index) => (
     <NotificationItem data={value} key={index} />
   ));
 }
@@ -200,15 +206,129 @@ function NotificationItem({ data }) {
   );
 }
 
-export default function Navbar() {
-  const [fetchdata, setFetchData] = useState([]);
+function TokenStateLink({ token, setNavbar }) {
+  const navbarClose = () => {
+    if (token === null || token === undefined || token === false) {
+      alert("로그인 정보가 올바르지 못합니다.");
+      setNavbar(false);
+      return;
+    }
+    setNavbar(false);
+  };
+
+  if (token === null || token === undefined || token === false) {
+    return (
+      <TopItem>
+        <TopTitleText>카테고리</TopTitleText>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlineShoppingCart
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          상품 리스트
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlineFileSync
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          관리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
+          갤러리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput onClick={navbarClose}>
+          <BsCalendar2Heart style={{ marginRight: "5px", marginLeft: "3px" }} />
+          위시 리스트/메모장
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+      </TopItem>
+    );
+  } else {
+    return (
+      <TopItem>
+        <TopTitleText>카테고리</TopTitleText>
+        <LinkInput to="/GoodsProduct" onClick={navbarClose}>
+          <AiOutlineShoppingCart
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          상품 리스트
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/admin/main" onClick={navbarClose}>
+          <AiOutlineFileSync
+            style={{ marginRight: "5px", marginLeft: "3px" }}
+          />
+          관리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/GalleryWedding" onClick={navbarClose}>
+          <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
+          갤러리 페이지
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+        <LinkInput to="/admin/memo" onClick={navbarClose}>
+          <BsCalendar2Heart style={{ marginRight: "5px", marginLeft: "3px" }} />
+          위시 리스트/메모장
+          <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+        </LinkInput>
+      </TopItem>
+    );
+  }
+}
+
+export default function Navbar({ setNavbar, token }) {
+  const [navbarNotification, setNavbarNotification] = useState([]);
+  const [_, nickName] = useTokenDecode(token);
+  const [uuid, setUUID] = useState([]);
+  const useLinkToken = token;
+  const navigate = useNavigate();
+
+  async function getGoodsUrlUuidRender(token) {
+    const UUID = await getGoodsUrlUUID(token);
+    setUUID(UUID.data);
+  }
+  console.log(_);
+
+  async function getNavibarNotificationRender(token) {
+    const navbarItemData = await headerNavbarApi(token);
+    setNavbarNotification(navbarItemData.data);
+  }
+  const removeAcctokenRender = () => {
+    const tokenStatus = hasAccessToken();
+    if (tokenStatus) {
+      removeAccessToken();
+      navigate("/");
+      setNavbar(false);
+      return;
+    }
+    if (!tokenStatus) {
+      navigate("/");
+      setNavbar(false);
+      alert("로그인정보가 존재하지 않습니다.");
+      return;
+    }
+  };
   useEffect(() => {
-    fetch("/alarm/all")
-      .then((res) => res.json())
-      .then((data) => {
-        setFetchData(data);
-      });
+    getNavibarNotificationRender(token);
   }, []);
+  useEffect(() => {
+    getGoodsUrlUuidRender(token);
+  }, []);
+  const urlLinkClick = () => {
+    try {
+      navigator.clipboard.writeText(
+        `도메인주소/GallerySupport/${uuid.uuidFirst}/${uuid.uuidSecond}`
+      );
+      alert("링크주소가 복사되었습니다.");
+      setNavbar(false);
+    } catch (e) {
+      console.error(e);
+      alert("다시 시도해주세요.");
+    }
+  };
   return (
     <>
       <Base>
@@ -218,52 +338,28 @@ export default function Navbar() {
             <BsPersonGear
               style={{ width: "25px", height: "27px", marginRight: "5px" }}
             />
-            000님 환영합니다.
+            {nickName ? (
+              <span>{nickName}님을 환영합니다.</span>
+            ) : (
+              <span>로그인을 진행해주세요.</span>
+            )}
           </NickNameText>
         </NickNamediv>
-        <TopItem>
-          <TopTitleText>카테고리</TopTitleText>
-          <LinkInput to="/GoodsProduct">
-            <AiOutlineShoppingCart
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            상품 리스트
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/admin/main">
-            <AiOutlineFileSync
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            관리 페이지
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/GalleryWedding">
-            <AiOutlinePicture
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            갤러리 페이지
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-          <LinkInput to="/admin/memo">
-            <BsCalendar2Heart
-              style={{ marginRight: "5px", marginLeft: "3px" }}
-            />
-            위시 리스트/메모장
-            <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
-          </LinkInput>
-        </TopItem>
+        <TokenStateLink token={useLinkToken} />
         <CenterItemDiv>
           <div>
             <CenterItemTitle>알림 목록</CenterItemTitle>
           </div>
-          <NotificationItemList notifications={fetchdata.data} />
+          <NotificationItemList
+            notifications={navbarNotification}
+            setNavbar={setNavbar}
+          />
         </CenterItemDiv>
         <BottomItemDiv>
-          <p>링크 공유하기</p>
-
-          <LogButton onClick={() => localStorage.removeItem("token")}>
-            Log out
-          </LogButton>
+          <span style={{ fontSize: "13px" }} onClick={urlLinkClick}>
+            링크 공유하기
+          </span>
+          <LogButton onClick={() => removeAcctokenRender()}>Log out</LogButton>
         </BottomItemDiv>
       </Base>
     </>

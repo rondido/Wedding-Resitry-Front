@@ -19,6 +19,7 @@
     "formik": "^2.2.9",
     "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
+    "js-base64": "^3.7.5",
     "msw": "^1.1.0",
     "oauth2-client-js": "^0.0.15",
     "react": "^18.2.0",

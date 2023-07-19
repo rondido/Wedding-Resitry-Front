@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import MainContainer from "../../containers/main/MainContainer";
-
-
+import { getAccessToken } from "../../tokens/token";
+const token = getAccessToken();
 export default function MainPage() {
-  return (
-    <>
-      <MainContainer />
-    </>
-  );
+  const [tokenData, setTokenData] = useState();
+  useEffect(() => {
+    setTokenData(token);
+  }, [token]);
+  return <MainContainer token={tokenData} />;
 }
