@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { authTokenAtom } from "@/state/authState.js";
 import axios from "axios";
 import { authStateAtom } from "../../state/authState";
@@ -70,8 +70,6 @@ const StyledSpan = styled.span``;
 function SignInForm() {
   // const authToken = useRecoilValue(authTokenAtom);
   const setAuthToken = useSetRecoilState(authTokenAtom);
-  const setAuthState = useSetRecoilState(authStateAtom);
-  const urlPathState = useRecoilValue(prevUrlPathState);
   const navigate = useNavigate();
   const initInputValue = {
     email: "",
@@ -95,20 +93,20 @@ function SignInForm() {
         "http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/login/service",
         { email: inputValue.email, password: inputValue.password }
       );
-      const { accessToken, refreshToken } = response.data.data;
-      setAuthToken({ accessToken: accessToken, refreshToken: refreshToken });
-      setAuthState({
-        userName: response.data.data.userName,
-      });
-      localStorage.setItem("refreshToken", accessToken);
-      localStorage.setItem("accessToken", refreshToken);
-      if (urlPathState.length > 0) {
-        window.location.assign(urlPathState);
-        return;
-      }
 
-      alert(`로그인 성공`);
-      navigate("/");
+      if (response.data.status === 200) {
+        const { accessToken, refreshToken } = response.data.data;
+        setAuthToken({ accessToken: accessToken, refreshToken: refreshToken });
+
+        localStorage.setItem("refreshToken", accessToken);
+        localStorage.setItem("accessToken", refreshToken);
+
+        alert(`로그인 성공`);
+        navigate("/");
+      } else {
+        console.log("로그인 실패");
+        alert(response.data.message);
+      }
     } catch (error) {
       console.error("Login 실패:", error);
     }
