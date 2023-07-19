@@ -5,7 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { worker } from "./mocks/browsers";
 import { RecoilRoot, useRecoilSnapshot } from "recoil";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 //service worker 실행파일
@@ -30,14 +32,15 @@ function DebugObserver() {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <DebugObserver />
-        <GoogleOAuthProvider clientId={clientId}>
+      <DebugObserver />
+      <GoogleOAuthProvider clientId={clientId}>
+        <QueryClientProvider client={queryClient}>
           <BrowserRouter>
+            <ReactQueryDevtools initialIsOpen={false} />
             <App />
           </BrowserRouter>
-        </GoogleOAuthProvider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </GoogleOAuthProvider>
     </RecoilRoot>
   </React.StrictMode>
 );
