@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Doughnut } from "react-chartjs-2";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const StyledDiv = styled.div`
   height: max-content;
@@ -76,12 +76,15 @@ function AdminMainContainer() {
     return data.data;
   };
 
-  const { data, isLoading, error } = useQuery(
-    "attendancdData",
-    fetchAttendanceData
-  );
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["attendanceData"],
+    queryFn: fetchAttendanceData,
+  });
 
-  const donationQuery = useQuery("donationData", fetchDonationData);
+  const donationQuery = useQuery({
+    queryKey: ["donationData"],
+    queryFn: fetchDonationData,
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -102,9 +105,9 @@ function AdminMainContainer() {
       },
     },
   };
+
   ChartJS.register(ArcElement, Tooltip, Legend);
 
-  // FIXME 이후 실 data 받아 적용
   const attendanceTable = {
     labels: ["참석", "불참석", "미정"],
     datasets: [
@@ -117,10 +120,10 @@ function AdminMainContainer() {
   };
 
   const donationTable = {
-    labels: ["상품A", "상품B", "상품C", "상품D", "상품E", "기타"],
+    labels: donationQuery.data?.map((i) => `${i.usersGoodsName}`),
     datasets: [
       {
-        data: [20, 5, 3, 6, 8, 9],
+        data: donationQuery.data?.map((i) => `${i.usersGoodsTotalDonation}`),
         backgroundColor: [
           "#0f3267",
           "#255090",
@@ -152,12 +155,10 @@ function AdminMainContainer() {
             <p>
               {data.yesRate}%, {data.yes}명
             </p>
-
             <h4>불참석</h4>
             <p>
               {data.noRate}%, {data.no}명
             </p>
-
             <h4>미정</h4>
             <p>
               {data.unknownRate}%, {data.unknown}명
@@ -177,16 +178,14 @@ function AdminMainContainer() {
             />
           </div>
           <span>
-            {donationQuery.data.data}
-            {donationQuery.data.success}
-            {donationQuery.data.status}
-
-            <h4>A 제품명, 금액 후원</h4>
-            <p>% 달성</p>
-            <h4>B 제품명, 금액 후원</h4>
-            <p>% 달성</p>
-            <h4>C 제품명, 금액 후원</h4>
-            <p>% 달성</p>
+            {donationQuery.data?.map((i) => (
+              <div key={i.usersGoodsId}>
+                <h4>
+                  {i.usersGoodsName}, {i.usersGoodsTotalDonation}원
+                </h4>
+                <p>{i.usersGoodsTotalDonationRate}% 달성</p>
+              </div>
+            ))}
           </span>
         </div>
       </StyledSection>

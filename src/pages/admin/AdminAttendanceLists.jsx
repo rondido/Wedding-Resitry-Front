@@ -7,7 +7,7 @@ import AdminAttendanceListsContainer from "../../containers/admin/AdminAttendanc
 import AdminContainer from "@/containers/admin/AdminContainer.jsx";
 import axios from "axios";
 // import _ from "lodash";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
