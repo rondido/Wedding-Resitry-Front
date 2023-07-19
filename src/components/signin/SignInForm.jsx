@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authTokenAtom } from "@/state/authState.js";
 import axios from "axios";
-import { authStateAtom } from "../../state/authState";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
+// import { authStateAtom } from "../../state/authState";
+// import { prevUrlPathState } from "../../state/prevUrlPathState";
 
 const StyledWrapper = styled.div`
   width: 100%;
