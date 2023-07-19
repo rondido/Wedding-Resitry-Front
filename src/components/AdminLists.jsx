@@ -50,9 +50,11 @@ function AdminLists({
           delay={2}
           ghostClass="sortable-ghost"
         >
-          {attendance.map((item) => (
-            <p key={item.id}>{item.name}</p>
-          ))}
+          {attendance.length === 0 ? (
+            <span></span>
+          ) : (
+            attendance.map((item) => <p key={item.userId}>{item.name}</p>)
+          )}
         </ReactSortable>
       </div>
       <div className="item">
@@ -66,9 +68,11 @@ function AdminLists({
           delay={2}
           ghostClass="sortable-ghost"
         >
-          {absence.map((item) => (
-            <p key={item.id}>{item.name}</p>
-          ))}
+          {absence.length === 0 ? (
+            <span></span>
+          ) : (
+            absence.map((item) => <p key={item.userId}>{item.name}</p>)
+          )}
         </ReactSortable>
       </div>
       <div className="item">
@@ -82,9 +86,11 @@ function AdminLists({
           delay={2}
           ghostClass="sortable-ghost"
         >
-          {undecided.map((item) => (
-            <p key={item.id}>{item.name}</p>
-          ))}
+          {undecided.length === 0 ? (
+            <span></span>
+          ) : (
+            undecided.map((item) => <p key={item.userId}>{item.name}</p>)
+          )}
         </ReactSortable>
       </div>
     </StyledDiv>
