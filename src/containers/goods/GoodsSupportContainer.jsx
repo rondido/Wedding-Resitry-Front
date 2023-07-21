@@ -169,7 +169,7 @@ function WeddingAttendJudgment({ token, guestToken }) {
   // 첫페이지 렌더링시 참석 여부 불러오기
   async function getWeddingAttnedListRender(token, guestToken) {
     const getAttendData = await getWeddingAttendList(token, guestToken);
-    setAttendData(getAttendData.data.attend);
+    setAttendData(getAttendData.data?.attend);
   }
   //참석 여부 post
   async function postWeddingAttnedListRender(

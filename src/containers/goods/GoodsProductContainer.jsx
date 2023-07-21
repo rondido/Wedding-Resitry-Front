@@ -6,8 +6,18 @@ import Share from "@/assets/icons/share.png";
 import ShareBox from "@/components/ShareBox";
 import styled from "styled-components";
 import Box from "@/components/box/Box";
-import GoodsModal from "@/components/goodsmodal/GoodsModal";
-import { getGoodsProductApi } from "../../apis/Api";
+
+import {
+  addHusbandAccount,
+  addHusbandName,
+  addWeddingHallLocation,
+  addWeddingHallTime,
+  addWifeAccount,
+  addWifeName,
+  getGoodsProductApi,
+} from "../../apis/Api";
+import GoodsModal from "../../components/goodsmodal/GoodsModal";
+import { getWeddingHall } from "../../apis/Api";
 
 const GoodsText = styled.input`
   border: 0;
@@ -162,24 +172,158 @@ const BoxSlider = styled.div`
 
 const CenterTextdiv = styled.div`
   margin-bottom: 1%;
+  position: relative;
+  width: 450px;
+  height: 130px;
+`;
+
+const AddMarriedButton = styled.button`
+  border: none;
+  background: none;
+`;
+
+const AddMarriedButtonDiv = styled.div`
+  position: absolute;
+  top: 0;
+  margin-top: 65px;
+  right: 0;
 `;
 
 export default function GoodsProductContainer({ token }) {
   const [sharebox, setSharebox] = useState(false);
   const [didmount, setDidmount] = useState(false);
-  const [fetchdata, setFetchData] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [fetchData, setFetchData] = useState([]);
+  const [wifeNameText, setWifeNameText] = useState("");
+  const [husbandNameText, setHusbandNameText] = useState("");
+  const [addressText, setAddressText] = useState("");
+  const [dateText, setDateText] = useState("");
+  const [timeText, setTimeText] = useState("");
+  const [bankText, setBankText] = useState({
+    wifeBank: "",
+    husbandBank: "",
+  });
+  const [accountText, setAccountText] = useState({
+    wifeAccount: "",
+    husbandAccount: "",
+  });
+  const [marriedWeddingData, setMarriedWeddingData] = useState([]);
+  const [isOpen, setIsOpen] = useState({
+    result: false,
+    state: "Edit",
+    userGoodsId: "",
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
   //state 상태에 따른 비동기 통신중 fetchdata의 값이 undefined일때 상태를 고려한 code
-  const arrayLength = fetchdata.data ? fetchdata.data.length : 0;
+  const arrayLength = fetchData ? fetchData.length : 0;
   const TOTAL_SLIDES = 1;
   const FIX_SIZE = 10;
   const slideRef = useRef(null);
 
-  async function renderProduct() {
-    const products = await getGoodsProductApi();
-    setFetchData(products);
+  //상품전체조회
+  async function renderProduct(token) {
+    const products = await getGoodsProductApi(token);
+    setFetchData(products.data);
   }
+  //이름 계좌 시간 전체 조회
+  async function getWeddingHallRender(token) {
+    const weddingHallData = await getWeddingHall(token);
+    setMarriedWeddingData(weddingHallData);
+  }
+  //남편 이름 등록
+  async function addHusbandNameRender(token, name) {
+    console.log("남편 이름 등록");
+    await addHusbandName(token, name);
+    getWeddingHall(token);
+  }
+  // 신부 이름 등록
+  async function addWifeNameRender(token, name) {
+    await addWifeName(token, name);
+    getWeddingHall(token);
+  }
+
+  // 신부 계좌,은행 등록
+  async function addWifeAccountRender(token, account, bank) {
+    console.log("신부 계좌");
+    await addWifeAccount(token, account, bank);
+    getWeddingHall(token);
+  }
+  // 신랑 계좌,은행 등록
+  async function addHusbandAccountRender(token, account, bank) {
+    const data = await addHusbandAccount(token, account, bank);
+    console.log(data);
+    getWeddingHall(token);
+  }
+  //예식장 주소 및 날짜 변경
+  async function addWeddingHallLocationRender(token, address) {
+    const data = await addWeddingHallLocation(token, address);
+    setAddressText(data);
+  }
+  // 예식 시간
+  async function addWeddingHallTimeRender(token, timeText, dateText) {
+    const data = await addWeddingHallTime(token, timeText, dateText);
+    setDateText(data.weddingDate);
+    setTimeText(data.weddingTime);
+  }
+  // 신부 이름 text
+  const wifeTextChange = (e) => {
+    const value = e.target.value;
+    setWifeNameText(value);
+  };
+  // 신랑 이름 text
+  const husbandTextChange = (e) => {
+    const value = e.target.value;
+    setHusbandNameText(value);
+  };
+  // 은행 Change 이벤트
+  const bankTextChange = (e) => {
+    const value = e.target.value;
+    setBankText({
+      [e.target.name]: value,
+    });
+  };
+  // 계좌번호 Change 이벤트
+  const accountTextChange = (e) => {
+    const value = e.target.value;
+    setAccountText({
+      [e.target.name]: value,
+    });
+  };
+  // 결혼식 주소 Change 이벤트
+  const addressChange = (e) => {
+    const value = e.target.value;
+    setAddressText(value);
+    addWeddingHallLocationRender(token, addressText);
+  };
+  // 결혼식 날짜 Change 이벤트
+  const dateTimeChange = (e) => {
+    const value = e.target.value;
+    const [year, time] = value.split("T");
+    const yyyymmdd = year.split("-").join("");
+    const hhmm = time.split(":").join("");
+    setDateText(yyyymmdd);
+    setTimeText(hhmm);
+    addWeddingHallTimeRender(token, dateText, timeText);
+  };
+  //이름 계좌 시간 전체 등록 버튼
+  const addMarriedInformationClick = async (token) => {
+    //신랑 이름 등록
+    await addHusbandNameRender(token, husbandNameText);
+    //신부 이름 등록
+    await addWifeNameRender(token, wifeNameText);
+    //신부 계좌 등록
+    const data1 = await addWifeAccountRender(
+      token,
+      accountText.wifeAccount,
+      bankText.wifeBank
+    );
+    console.log(data1);
+    //신랑 계좌 등록
+    await addHusbandAccountRender(
+      token,
+      accountText.husbandAccount,
+      bankText.husbandBank
+    );
+  };
 
   useEffect(() => {
     setDidmount(true);
@@ -187,15 +331,17 @@ export default function GoodsProductContainer({ token }) {
 
   useEffect(() => {
     if (didmount) {
-      renderProduct();
+      renderProduct(token);
+      getWeddingHallRender(token);
     }
   }, [didmount]);
 
   useEffect(() => {
     if (!isOpen) {
-      renderProduct();
+      renderProduct(token);
     }
   }, [isOpen]);
+
   const GoodsElementList = () => {
     let element = [];
     for (let i = 0; i < FIX_SIZE - arrayLength; i++) {
@@ -203,7 +349,7 @@ export default function GoodsProductContainer({ token }) {
         <BoxItem
           style={{ width: "100%", marginRight: "150px" }}
           onClick={() => {
-            setIsOpen(true);
+            setIsOpen({ result: true, state: "Edit", userGoodsId: "" });
           }}
           key={i}
         >
@@ -235,6 +381,10 @@ export default function GoodsProductContainer({ token }) {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
+
+  const marriedWeddingHusbandAccountData = marriedWeddingData.data?.account[0];
+  const marriedWeddingWifeAccountData = marriedWeddingData.data?.account[0];
+
   return (
     <>
       <GoodsContainer>
@@ -253,74 +403,237 @@ export default function GoodsProductContainer({ token }) {
             />
             링크 공유하기
           </GoodsSharelink>
-          <div>
-            {sharebox ? (
-              <ShareBox token={token} setSharebox={setSharebox} />
-            ) : null}
-          </div>
+          <div>{sharebox ? <ShareBox /> : null}</div>
         </GoodsShareLinkdiv>
-        <div>
-          <GoodsText
-            placeholder="신부 이름"
-            style={{
-              marginBottom: "20px",
-            }}
-          />
-          <br />
-          <GoodsText placeholder="신랑 이름" />
-        </div>
-        <GoodsWeddingdiv>
-          <GoodsWeddingadress
-            placeholder="예식장 주소"
-            style={{
-              marginBottom: "20px",
-            }}
-          />
-          <input
-            type="datetime-local"
-            style={{
-              width: "200px",
-              borderRadius: "10px",
-              backgroundColor: "#EBEBEB",
-              height: "33px",
-              border: "1px solid #EBEBEB",
-            }}
-            onChange={(e) => {
-              console.log(e.target.value);
-            }}
-          />
-        </GoodsWeddingdiv>
-        <CenterTextdiv>
-          <div
-            style={{
-              marginTop: "30px",
-            }}
-          >
-            <GoodsWeddingText placeholder="신부 이름" />
-            <GoodsWeddingbank placeholder="은행" />
-            <GoodsWeddingaccountnumber placeholder="계좌번호" />
-          </div>
-          <br />
-          <div>
-            <GoodsWeddingText placeholder="신랑 이름" />
-            <GoodsWeddingbank placeholder="은행" />
-            <GoodsWeddingaccountnumber placeholder="계좌번호" />
-          </div>
-        </CenterTextdiv>
+        {marriedWeddingData.data && marriedWeddingData.data?.account ? (
+          <>
+            <div>
+              <GoodsText
+                placeholder="신부이름"
+                style={{
+                  marginBottom: "20px",
+                }}
+                onChange={(e) => wifeTextChange(e)}
+                value={marriedWeddingWifeAccountData?.name || wifeNameText}
+              />
+
+              <br />
+              <GoodsText
+                placeholder="신랑 이름"
+                onChange={(e) => husbandTextChange(e)}
+                value={
+                  marriedWeddingHusbandAccountData?.name || husbandNameText
+                }
+              />
+            </div>
+            <GoodsWeddingdiv>
+              <GoodsWeddingadress
+                placeholder="예식장 주소"
+                style={{
+                  marginBottom: "20px",
+                }}
+                onChange={(e) => addressChange(e)}
+                value={marriedWeddingData.data?.location || addressText}
+              />
+              <input
+                type="datetime-local"
+                style={{
+                  width: "200px",
+                  borderRadius: "10px",
+                  backgroundColor: "#EBEBEB",
+                  height: "33px",
+                  border: "1px solid #EBEBEB",
+                }}
+                onChange={(e) => dateTimeChange(e)}
+                value={
+                  marriedWeddingData.data?.weddingDate +
+                    marriedWeddingData.data?.weddingTime || dateText + timeText
+                }
+              />
+            </GoodsWeddingdiv>
+            <CenterTextdiv>
+              <div
+                style={{
+                  marginTop: "30px",
+                }}
+              >
+                <GoodsWeddingText
+                  placeholder="신부 이름"
+                  value={marriedWeddingWifeAccountData?.name || wifeNameText}
+                />
+                <GoodsWeddingbank
+                  placeholder="은행"
+                  onChange={(e) => bankTextChange(e)}
+                  name="wifeBank"
+                  value={
+                    marriedWeddingWifeAccountData?.bank || bankText.wifeBank
+                  }
+                />
+                <GoodsWeddingaccountnumber
+                  placeholder="계좌번호"
+                  onChange={(e) => accountTextChange(e)}
+                  name="wifeAccount"
+                  value={
+                    marriedWeddingWifeAccountData?.account ||
+                    accountText.wifeAccount
+                  }
+                />
+              </div>
+              <br />
+              <div>
+                <GoodsWeddingText
+                  placeholder="신랑 이름"
+                  value={
+                    marriedWeddingHusbandAccountData?.name || husbandNameText
+                  }
+                />
+                <GoodsWeddingbank
+                  placeholder="은행"
+                  name="husbandBank"
+                  onChange={(e) => bankTextChange(e)}
+                  value={
+                    marriedWeddingHusbandAccountData?.bank ||
+                    bankText.husbandBank
+                  }
+                />
+                <GoodsWeddingaccountnumber
+                  placeholder="계좌번호"
+                  onChange={(e) => accountTextChange(e)}
+                  name="husbandAccount"
+                  value={
+                    marriedWeddingHusbandAccountData?.account ||
+                    accountText.husbandAccount
+                  }
+                />
+                <AddMarriedButtonDiv>
+                  <AddMarriedButton
+                    onClick={() => addMarriedInformationClick(token)}
+                  >
+                    저장하기
+                  </AddMarriedButton>
+                </AddMarriedButtonDiv>
+              </div>
+            </CenterTextdiv>
+          </>
+        ) : (
+          <>
+            <div>
+              <GoodsText
+                placeholder="신부이름"
+                style={{
+                  marginBottom: "20px",
+                }}
+                onChange={(e) => wifeTextChange(e)}
+                value={wifeNameText}
+              />
+
+              <br />
+              <GoodsText
+                placeholder="신랑 이름"
+                onChange={(e) => husbandTextChange(e)}
+                value={husbandNameText || ""}
+              />
+            </div>
+            <GoodsWeddingdiv>
+              <GoodsWeddingadress
+                placeholder="예식장 주소"
+                style={{
+                  marginBottom: "20px",
+                }}
+                onChange={(e) => addressChange(e)}
+                value={addressText || ""}
+              />
+              <input
+                type="datetime-local"
+                style={{
+                  width: "200px",
+                  borderRadius: "10px",
+                  backgroundColor: "#EBEBEB",
+                  height: "33px",
+                  border: "1px solid #EBEBEB",
+                }}
+                onChange={(e) => dateTimeChange(e)}
+                value={dateText + timeText || ""}
+              />
+            </GoodsWeddingdiv>
+            <CenterTextdiv>
+              <div
+                style={{
+                  marginTop: "30px",
+                }}
+              >
+                <GoodsWeddingText
+                  placeholder="신부 이름"
+                  value={wifeNameText}
+                />
+                <GoodsWeddingbank
+                  placeholder="은행"
+                  onChange={(e) => bankTextChange(e)}
+                  name="wifeBank"
+                  value={bankText.wifeBank || ""}
+                />
+                <GoodsWeddingaccountnumber
+                  placeholder="계좌번호"
+                  onChange={(e) => accountTextChange(e)}
+                  name="wifeAccount"
+                  value={accountText.wifeAccount || ""}
+                />
+              </div>
+              <br />
+              <div>
+                <GoodsWeddingText
+                  placeholder="신랑 이름"
+                  value={husbandNameText || ""}
+                />
+                <GoodsWeddingbank
+                  placeholder="은행"
+                  name="husbandBank"
+                  onChange={(e) => bankTextChange(e)}
+                  value={bankText.husbandBank || ""}
+                />
+                <GoodsWeddingaccountnumber
+                  placeholder="계좌번호"
+                  onChange={(e) => accountTextChange(e)}
+                  name="husbandAccount"
+                  value={accountText.husbandAccount || ""}
+                />
+                <AddMarriedButtonDiv>
+                  <AddMarriedButton
+                    onClick={() => addMarriedInformationClick(token)}
+                  >
+                    저장하기
+                  </AddMarriedButton>
+                </AddMarriedButtonDiv>
+              </div>
+            </CenterTextdiv>
+          </>
+        )}
+
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
             <BoxWapper ref={slideRef}>
               <>
-                {fetchdata.data &&
-                  fetchdata.data.map((value, idx) => (
+                {fetchData &&
+                  fetchData.map((value, idx) => (
                     <BoxItem
                       key={idx}
                       onClick={() => {
-                        setIsOpen(true);
+                        setIsOpen({
+                          result: true,
+                          state: "View",
+                          userGoodsId: value.usersGoodsId,
+                        });
                       }}
                     >
-                      <Box url={value.usersGoodsImgUrl} />
+                      <Box
+                        url={value.usersGoodsImgUrl}
+                        setIsOpen={setIsOpen}
+                        isOpen={isOpen}
+                        setFetchData={setFetchData}
+                        fetchData={fetchData}
+                        token={token}
+                      />
                       <ItemDiv>
                         <StyledTrack isTrue={false}>
                           <StyledRange width={value.usersGoodsPercent} />
@@ -330,24 +643,34 @@ export default function GoodsProductContainer({ token }) {
                             <p>{value.usersGoodsName}</p>
                           </div>
                           <div>
-                            <p>{value.usersGoodsPrice}원</p>
+                            <p>{value.usersGoodsPrice} 원</p>
                           </div>
                           <div>
                             <p style={{ marginTop: "50px" }}>
-                              {value.totalDonation}원 후원
+                              {value.usersGoodsTotalDonation}원 후원
                             </p>
                           </div>
                         </ValueItem>
                       </ItemDiv>
                     </BoxItem>
                   ))}
-                {GoodsElementList(token)}
+                {GoodsElementList()}
               </>
             </BoxWapper>
           </BoxSlider>
+          {isOpen.result ? (
+            <GoodsModal
+              setIsOpen={setIsOpen}
+              token={token}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
+              isOpen={isOpen}
+            />
+          ) : (
+            <></>
+          )}
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
-        {isOpen ? <GoodsModal setIsOpen={setIsOpen} /> : <></>}
       </GoodsContainer>
     </>
   );

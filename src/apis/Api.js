@@ -46,37 +46,43 @@ async function addBorderIdApi(token) {
 }
 
 //상품 전체 조회
-async function getGoodsProductApi() {
+async function getGoodsProductApi(token) {
   try {
-    const response = await fetch(`/GoodsProduct/all`);
-    const { data } = await response.json();
-    return {
-      data,
-    };
+    const response = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/all
+      `,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
   }
 }
 
 //상품 등록
-async function postGoodsProductApi(url) {
-  //borderid는 상품 등록 게시판 생성 시 만들어짐
+async function postGoodsProductApi(url, token) {
   try {
-    const response = await fetch(`/usersgoods/add/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/add/product`,
+      {
+        url: url,
       },
-      body: JSON.stringify({
-        url: `${url}`,
-      }),
-    });
-    const { data } = await response.json();
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    return {
-      data,
-    };
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -85,24 +91,222 @@ async function postGoodsProductApi(url) {
 //상품 삭제
 async function deleteGoodsAdd(userGoodsId) {
   try {
-    const response = await fetch(`/usersgoods?usersGoodsId=${userGoodsId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token1}`,
-      },
-    });
-    const { data } = await response.json();
-    return { data };
+    const response = await axios(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods?usersGoodsId=${userGoodsId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token1}`,
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 }
 
+//이름 계좌 시간 전체 조회
+async function getWeddingHall(token) {
+  console.log(token);
+  try {
+    const response = await axios.get(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/weddingHall/all
+      `,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//신랑 이름 등록
+async function addHusbandName(token, name) {
+  console.log(name);
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/husband/name`,
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+//신부 이름 등록
+async function addWifeName(token, name) {
+  console.log("wife" + name);
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/wife/name`,
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//신부 계좌 등록
+async function addWifeAccount(token, account, bank) {
+  console.log(token);
+  console.log(account);
+  console.log(bank);
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/wife/account`,
+      {
+        account: account,
+        bank: bank,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+//신랑 계좌 등록
+async function addHusbandAccount(token, account, bank) {
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/husband/account`,
+      {
+        account: account,
+        bank: bank,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// 예식시간
+async function addWeddingHallTime(token, date, time) {
+  console.log(date);
+  console.log(time);
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/weddingHall/time`,
+      {
+        date: date,
+        time: time,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+//예식장 주소 및 주소 변경
+async function addWeddingHallLocation(token, address) {
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/weddingHall/location`,
+      {
+        address: address,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//후원가 수정
+async function updateGoodsPrice(token, usersGoodsId, usersGoodsPrice) {
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/cost/update?usersGoodsId=${usersGoodsId}`,
+      {
+        usersGoodsPrice: usersGoodsPrice,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//상품이름 수정
+
+async function updateGoodsname(token, usersGoodsId, usersGoodsName) {
+  try {
+    const response = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/name/update?usersGoodsId=${usersGoodsId}`,
+      {
+        usersGoodsName: usersGoodsName,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 //사진 조회
 async function getGalleryWeddingImage(token) {
-  console.log(token);
   try {
     const res = await axios.get(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
@@ -323,4 +527,13 @@ export {
   getInforMationList,
   postWeddingAttendList,
   getWeddingAttendList,
+  updateGoodsname,
+  updateGoodsPrice,
+  getWeddingHall,
+  addHusbandName,
+  addWeddingHallTime,
+  addWeddingHallLocation,
+  addHusbandAccount,
+  addWifeName,
+  addWifeAccount,
 };
