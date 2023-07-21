@@ -196,16 +196,22 @@ export default function GoodsProductContainer({ token }) {
   const [wifeNameText, setWifeNameText] = useState("");
   const [husbandNameText, setHusbandNameText] = useState("");
   const [addressText, setAddressText] = useState("");
+  const [locationText, setLocationText] = useState("");
   const [dateText, setDateText] = useState("");
   const [timeText, setTimeText] = useState("");
-  const [bankText, setBankText] = useState({
-    wifeBank: "",
-    husbandBank: "",
+  const [isEditing, setIsEditing] = useState({
+    husband: false,
+    wife: false,
+    wifeBank: false,
+    husbandBank: false,
+    wifeAccount: false,
+    husbandAccount: false,
   });
-  const [accountText, setAccountText] = useState({
-    wifeAccount: "",
-    husbandAccount: "",
-  });
+  const [wifeBankText, setWifeBankText] = useState("");
+  const [wifeAccountText, setWifeAccountText] = useState("");
+  const [husbandBankText, setHusbandBankText] = useState("");
+
+  const [husbandAccountText, setHusBandAccountText] = useState("");
   const [marriedWeddingData, setMarriedWeddingData] = useState([]);
   const [isOpen, setIsOpen] = useState({
     result: false,
@@ -231,7 +237,6 @@ export default function GoodsProductContainer({ token }) {
   }
   //남편 이름 등록
   async function addHusbandNameRender(token, name) {
-    console.log("남편 이름 등록");
     await addHusbandName(token, name);
     getWeddingHall(token);
   }
@@ -243,30 +248,40 @@ export default function GoodsProductContainer({ token }) {
 
   // 신부 계좌,은행 등록
   async function addWifeAccountRender(token, account, bank) {
-    console.log("신부 계좌");
     await addWifeAccount(token, account, bank);
     getWeddingHall(token);
   }
   // 신랑 계좌,은행 등록
   async function addHusbandAccountRender(token, account, bank) {
-    const data = await addHusbandAccount(token, account, bank);
-    console.log(data);
+    await addHusbandAccount(token, account, bank);
     getWeddingHall(token);
   }
   //예식장 주소 및 날짜 변경
   async function addWeddingHallLocationRender(token, address) {
-    const data = await addWeddingHallLocation(token, address);
-    setAddressText(data);
+    await addWeddingHallLocation(token, address);
+
+    await getWeddingHall(token);
   }
   // 예식 시간
-  async function addWeddingHallTimeRender(token, timeText, dateText) {
-    const data = await addWeddingHallTime(token, timeText, dateText);
-    setDateText(data.weddingDate);
-    setTimeText(data.weddingTime);
+  async function addWeddingHallTimeRender(token, locationText) {
+    if (locationText !== "") {
+      const [year, time] = locationText.split("T");
+      const yyyymmdd = year.split("-").join("");
+      const hhmm = time.split(":").join("");
+      const data = await addWeddingHallTime(token, yyyymmdd, hhmm);
+      setDateText(data.data?.weddingDate);
+      setTimeText(data.data?.weddingTime);
+      getWeddingHall(token);
+    }
+
+    await getWeddingHall(token);
   }
   // 신부 이름 text
   const wifeTextChange = (e) => {
     const value = e.target.value;
+    if (isEditing.wife) {
+      setWifeNameText(value);
+    }
     setWifeNameText(value);
   };
   // 신랑 이름 text
@@ -274,19 +289,25 @@ export default function GoodsProductContainer({ token }) {
     const value = e.target.value;
     setHusbandNameText(value);
   };
-  // 은행 Change 이벤트
-  const bankTextChange = (e) => {
+  // 신부 은행 Change 이벤트
+  const wifBankTextChange = (e) => {
     const value = e.target.value;
-    setBankText({
-      [e.target.name]: value,
-    });
+    setWifeBankText(value);
   };
-  // 계좌번호 Change 이벤트
-  const accountTextChange = (e) => {
+  // 신부 계좌번호 Change 이벤트
+  const wifeAccountTextChange = (e) => {
     const value = e.target.value;
-    setAccountText({
-      [e.target.name]: value,
-    });
+    setWifeAccountText(value);
+  };
+  // 신랑 은행 Change 이벤트
+  const hasbandBankTextChange = (e) => {
+    const value = e.target.value;
+    setHusbandBankText(value);
+  };
+  // 신랑 계좌번호 Change 이벤트
+  const husbandAccountTextChange = (e) => {
+    const value = e.target.value;
+    setHusBandAccountText(value);
   };
   // 결혼식 주소 Change 이벤트
   const addressChange = (e) => {
@@ -296,13 +317,11 @@ export default function GoodsProductContainer({ token }) {
   };
   // 결혼식 날짜 Change 이벤트
   const dateTimeChange = (e) => {
+    console.log(e.target.value);
     const value = e.target.value;
-    const [year, time] = value.split("T");
-    const yyyymmdd = year.split("-").join("");
-    const hhmm = time.split(":").join("");
-    setDateText(yyyymmdd);
-    setTimeText(hhmm);
-    addWeddingHallTimeRender(token, dateText, timeText);
+    setLocationText(value);
+
+    addWeddingHallTimeRender(token, locationText);
   };
   //이름 계좌 시간 전체 등록 버튼
   const addMarriedInformationClick = async (token) => {
@@ -313,16 +332,12 @@ export default function GoodsProductContainer({ token }) {
     //신부 계좌 등록
     const data1 = await addWifeAccountRender(
       token,
-      accountText.wifeAccount,
-      bankText.wifeBank
+      wifeAccountText,
+      wifeBankText
     );
     console.log(data1);
     //신랑 계좌 등록
-    await addHusbandAccountRender(
-      token,
-      accountText.husbandAccount,
-      bankText.husbandBank
-    );
+    await addHusbandAccountRender(token, husbandAccountText, husbandBankText);
   };
 
   useEffect(() => {
@@ -377,13 +392,42 @@ export default function GoodsProductContainer({ token }) {
     }
   };
 
+  function marriedWeddingWifeUpdateHanlder() {
+    const marriedWeddingWifeAccountData = marriedWeddingData.data?.account[1];
+    setWifeNameText(marriedWeddingWifeAccountData?.name);
+    setWifeBankText(marriedWeddingWifeAccountData?.bank);
+    setWifeAccountText(marriedWeddingWifeAccountData?.account);
+  }
+
+  function marriedWeddingHusbandUpdateHanlder() {
+    const marriedWeddingHusbandAccountData =
+      marriedWeddingData.data?.account[0];
+    setHusbandNameText(marriedWeddingHusbandAccountData?.name);
+    setHusbandBankText(marriedWeddingHusbandAccountData?.bank);
+    setHusBandAccountText(marriedWeddingHusbandAccountData?.account);
+  }
+  function marriedWeddingTimeHandler() {
+    const weddingDate = marriedWeddingData.data?.weddingDate;
+    const weddingTime = marriedWeddingData.data?.weddingTime;
+    setDateText(weddingDate);
+    setTimeText(weddingTime);
+  }
+
+  function marriedAddresStateHandler() {
+    const marriedWeddingLocation = marriedWeddingData.data?.location;
+    setAddressText(marriedWeddingLocation);
+  }
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
 
-  const marriedWeddingHusbandAccountData = marriedWeddingData.data?.account[0];
-  const marriedWeddingWifeAccountData = marriedWeddingData.data?.account[0];
+  useEffect(() => {
+    marriedWeddingWifeUpdateHanlder();
+    marriedWeddingHusbandUpdateHanlder();
+    marriedAddresStateHandler();
+    marriedWeddingTimeHandler();
+  }, [marriedWeddingData]);
 
   return (
     <>
@@ -405,7 +449,7 @@ export default function GoodsProductContainer({ token }) {
           </GoodsSharelink>
           <div>{sharebox ? <ShareBox /> : null}</div>
         </GoodsShareLinkdiv>
-        {marriedWeddingData.data && marriedWeddingData.data?.account ? (
+        {marriedWeddingData.data && (
           <>
             <div>
               <GoodsText
@@ -413,17 +457,17 @@ export default function GoodsProductContainer({ token }) {
                 style={{
                   marginBottom: "20px",
                 }}
-                onChange={(e) => wifeTextChange(e)}
-                value={marriedWeddingWifeAccountData?.name || wifeNameText}
+                onChange={(e) => {
+                  wifeTextChange(e);
+                  setIsEditing({ wife: true });
+                }}
+                defaultValue={wifeNameText}
               />
-
               <br />
               <GoodsText
                 placeholder="신랑 이름"
                 onChange={(e) => husbandTextChange(e)}
-                value={
-                  marriedWeddingHusbandAccountData?.name || husbandNameText
-                }
+                defaultValue={husbandNameText}
               />
             </div>
             <GoodsWeddingdiv>
@@ -433,7 +477,7 @@ export default function GoodsProductContainer({ token }) {
                   marginBottom: "20px",
                 }}
                 onChange={(e) => addressChange(e)}
-                value={marriedWeddingData.data?.location || addressText}
+                defaultValue={addressText || ""}
               />
               <input
                 type="datetime-local"
@@ -445,10 +489,7 @@ export default function GoodsProductContainer({ token }) {
                   border: "1px solid #EBEBEB",
                 }}
                 onChange={(e) => dateTimeChange(e)}
-                value={
-                  marriedWeddingData.data?.weddingDate +
-                    marriedWeddingData.data?.weddingTime || dateText + timeText
-                }
+                value={dateText + "T" + timeText}
               />
             </GoodsWeddingdiv>
             <CenterTextdiv>
@@ -459,143 +500,38 @@ export default function GoodsProductContainer({ token }) {
               >
                 <GoodsWeddingText
                   placeholder="신부 이름"
-                  value={marriedWeddingWifeAccountData?.name || wifeNameText}
+                  defaultValue={wifeNameText || ""}
                 />
                 <GoodsWeddingbank
                   placeholder="은행"
-                  onChange={(e) => bankTextChange(e)}
+                  onChange={(e) => wifBankTextChange(e)}
                   name="wifeBank"
-                  value={
-                    marriedWeddingWifeAccountData?.bank || bankText.wifeBank
-                  }
+                  defaultValue={wifeBankText}
                 />
                 <GoodsWeddingaccountnumber
                   placeholder="계좌번호"
-                  onChange={(e) => accountTextChange(e)}
+                  onChange={(e) => wifeAccountTextChange(e)}
                   name="wifeAccount"
-                  value={
-                    marriedWeddingWifeAccountData?.account ||
-                    accountText.wifeAccount
-                  }
+                  defaultValue={wifeAccountText}
                 />
               </div>
               <br />
               <div>
                 <GoodsWeddingText
                   placeholder="신랑 이름"
-                  value={
-                    marriedWeddingHusbandAccountData?.name || husbandNameText
-                  }
+                  defaultValue={husbandNameText}
                 />
                 <GoodsWeddingbank
                   placeholder="은행"
                   name="husbandBank"
-                  onChange={(e) => bankTextChange(e)}
-                  value={
-                    marriedWeddingHusbandAccountData?.bank ||
-                    bankText.husbandBank
-                  }
+                  onChange={(e) => hasbandBankTextChange(e)}
+                  defaultValue={husbandAccountText}
                 />
                 <GoodsWeddingaccountnumber
                   placeholder="계좌번호"
-                  onChange={(e) => accountTextChange(e)}
+                  onChange={(e) => husbandAccountTextChange(e)}
                   name="husbandAccount"
-                  value={
-                    marriedWeddingHusbandAccountData?.account ||
-                    accountText.husbandAccount
-                  }
-                />
-                <AddMarriedButtonDiv>
-                  <AddMarriedButton
-                    onClick={() => addMarriedInformationClick(token)}
-                  >
-                    저장하기
-                  </AddMarriedButton>
-                </AddMarriedButtonDiv>
-              </div>
-            </CenterTextdiv>
-          </>
-        ) : (
-          <>
-            <div>
-              <GoodsText
-                placeholder="신부이름"
-                style={{
-                  marginBottom: "20px",
-                }}
-                onChange={(e) => wifeTextChange(e)}
-                value={wifeNameText}
-              />
-
-              <br />
-              <GoodsText
-                placeholder="신랑 이름"
-                onChange={(e) => husbandTextChange(e)}
-                value={husbandNameText || ""}
-              />
-            </div>
-            <GoodsWeddingdiv>
-              <GoodsWeddingadress
-                placeholder="예식장 주소"
-                style={{
-                  marginBottom: "20px",
-                }}
-                onChange={(e) => addressChange(e)}
-                value={addressText || ""}
-              />
-              <input
-                type="datetime-local"
-                style={{
-                  width: "200px",
-                  borderRadius: "10px",
-                  backgroundColor: "#EBEBEB",
-                  height: "33px",
-                  border: "1px solid #EBEBEB",
-                }}
-                onChange={(e) => dateTimeChange(e)}
-                value={dateText + timeText || ""}
-              />
-            </GoodsWeddingdiv>
-            <CenterTextdiv>
-              <div
-                style={{
-                  marginTop: "30px",
-                }}
-              >
-                <GoodsWeddingText
-                  placeholder="신부 이름"
-                  value={wifeNameText}
-                />
-                <GoodsWeddingbank
-                  placeholder="은행"
-                  onChange={(e) => bankTextChange(e)}
-                  name="wifeBank"
-                  value={bankText.wifeBank || ""}
-                />
-                <GoodsWeddingaccountnumber
-                  placeholder="계좌번호"
-                  onChange={(e) => accountTextChange(e)}
-                  name="wifeAccount"
-                  value={accountText.wifeAccount || ""}
-                />
-              </div>
-              <br />
-              <div>
-                <GoodsWeddingText
-                  placeholder="신랑 이름"
-                  value={husbandNameText || ""}
-                />
-                <GoodsWeddingbank
-                  placeholder="은행"
-                  name="husbandBank"
-                  onChange={(e) => bankTextChange(e)}
-                  value={bankText.husbandBank || ""}
-                />
-                <GoodsWeddingaccountnumber
-                  placeholder="계좌번호"
-                  onChange={(e) => accountTextChange(e)}
-                  name="husbandAccount"
-                  value={accountText.husbandAccount || ""}
+                  defaultValue={husbandAccountText}
                 />
                 <AddMarriedButtonDiv>
                   <AddMarriedButton
