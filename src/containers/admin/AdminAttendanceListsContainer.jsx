@@ -1,7 +1,8 @@
-
-import React from "react";
-import styled from 'styled-components'
-import {Doughnut} from "react-chartjs-2";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Doughnut } from "react-chartjs-2";
+import axios from "axios";
+// import _ from "lodash";
 
 const StyledSection = styled.section`
   margin: auto;
@@ -14,7 +15,7 @@ const StyledSection = styled.section`
   margin-bottom: 80px;
 
   h3 {
-    color: #4B4B4B;
+    color: #4b4b4b;
     font-size: 21px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -35,7 +36,7 @@ const StyledSection = styled.section`
     height: fit-content;
     padding: 8px 15px;
     margin-left: 60px;
-    h4{
+    h4 {
       padding: 5px 0 2px;
       font-size: 16px;
       font-weight: 600;
@@ -45,54 +46,109 @@ const StyledSection = styled.section`
       margin: 7px 0 10px;
     }
   }
-`
+`;
 
 function AdminAttendanceListsContainer() {
-    const attendanceData = {
-        labels: ['참석', '불참석', '미정'],
-        datasets: [
-            {
-                data: [12, 2, 3],
-                backgroundColor: [
-                    '#1552af',
-                    '#6c97dc',
-                    '#cfcfcf'
-                ],
-                borderWidth: 0,
-            },
-        ],
-    };
+  const [attendanceData, setAttendanceData] = useState({
+    yes: {},
+    no: {},
+    unknown: {},
+  });
 
-    const options = {
-        responsive: false,
-        layout: {
-            padding: 20
+  const tempToken = import.meta.env.VITE_TEMPTOKEN;
+  const fetchAttendanceData = async () => {
+    const { data } = await axios.get(
+      "http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/admin/attendance/detail",
+      {
+        headers: {
+          Authorization: "Bearer " + tempToken,
         },
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-    }
+      }
+    );
 
-    return (
-        <StyledSection>
-            <div className='item'>
-                <div>
-                    <h3>결혼식 참석 여부</h3>
-                    <Doughnut options={options} data={attendanceData}  width="300px" height="300px" />
-                </div>
-                <span>
-            <h4>참석</h4>
-            <p>%, 명</p>
-            <h4>불참석</h4>
-            <p>%, 명</p>
-            <h4>미정</h4>
-            <p>%, 명</p>
-          </span>
-            </div>
-        </StyledSection>
-    )
+    setAttendanceData({
+      ...attendanceData,
+      ["yes"]: data.data.yes,
+      ["no"]: data.data.no,
+      ["unknown"]: data.data.unknown,
+    });
+    // attendanceData.yes = _.cloneDeep(data.data.yes);
+    // attendanceData.no = _.cloneDeep(data.data.no);
+    // attendanceData.unknown = _.cloneDeep(data.data.unknown);
+
+    return console.log("attendance", attendanceData);
+  };
+
+  let attendanceTable = {
+    labels: ["참석", "불참석", "미정"],
+    datasets: [
+      {
+        data: [
+          attendanceData.yes.count,
+          attendanceData.no.count,
+          attendanceData.unknown.count,
+        ],
+        backgroundColor: ["#1552af", "#6c97dc", "#cfcfcf"],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: false,
+    layout: {
+      padding: 20,
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
+  useEffect(() => {
+    fetchAttendanceData();
+    attendanceTable.datasets = [
+      {
+        data: [
+          attendanceData.yes.count,
+          attendanceData.no.count,
+          attendanceData.unknown.count,
+        ],
+      },
+    ];
+    console.log("table", attendanceTable);
+  }, []);
+
+  return (
+    <StyledSection>
+      <div className="item">
+        <div>
+          <h3>결혼식 참석 여부</h3>
+          <Doughnut
+            options={options}
+            data={attendanceTable}
+            width="300px"
+            height="300px"
+          />
+        </div>
+        <span>
+          <h4>참석</h4>
+          <p>
+            {attendanceData.yes.rate}%, {attendanceData.yes.count}명
+          </p>
+          <h4>불참석</h4>
+          <p>
+            {attendanceData.no.rate}%, {attendanceData.no.count}명
+          </p>
+          <h4>미정</h4>
+          <p>
+            {attendanceData.unknown.rate}%, {attendanceData.unknown.count}명
+          </p>
+        </span>
+      </div>
+    </StyledSection>
+  );
 }
 
-export default AdminAttendanceListsContainer
+export default AdminAttendanceListsContainer;
