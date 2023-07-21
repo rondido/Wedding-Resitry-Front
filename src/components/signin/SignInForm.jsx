@@ -95,6 +95,7 @@ function SignInForm() {
         "http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/login/service",
         { email: inputValue.email, password: inputValue.password }
       );
+      console.log(response);
       const { accessToken, refreshToken } = response.data.data;
       setAuthToken({ accessToken: accessToken, refreshToken: refreshToken });
       setAuthState({
