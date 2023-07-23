@@ -104,15 +104,17 @@ const GoodsDiv = styled.div`
 `;
 
 const GoodsImage = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-image: url(${(props) => props.url});
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
   margin-bottom: 10px;
+  margin-left: 30%;
 `;
 
 const GoodsText = styled.p`
@@ -130,6 +132,7 @@ function CreateGoodsState({
   token,
   postGoodsListRender,
   goodsData,
+  deleteGoodsRender,
 }) {
   const getGoodsUrl = (e) => {
     setGetGoodsUrlItem(e.target.value);
@@ -139,8 +142,8 @@ function CreateGoodsState({
     setIsOpen(false);
   };
 
-  const deleteButton = () => {
-    deleteGoodsAdd();
+  const deleteButton = (token, id) => {
+    deleteGoodsRender(token, id);
     setIsOpen(false);
   };
 
@@ -150,7 +153,7 @@ function CreateGoodsState({
   return (
     <>
       {goodsData.length !== 0 && goodsData ? (
-        <>
+        <div id={goodsData.usersGoodsId}>
           <GoodsImage url={goodsData.usersGoodsImgUrl} />
           <div>
             <p>상품 이름 :{goodsData.usersGoodsName}</p>
@@ -167,11 +170,15 @@ function CreateGoodsState({
               </div>
               <div style={{ position: "absolute", top: "85%", right: "10%" }}>
                 <ApiButton onClick={okButton}>확인</ApiButton>|
-                <ApiButton onClick={deleteButton}>취소</ApiButton>
+                <ApiButton
+                  onClick={() => deleteButton(token, goodsData.usersGoodsId)}
+                >
+                  취소
+                </ApiButton>
               </div>
             </OkorColsebuttonDiv>
           </div>
-        </>
+        </div>
       ) : (
         <>
           {goodsData.length !== 0 && goodsData ? <></> : <Logo src={logo} />}
@@ -207,13 +214,13 @@ function CreateGoodsState({
 // 수정 삭제하기 버튼 만들어짐
 
 function UpdateGoodsState({
-  setGoosData,
   token,
-
   isOpen,
   fetchData,
   setIsOpen,
   setFetchData,
+  deleteGoodsRender,
+  renderProduct,
 }) {
   const [postFilterGoodsData, setPostFilterGoodsData] = useState([]);
   const [modifyResult, setModifyResult] = useState({
@@ -225,37 +232,37 @@ function UpdateGoodsState({
     prcie: false, // 수정 상태 기본상태
     name: false, // 상품 이름 수정
   });
+
   //상품 가격 수정
   async function updateGoodsPriceRender(token, usersGoodsId, usersGoodsName) {
-    const dataPrice = await updateGoodsPrice(
-      token,
-      usersGoodsId,
-      usersGoodsName
-    );
-    setGoosData(dataPrice.data);
+    await updateGoodsPrice(token, usersGoodsId, usersGoodsName);
+    setIsOpen(false);
   }
   //상품이름 수정
   async function updateGoodsNameRender(token, usersGoodsId, usersGoodsPrice) {
-    const dataName = await updateGoodsname(
-      token,
-      usersGoodsId,
-      usersGoodsPrice
-    );
-    setGoosData(dataName.data);
+    await updateGoodsname(token, usersGoodsId, usersGoodsPrice);
+    setIsOpen(false);
   }
 
   const updateGoodsAllClick = (token, usersGoodsId, name, price) => {
     const priceData = updateGoodsPriceRender(token, usersGoodsId, price);
     if (priceData) {
       setFetchData(priceData.data);
+      renderProduct();
     }
     const nameData = updateGoodsNameRender(token, usersGoodsId, name);
     if (nameData) {
       setFetchData(nameData.data);
+      renderProduct();
     }
     setIsOpen(false);
   };
 
+  const goodsDeleteButton = (token, id) => {
+    deleteGoodsRender(token, id);
+    setIsOpen(false);
+    renderProduct();
+  };
   const updateGoodsNameChange = (e) => {
     const value = e.target.value;
     setModifyResult({
@@ -329,7 +336,7 @@ function UpdateGoodsState({
             ))
           : postFilterGoodsData &&
             postFilterGoodsData.map((v) => (
-              <div key={v.usersGoodsId}>
+              <div key={v.usersGoodsId} id={v.usersGoodsId}>
                 <GoodsImage url={v.usersGoodsImgUrl} />
                 <div>
                   <GoodsDonationDiv>
@@ -364,7 +371,11 @@ function UpdateGoodsState({
                       style={{ position: "absolute", top: "85%", right: "10%" }}
                     >
                       <ApiButton>수정하기</ApiButton>|
-                      <ApiButton>삭제하기</ApiButton>
+                      <ApiButton
+                        onClick={() => goodsDeleteButton(token, v.usersGoodsId)}
+                      >
+                        삭제하기
+                      </ApiButton>
                     </div>
                   </OkorColsebuttonDiv>
                 </div>
@@ -385,6 +396,7 @@ export default function GoodsModal({
   usersGoodsPrice,
   isOpen,
   fetchData,
+  renderProduct,
 }) {
   const [getGoodsUrlItem, setGetGoodsUrlItem] = useState("");
   const [goodsData, setGoodsData] = useState([]);
@@ -392,6 +404,9 @@ export default function GoodsModal({
   async function postGoodsListRender(url, token) {
     const goodsItems = await postGoodsProductApi(url, token);
     setGoodsData(goodsItems.data);
+  }
+  async function deleteGoodsRender(token, id) {
+    await deleteGoodsAdd(token, id);
   }
 
   return (
@@ -424,6 +439,8 @@ export default function GoodsModal({
               usersGoodsPrice={usersGoodsPrice}
               isOpen={isOpen}
               fetchData={fetchData}
+              deleteGoodsRender={deleteGoodsRender}
+              renderProduct={renderProduct}
             />
           ) : (
             <CreateGoodsState
@@ -434,6 +451,7 @@ export default function GoodsModal({
               getGoodsUrlItem={getGoodsUrlItem}
               setFetchData={setFetchData}
               goodsData={goodsData}
+              deleteGoodsRender={deleteGoodsRender}
             />
           )}
         </TextDiv>
