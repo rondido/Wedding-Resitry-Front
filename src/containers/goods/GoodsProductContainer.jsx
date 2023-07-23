@@ -141,7 +141,7 @@ const ItemDiv = styled.div`
 const StyledTrack = styled.div`
   width: 5px;
   height: 100px;
-  background-color: ${(props) => (props ? "" : `#ebebeb`)};
+  background-color: #ebebeb;
   border-radius: 15px;
   transform: rotate(180deg);
   margin-right: 8px;
@@ -428,6 +428,7 @@ export default function GoodsProductContainer({ token }) {
     marriedAddresStateHandler();
     marriedWeddingTimeHandler();
   }, [marriedWeddingData]);
+  console.log(fetchData);
 
   return (
     <>
@@ -563,7 +564,7 @@ export default function GoodsProductContainer({ token }) {
                       }}
                     >
                       <Box
-                        url={value.usersGoodsImgUrl}
+                        url={value?.usersGoodsImgUrl}
                         setIsOpen={setIsOpen}
                         isOpen={isOpen}
                         setFetchData={setFetchData}
@@ -572,18 +573,18 @@ export default function GoodsProductContainer({ token }) {
                       />
                       <ItemDiv>
                         <StyledTrack isTrue={false}>
-                          <StyledRange width={value.usersGoodsPercent} />
+                          <StyledRange width={value?.usersGoodsPercent} />
                         </StyledTrack>
                         <ValueItem>
                           <div>
-                            <p>{value.usersGoodsName}</p>
+                            <p>{value?.usersGoodsName}</p>
                           </div>
                           <div>
-                            <p>{value.usersGoodsPrice} 원</p>
+                            <p>{value?.usersGoodsPrice} 원</p>
                           </div>
                           <div>
                             <p style={{ marginTop: "50px" }}>
-                              {value.usersGoodsTotalDonation}원 후원
+                              {value?.usersGoodsTotalDonation}원 후원
                             </p>
                           </div>
                         </ValueItem>
@@ -601,6 +602,7 @@ export default function GoodsProductContainer({ token }) {
               fetchData={fetchData}
               setFetchData={setFetchData}
               isOpen={isOpen}
+              renderProduct={renderProduct}
             />
           ) : (
             <></>

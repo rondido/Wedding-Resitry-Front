@@ -1,7 +1,4 @@
 import axios from "axios";
-import { getAccessToken } from "../tokens/token";
-
-const token1 = getAccessToken();
 
 //navbar 알림
 async function headerNavbarApi(token) {
@@ -89,7 +86,7 @@ async function postGoodsProductApi(url, token) {
 }
 
 //상품 삭제
-async function deleteGoodsAdd(userGoodsId) {
+async function deleteGoodsAdd(token, userGoodsId) {
   try {
     const response = await axios(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods?usersGoodsId=${userGoodsId}`,
@@ -98,7 +95,7 @@ async function deleteGoodsAdd(userGoodsId) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${token1}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
