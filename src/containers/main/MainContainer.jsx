@@ -138,7 +138,6 @@ const MainImage = styled.div`
 export default function MainContainer({ token }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
   const [borderId, _] = useTokenDecode(token);
-  console.log(borderId);
   console.log(_);
   useEffect(() => {
     if (borderId === undefined || borderId === null || borderId === "") {

@@ -161,7 +161,6 @@ const LogButton = styled.button`
 `;
 
 function NotificationItemList({ notifications }) {
-  console.log(notifications);
   if (notifications === undefined || notifications === null) {
     return <></>;
   }
@@ -174,9 +173,6 @@ function NotificationItemList({ notifications }) {
 }
 
 function NotificationItem({ data }) {
-  //return 렌더링
-  //선언부
-  //혹시 이유는??
   if (data === null || data === undefined) {
     return <></>;
   }
@@ -205,6 +201,7 @@ function NotificationItem({ data }) {
     </AlarmDiv>
   );
 }
+//로그인상태에따른 navbar click 행위 핸들링
 
 function TokenStateLink({ token, setNavbar }) {
   const navbarClose = () => {
@@ -279,10 +276,49 @@ function TokenStateLink({ token, setNavbar }) {
   }
 }
 
-export default function Navbar({ setNavbar, token }) {
+function UUidIsTrueState({ setNavbar, uuid1, uuid2 }) {
+  const navbarClose = () => {
+    if (!uuid1 || !uuid2) {
+      alert("접속 할 수 없는 경로 입니다.");
+      setNavbar(false);
+      return;
+    }
+    setNavbar(false);
+  };
+  return (
+    <TopItem>
+      <TopTitleText>카테고리</TopTitleText>
+      <LinkInput to={`/GoodsSupport/${uuid1}/${uuid2}`} onClick={navbarClose}>
+        <AiOutlineShoppingCart
+          style={{ marginRight: "5px", marginLeft: "3px" }}
+        />
+        상품 리스트
+        <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+      </LinkInput>
+      <LinkInput onClick={navbarClose}>
+        <AiOutlineFileSync style={{ marginRight: "5px", marginLeft: "3px" }} />
+        관리 페이지
+        <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+      </LinkInput>
+      <LinkInput to={`/GallerySupport/${uuid1}/${uuid2}`} onClick={navbarClose}>
+        <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
+        갤러리 페이지
+        <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+      </LinkInput>
+      <LinkInput onClick={navbarClose}>
+        <BsCalendar2Heart style={{ marginRight: "5px", marginLeft: "3px" }} />
+        위시 리스트/메모장
+        <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
+      </LinkInput>
+    </TopItem>
+  );
+}
+
+export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
   const [navbarNotification, setNavbarNotification] = useState([]);
   const [_, nickName] = useTokenDecode(token);
   const [uuid, setUUID] = useState([]);
+
   const useLinkToken = token;
   const navigate = useNavigate();
 
@@ -296,12 +332,14 @@ export default function Navbar({ setNavbar, token }) {
     const navbarItemData = await headerNavbarApi(token);
     setNavbarNotification(navbarItemData.data);
   }
+
   const removeAcctokenRender = () => {
     const tokenStatus = hasAccessToken();
     if (tokenStatus) {
       removeAccessToken();
       navigate("/");
       setNavbar(false);
+      alert("로그아웃");
       return;
     }
     if (!tokenStatus) {
@@ -320,7 +358,7 @@ export default function Navbar({ setNavbar, token }) {
   const urlLinkClick = () => {
     try {
       navigator.clipboard.writeText(
-        `도메인주소/GallerySupport/${uuid.uuidFirst}/${uuid.uuidSecond}`
+        `zolabayo.com/GallerySupport/${uuid.uuidFirst}/${uuid.uuidSecond}`
       );
       alert("링크주소가 복사되었습니다.");
       setNavbar(false);
@@ -329,6 +367,7 @@ export default function Navbar({ setNavbar, token }) {
       alert("다시 시도해주세요.");
     }
   };
+
   return (
     <>
       <Base>
@@ -345,7 +384,11 @@ export default function Navbar({ setNavbar, token }) {
             )}
           </NickNameText>
         </NickNamediv>
-        <TokenStateLink token={useLinkToken} />
+        {uuid1 || uuid2 ? (
+          <UUidIsTrueState uuid1={uuid1} uuid2={uuid2} />
+        ) : (
+          <TokenStateLink token={useLinkToken} />
+        )}
         <CenterItemDiv>
           <div>
             <CenterItemTitle>알림 목록</CenterItemTitle>
@@ -359,7 +402,7 @@ export default function Navbar({ setNavbar, token }) {
           <span style={{ fontSize: "13px" }} onClick={urlLinkClick}>
             링크 공유하기
           </span>
-          <LogButton onClick={() => removeAcctokenRender()}>Log out</LogButton>
+          <LogButton onClick={removeAcctokenRender}>Log out</LogButton>
         </BottomItemDiv>
       </Base>
     </>
