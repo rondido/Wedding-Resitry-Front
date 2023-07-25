@@ -44,6 +44,7 @@ function App() {
       setBorder(true);
     }
   }, []);
+
   return (
     <>
       <Reset />
@@ -62,12 +63,13 @@ function App() {
         <Route path="admin/donation" element={<AdminDonationLists />} />
         <Route path="admin/memo" element={<AdminMemo />} />
         <Route path="/GalleryWedding" element={<GalleryWedding />} />
+        <Route path="/GoodsProduct" element={<GoodsProduct />} />
+        <Route path="/Guest/:uuid1/:uuid2" element={<Main />} />
+        <Route path="/GoodsSupport/:uuid1/:uuid2" element={<GoodsSupport />} />
         <Route
           path="/GallerySupport/:uuid1/:uuid2"
           element={<GallerySupport />}
         />
-        <Route path="/GoodsSupport/:uuid1/:uuid2" element={<GoodsSupport />} />
-        <Route path="/GoodsProduct" element={<GoodsProduct />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
