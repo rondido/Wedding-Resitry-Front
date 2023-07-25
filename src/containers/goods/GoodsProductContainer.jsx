@@ -155,7 +155,7 @@ const StyledRange = styled.div`
 `;
 
 const ValueItem = styled.div`
-  width: 100%;
+  width: 130px;
   display: inline-block;
   font-style: normal;
   font-weight: 400px;
@@ -317,10 +317,8 @@ export default function GoodsProductContainer({ token }) {
   };
   // 결혼식 날짜 Change 이벤트
   const dateTimeChange = (e) => {
-    console.log(e.target.value);
     const value = e.target.value;
     setLocationText(value);
-
     addWeddingHallTimeRender(token, locationText);
   };
   //이름 계좌 시간 전체 등록 버튼
@@ -428,7 +426,6 @@ export default function GoodsProductContainer({ token }) {
     marriedAddresStateHandler();
     marriedWeddingTimeHandler();
   }, [marriedWeddingData]);
-  console.log(fetchData);
 
   return (
     <>
@@ -526,7 +523,7 @@ export default function GoodsProductContainer({ token }) {
                   placeholder="은행"
                   name="husbandBank"
                   onChange={(e) => hasbandBankTextChange(e)}
-                  defaultValue={husbandAccountText}
+                  defaultValue={husbandBankText}
                 />
                 <GoodsWeddingaccountnumber
                   placeholder="계좌번호"

@@ -223,14 +223,11 @@ function UpdateGoodsState({
   renderProduct,
 }) {
   const [postFilterGoodsData, setPostFilterGoodsData] = useState([]);
-  const [modifyResult, setModifyResult] = useState({
-    price: "",
-    name: "",
-  });
+
+  const [editNameText, setEditNameText] = useState("");
+  const [editPriceText, setEditPriceText] = useState("");
   const [editState, setEditState] = useState({
     state: false,
-    prcie: false, // 수정 상태 기본상태
-    name: false, // 상품 이름 수정
   });
 
   //상품 가격 수정
@@ -244,17 +241,16 @@ function UpdateGoodsState({
     setIsOpen(false);
   }
 
-  const updateGoodsAllClick = (token, usersGoodsId, name, price) => {
+  const updateGoodsAllClick = async (token, usersGoodsId, name, price) => {
     const priceData = updateGoodsPriceRender(token, usersGoodsId, price);
     if (priceData) {
       setFetchData(priceData.data);
-      renderProduct();
     }
     const nameData = updateGoodsNameRender(token, usersGoodsId, name);
     if (nameData) {
       setFetchData(nameData.data);
-      renderProduct();
     }
+    await renderProduct();
     setIsOpen(false);
   };
 
@@ -265,17 +261,22 @@ function UpdateGoodsState({
   };
   const updateGoodsNameChange = (e) => {
     const value = e.target.value;
-    setModifyResult({
-      [e.target.name]: value,
-    });
+    setEditNameText(value);
+  };
+  const updateGoodsPriceChange = (e) => {
+    const value = e.target.value;
+    setEditPriceText(value);
   };
 
   useEffect(() => {
     const filterGoodsData = fetchData?.filter(
       (v) => v.usersGoodsId === isOpen.userGoodsId
     );
+    setEditNameText(filterGoodsData[0].usersGoodsName);
+    setEditPriceText(filterGoodsData[0].usersGoodsPrice);
     setPostFilterGoodsData(filterGoodsData);
   }, []);
+
   return (
     <>
       <GoodsDiv>
@@ -289,9 +290,7 @@ function UpdateGoodsState({
                     상품 이름 :{" "}
                     <GoodsNameInput
                       name="name"
-                      value={
-                        editState.name ? modifyResult.name : v.usersGoodsName
-                      }
+                      value={editNameText}
                       onChange={updateGoodsNameChange}
                     />
                   </p>
@@ -300,12 +299,8 @@ function UpdateGoodsState({
                       후&nbsp; 원 &nbsp; 가
                       <GoodsDonationInput
                         name="price"
-                        value={
-                          editState.price
-                            ? modifyResult.price
-                            : v.usersGoodsPrice
-                        }
-                        onChange={updateGoodsNameChange}
+                        value={editPriceText}
+                        onChange={updateGoodsPriceChange}
                       />
                       원
                     </p>
@@ -321,14 +316,19 @@ function UpdateGoodsState({
                           updateGoodsAllClick(
                             token,
                             v.usersGoodsId,
-                            modifyResult.name,
-                            modifyResult.price
+                            editNameText,
+                            editPriceText
                           )
                         }
                       >
                         수정하기
                       </ApiButton>
-                      |<ApiButton>삭제하기</ApiButton>
+                      |
+                      <ApiButton
+                        onClick={() => goodsDeleteButton(token, v.usersGoodsId)}
+                      >
+                        삭제하기
+                      </ApiButton>
                     </div>
                   </OkorColsebuttonDiv>
                 </div>
@@ -343,23 +343,19 @@ function UpdateGoodsState({
                     <p>
                       상품 이름 :{" "}
                       <GoodsNameInput
-                        value={v.usersGoodsName}
+                        value={editNameText}
                         onChange={updateGoodsNameChange}
                         name="name"
-                        onFocus={(e) => {
-                          setEditState({ [e.target.name]: true, state: true });
-                        }}
+                        onFocus={() => setEditState({ state: true })}
                       />
                     </p>
                     <p>
                       후&nbsp; 원 &nbsp; 가
                       <GoodsDonationInput
-                        value={v.usersGoodsPrice}
-                        onChange={updateGoodsNameChange}
+                        value={editPriceText}
+                        onChange={updateGoodsPriceChange}
                         name="price"
-                        onFocus={(e) => {
-                          setEditState({ [e.target.name]: true, state: true });
-                        }}
+                        onFocus={() => setEditState({ state: true })}
                       />
                       원
                     </p>
