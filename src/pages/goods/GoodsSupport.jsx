@@ -13,7 +13,6 @@ export default function GoodsSupport() {
   const location = useLocation();
   const prevUrlPathName = location.pathname;
   const data = useSetRecoilState(prevUrlPathState);
-
   const navigator = useNavigate();
   useEffect(() => {
     data(prevUrlPathName);

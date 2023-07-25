@@ -155,7 +155,7 @@ const StyledRange = styled.div`
 `;
 
 const ValueItem = styled.div`
-  width: 120px;
+  width: 100%;
   display: inline-block;
   font-style: normal;
   font-weight: 400px;
