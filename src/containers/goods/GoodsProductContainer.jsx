@@ -14,6 +14,7 @@ import {
   addWeddingHallTime,
   addWifeAccount,
   addWifeName,
+  deleteGoodsAdd,
   getGoodsProductApi,
 } from "../../apis/Api";
 import GoodsModal from "../../components/goodsmodal/GoodsModal";
@@ -427,6 +428,13 @@ export default function GoodsProductContainer({ token }) {
     marriedWeddingTimeHandler();
   }, [marriedWeddingData]);
 
+  async function deleteGoodsRender(token, id) {
+    const data = await deleteGoodsAdd(token, id);
+    if (data.data === null) {
+      setFetchData((prev) => prev.filter((goods) => goods.usersGoodsId !== id));
+    }
+  }
+
   return (
     <>
       <GoodsContainer>
@@ -600,6 +608,7 @@ export default function GoodsProductContainer({ token }) {
               setFetchData={setFetchData}
               isOpen={isOpen}
               renderProduct={renderProduct}
+              deleteGoodsRender={deleteGoodsRender}
             />
           ) : (
             <></>

@@ -4,7 +4,6 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import logo from "@/assets/icons/logo.png";
 import {
-  deleteGoodsAdd,
   postGoodsProductApi,
   updateGoodsPrice,
   updateGoodsname,
@@ -133,6 +132,7 @@ function CreateGoodsState({
   postGoodsListRender,
   goodsData,
   deleteGoodsRender,
+  setFetchData,
 }) {
   const getGoodsUrl = (e) => {
     setGetGoodsUrlItem(e.target.value);
@@ -144,6 +144,7 @@ function CreateGoodsState({
 
   const deleteButton = (token, id) => {
     deleteGoodsRender(token, id);
+    setFetchData((prev) => prev.filter((goods) => goods.id !== id));
     setIsOpen(false);
   };
 
@@ -199,7 +200,12 @@ function CreateGoodsState({
                 <ApiButton onClick={registerGoodsButton}>등록하기</ApiButton>
               </div>
               <div style={{ position: "absolute", top: "85%", right: "10%" }}>
-                <ApiButton>확인</ApiButton>|<ApiButton>취소</ApiButton>
+                <ApiButton>확인</ApiButton>|
+                <ApiButton
+                  onClick={() => deleteButton(token, goodsData.usersGoodsId)}
+                >
+                  취소
+                </ApiButton>
               </div>
             </OkorColsebuttonDiv>
           </div>
@@ -257,7 +263,7 @@ function UpdateGoodsState({
   const goodsDeleteButton = (token, id) => {
     deleteGoodsRender(token, id);
     setIsOpen(false);
-    renderProduct();
+    setFetchData((prev) => prev.filter((goods) => goods.usersGoodsId !== id));
   };
   const updateGoodsNameChange = (e) => {
     const value = e.target.value;
@@ -393,6 +399,7 @@ export default function GoodsModal({
   isOpen,
   fetchData,
   renderProduct,
+  deleteGoodsRender,
 }) {
   const [getGoodsUrlItem, setGetGoodsUrlItem] = useState("");
   const [goodsData, setGoodsData] = useState([]);
@@ -400,9 +407,6 @@ export default function GoodsModal({
   async function postGoodsListRender(url, token) {
     const goodsItems = await postGoodsProductApi(url, token);
     setGoodsData(goodsItems.data);
-  }
-  async function deleteGoodsRender(token, id) {
-    await deleteGoodsAdd(token, id);
   }
 
   return (
