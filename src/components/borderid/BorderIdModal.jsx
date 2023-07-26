@@ -53,23 +53,29 @@ const WeddingText = styled.p`
   font-size: 40px;
 `;
 
-export default function BorderIdModal({ setBorderIdModal, token }) {
+export default function BorderIdModal({
+  setBorderIdModal,
+  token,
+  setBodersIdState,
+}) {
   async function addBorderIdrender(token) {
     const data = await addBorderIdApi(token);
-    console.log(data);
     if (data.data.accessToken && data.data.accessToken) {
       setAccessToken(data.data.refreshToken, data.data.accessToken);
+      setBodersIdState(true);
+      setBorderIdModal(false);
       return;
     }
     if (data.data.accessToken === undefined) {
       alert("로그인 정보가 없습니다.");
+      setBodersIdState(false);
+      setBorderIdModal(false);
       return;
     }
   }
 
   const borderAddButton = () => {
     addBorderIdrender(token);
-    setBorderIdModal(false);
   };
 
   return (
