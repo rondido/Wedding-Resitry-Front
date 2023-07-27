@@ -101,13 +101,12 @@ async function deleteGoodsAdd(token, userGoodsId) {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 //이름 계좌 시간 전체 조회
 async function getWeddingHall(token) {
-  console.log(token);
   try {
     const response = await axios.get(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/weddingHall/all
@@ -128,7 +127,6 @@ async function getWeddingHall(token) {
 
 //신랑 이름 등록
 async function addHusbandName(token, name) {
-  console.log(name);
   try {
     const response = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/husband/name`,
@@ -149,7 +147,6 @@ async function addHusbandName(token, name) {
 }
 //신부 이름 등록
 async function addWifeName(token, name) {
-  console.log("wife" + name);
   try {
     const response = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/wife/name`,
@@ -171,9 +168,6 @@ async function addWifeName(token, name) {
 
 //신부 계좌 등록
 async function addWifeAccount(token, account, bank) {
-  console.log(token);
-  console.log(account);
-  console.log(bank);
   try {
     const response = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/marriage/wife/account`,
@@ -217,8 +211,6 @@ async function addHusbandAccount(token, account, bank) {
 
 // 예식시간
 async function addWeddingHallTime(token, date, time) {
-  console.log(date);
-  console.log(time);
   try {
     const response = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/weddingHall/time`,
