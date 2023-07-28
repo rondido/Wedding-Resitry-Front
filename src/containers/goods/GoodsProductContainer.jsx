@@ -71,7 +71,7 @@ const GoodsWeddingadress = styled.input`
   outline: none;
   border: none;
   background-color: #ebebeb;
-  width: 200px;
+  width: 270px;
   border-radius: 10px;
   margin-left: 5px;
   height: 33px;
@@ -314,7 +314,6 @@ export default function GoodsProductContainer({ token }) {
   const addressChange = (e) => {
     const value = e.target.value;
     setAddressText(value);
-    addWeddingHallLocationRender(token, addressText);
   };
   // 결혼식 날짜 Change 이벤트
   const dateTimeChange = (e) => {
@@ -333,6 +332,13 @@ export default function GoodsProductContainer({ token }) {
     //신랑 계좌 등록
     await addHusbandAccountRender(token, husbandAccountText, husbandBankText);
     await getWeddingHallRender(token);
+  };
+
+  //엔터키
+  const activeEnter = (e) => {
+    if (e.key === "Enter") {
+      addWeddingHallLocationRender(token, addressText);
+    }
   };
 
   useEffect(() => {
@@ -478,21 +484,23 @@ export default function GoodsProductContainer({ token }) {
             </div>
             <GoodsWeddingdiv>
               <GoodsWeddingadress
-                placeholder="예식장 주소"
+                placeholder="예식장 주소(Enter키를 눌러 저장해주세요)"
                 style={{
                   marginBottom: "20px",
                 }}
                 onChange={(e) => addressChange(e)}
                 defaultValue={addressText || ""}
+                onKeyDown={(e) => activeEnter(e)}
               />
               <input
                 type="datetime-local"
                 style={{
-                  width: "200px",
+                  width: "270px",
                   borderRadius: "10px",
                   backgroundColor: "#EBEBEB",
                   height: "33px",
                   border: "1px solid #EBEBEB",
+                  textAlign: "center",
                 }}
                 onChange={(e) => dateTimeChange(e)}
                 value={dateText + "T" + timeText}
