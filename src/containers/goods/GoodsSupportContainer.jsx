@@ -100,12 +100,16 @@ const StyledRange = styled.div`
 `;
 
 const ValueItem = styled.div`
-  width: 120px;
+  width: 130px;
   display: inline-block;
   font-style: normal;
   font-weight: 400px;
   font-size: 14px;
   line-height: 17px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
 
 const BoxSlider = styled.div`
@@ -157,8 +161,14 @@ const GoodsWeddingadress = styled.input`
   text-align: center;
 `;
 
+const GoodsInformationAddressandDateTimeDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 //라디오 버튼
-function WeddingAttendJudgment({ token, guestToken }) {
+function WeddingAttendJudgment({ token }) {
+  const guestToken = localStorage.getItem("Guest-Info");
   const [attendData, setAttendData] = useState([]);
 
   //radiobutton change 값
@@ -182,15 +192,15 @@ function WeddingAttendJudgment({ token, guestToken }) {
       radioButtonValue,
       guestToken
     );
+
+    console.log(postAttendData);
     setAttendData(postAttendData.data.attend);
   }
-
   useEffect(() => {
     getWeddingAttnedListRender(token, guestToken);
   }, []);
-
   return (
-    <WeddingYn>
+    <WeddingYn key={2}>
       <div>
         <p>결혼식 참석 여부를 알려주세요.</p>
         <input
@@ -232,71 +242,60 @@ function WeddingAttendJudgment({ token, guestToken }) {
   );
 }
 
-function MarriedInforMation({ token, guestToken }) {
+function MarriedInforMation({ token }) {
+  const guestToken = localStorage.getItem("Guest-Info");
   //신랑 신부 statae
-  const [merriedNameData, setMerriedNameData] = useState([]);
-  // 은행 state
-  const [accountData, setAccountData] = useState([]);
-  //도로명주소 및 날짜
+  const [merriedHusbandNameData, setMerriedHusbandNameData] = useState([]);
+  const [merriedWifeNameData, setMerriedWifeNameData] = useState([]);
+  //도로명주소
   const [addressData, setAdressData] = useState([]);
+  const [dateTimeData, setDateTimeData] = useState("");
   //신랑 신부 내용 조회
   async function getInforMationListRender(token, guestToken) {
     const getMerriedInfoMationData = await getInforMationList(
       token,
       guestToken
     );
-    setMerriedNameData(getMerriedInfoMationData.data.users);
-    setAccountData(getMerriedInfoMationData.data.account);
-    setAdressData(getMerriedInfoMationData.data);
+    const getMrriedInforMationDataHusBand =
+      getMerriedInfoMationData.data.account[0];
+    setMerriedHusbandNameData(getMrriedInforMationDataHusBand);
+    const getMrriedInforMationDataHusWife =
+      getMerriedInfoMationData.data.account[1];
+    setMerriedWifeNameData(getMrriedInforMationDataHusWife);
+    setAdressData(getMerriedInfoMationData.data.location);
+    setDateTimeData(
+      getMerriedInfoMationData.data.weddingDate +
+        "T" +
+        getMerriedInfoMationData.data.weddingTime
+    );
   }
+
   useEffect(() => {
     getInforMationListRender(token, guestToken);
   }, []);
+
   return (
     <>
       <>
         <TitleDiv>
-          {merriedNameData &&
-            merriedNameData.map((v) => (
-              <>
-                <TitleText>
-                  {v.name}님과 {v.name}을 결혼 축하 드립니다.
-                </TitleText>
-              </>
-            ))}
+          {merriedHusbandNameData && merriedWifeNameData && (
+            <>
+              <TitleText>
+                {merriedHusbandNameData.name}님과 {merriedWifeNameData.name}
+                님의 결혼을 축하합니다.
+              </TitleText>
+            </>
+          )}
         </TitleDiv>
         <GoodsWeddingdiv>
-          {addressData && addressData ? (
-            addressData.map((v, idx) => (
-              <div key={idx}>
-                <GoodsWeddingadress
-                  style={{
-                    marginBottom: "20px",
-                  }}
-                  disabled={true}
-                  value={v.location}
-                />
-                <input
-                  type="datetime-local"
-                  style={{
-                    width: "200px",
-                    borderRadius: "10px",
-                    backgroundColor: "#EBEBEB",
-                    height: "33px",
-                    border: "1px solid #EBEBEB",
-                  }}
-                  value={v.weddingData + v.weddingTime}
-                  disabled={true}
-                />
-              </div>
-            ))
-          ) : (
-            <div>
+          {addressData && addressData && (
+            <GoodsInformationAddressandDateTimeDiv key={addressData}>
               <GoodsWeddingadress
                 style={{
                   marginBottom: "20px",
                 }}
                 disabled={true}
+                value={addressData || ""}
               />
               <input
                 type="datetime-local"
@@ -307,57 +306,50 @@ function MarriedInforMation({ token, guestToken }) {
                   height: "33px",
                   border: "1px solid #EBEBEB",
                 }}
+                value={dateTimeData || ""}
                 disabled={true}
               />
-            </div>
+            </GoodsInformationAddressandDateTimeDiv>
           )}
         </GoodsWeddingdiv>
         <CenterTextdiv>
-          <WeddingAttendJudgment token={token} guestToken={guestToken} />
-          {accountData && accountData ? (
-            accountData.map((v) => (
-              <>
-                <div
-                  style={{
-                    marginTop: "30px",
-                  }}
-                >
-                  <GoodsWeddingText disabled={true} value={v.name} />
-                  <GoodsWeddingbank disabled={true} value={v.bank} />
-                  <GoodsWeddingaccountnumber
-                    disabled={true}
-                    value={v.account}
-                  />
-                </div>
-                <br />
-                <div>
-                  <GoodsWeddingText disabled={true} value={v.name} />
-                  <GoodsWeddingbank disabled={true} value={v.bank} />
-                  <GoodsWeddingaccountnumber
-                    disabled={true}
-                    value={v.account}
-                  />
-                </div>
-              </>
-            ))
-          ) : (
-            <>
+          <WeddingAttendJudgment token={token} />
+          {merriedHusbandNameData && merriedWifeNameData && (
+            <div key={merriedWifeNameData}>
               <div
                 style={{
                   marginTop: "30px",
                 }}
               >
-                <GoodsWeddingText disabled={true} />
-                <GoodsWeddingbank disabled={true} />
-                <GoodsWeddingaccountnumber disabled={true} />
+                <GoodsWeddingText
+                  disabled={true}
+                  value={merriedHusbandNameData.name || ""}
+                />
+                <GoodsWeddingbank
+                  disabled={true}
+                  value={merriedHusbandNameData.bank || ""}
+                />
+                <GoodsWeddingaccountnumber
+                  disabled={true}
+                  value={merriedHusbandNameData.account || ""}
+                />
               </div>
               <br />
               <div>
-                <GoodsWeddingText disabled={true} />
-                <GoodsWeddingbank disabled={true} />
-                <GoodsWeddingaccountnumber disabled={true} />
+                <GoodsWeddingText
+                  disabled={true}
+                  value={merriedWifeNameData.name || ""}
+                />
+                <GoodsWeddingbank
+                  disabled={true}
+                  value={merriedWifeNameData.bank || ""}
+                />
+                <GoodsWeddingaccountnumber
+                  disabled={true}
+                  value={merriedWifeNameData.account || ""}
+                />
               </div>
-            </>
+            </div>
           )}
         </CenterTextdiv>
       </>
@@ -373,13 +365,12 @@ export default function GoodsSupportContainer({ token, guestToken }) {
   const TOTAL_SLIDES = 1;
   const arrayLength = goodsSupportData ? goodsSupportData.length : 0;
   const FIX_SIZE = 10;
-
   // 상품 조회
   async function getGoodsListRender(token, guestToken) {
     const goodsSupportData = await getGoodsSupportItemsList(token, guestToken);
     setGoodsSupportData(goodsSupportData.data);
   }
-
+  console.log(goodsSupportData);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
       // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.
@@ -401,7 +392,7 @@ export default function GoodsSupportContainer({ token, guestToken }) {
       element.push(
         <BoxItem style={{ width: "100%", marginRight: "150px" }}>
           <Box />
-          <ItemDiv></ItemDiv>
+          <ItemDiv />
         </BoxItem>
       );
     }
@@ -437,18 +428,12 @@ export default function GoodsSupportContainer({ token, guestToken }) {
                     <Box url={value.usersGoodsImgUrl} />
                     <ItemDiv>
                       <StyledTrack>
-                        <StyledRange width={value.usersGoodsPercent} />
+                        <StyledRange width={value?.usersGoodsPercent} />
                       </StyledTrack>
                       <ValueItem>
-                        <div>
-                          <p>{value.usersGoodsName}</p>
-                        </div>
-                        <div>
-                          <p>{value.usersGoodsPrice}원</p>
-                        </div>
-                        <div>
-                          <p>{value.totalDonation}원 후원</p>
-                        </div>
+                        <p>{value?.usersGoodsName}</p>
+                        <p>{value?.usersGoodsPrice}원</p>
+                        <p>{value?.usersGoodsTotalDonation}원 후원</p>
                       </ValueItem>
                     </ItemDiv>
                   </BoxItem>

@@ -14,6 +14,7 @@ import {
   addWeddingHallTime,
   addWifeAccount,
   addWifeName,
+  deleteGoodsAdd,
   getGoodsProductApi,
 } from "../../apis/Api";
 import GoodsModal from "../../components/goodsmodal/GoodsModal";
@@ -155,7 +156,7 @@ const StyledRange = styled.div`
 `;
 
 const ValueItem = styled.div`
-  width: 120px;
+  width: 130px;
   display: inline-block;
   font-style: normal;
   font-weight: 400px;
@@ -238,29 +239,29 @@ export default function GoodsProductContainer({ token }) {
   //남편 이름 등록
   async function addHusbandNameRender(token, name) {
     await addHusbandName(token, name);
-    getWeddingHall(token);
+    getWeddingHallRender(token);
   }
   // 신부 이름 등록
   async function addWifeNameRender(token, name) {
     await addWifeName(token, name);
-    getWeddingHall(token);
+    getWeddingHallRender(token);
   }
 
   // 신부 계좌,은행 등록
   async function addWifeAccountRender(token, account, bank) {
     await addWifeAccount(token, account, bank);
-    getWeddingHall(token);
+    getWeddingHallRender(token);
   }
   // 신랑 계좌,은행 등록
   async function addHusbandAccountRender(token, account, bank) {
     await addHusbandAccount(token, account, bank);
-    getWeddingHall(token);
+    getWeddingHallRender(token);
   }
   //예식장 주소 및 날짜 변경
   async function addWeddingHallLocationRender(token, address) {
     await addWeddingHallLocation(token, address);
 
-    await getWeddingHall(token);
+    await getWeddingHallRender(token);
   }
   // 예식 시간
   async function addWeddingHallTimeRender(token, locationText) {
@@ -271,10 +272,10 @@ export default function GoodsProductContainer({ token }) {
       const data = await addWeddingHallTime(token, yyyymmdd, hhmm);
       setDateText(data.data?.weddingDate);
       setTimeText(data.data?.weddingTime);
-      getWeddingHall(token);
+      getWeddingHallRender(token);
     }
 
-    await getWeddingHall(token);
+    await getWeddingHallRender(token);
   }
   // 신부 이름 text
   const wifeTextChange = (e) => {
@@ -317,10 +318,8 @@ export default function GoodsProductContainer({ token }) {
   };
   // 결혼식 날짜 Change 이벤트
   const dateTimeChange = (e) => {
-    console.log(e.target.value);
     const value = e.target.value;
     setLocationText(value);
-
     addWeddingHallTimeRender(token, locationText);
   };
   //이름 계좌 시간 전체 등록 버튼
@@ -330,14 +329,10 @@ export default function GoodsProductContainer({ token }) {
     //신부 이름 등록
     await addWifeNameRender(token, wifeNameText);
     //신부 계좌 등록
-    const data1 = await addWifeAccountRender(
-      token,
-      wifeAccountText,
-      wifeBankText
-    );
-    console.log(data1);
+    await addWifeAccountRender(token, wifeAccountText, wifeBankText);
     //신랑 계좌 등록
     await addHusbandAccountRender(token, husbandAccountText, husbandBankText);
+    await getWeddingHallRender(token);
   };
 
   useEffect(() => {
@@ -428,7 +423,13 @@ export default function GoodsProductContainer({ token }) {
     marriedAddresStateHandler();
     marriedWeddingTimeHandler();
   }, [marriedWeddingData]);
-  console.log(fetchData);
+
+  async function deleteGoodsRender(token, id) {
+    const data = await deleteGoodsAdd(token, id);
+    if (data.data === null) {
+      setFetchData((prev) => prev.filter((goods) => goods.usersGoodsId !== id));
+    }
+  }
 
   return (
     <>
@@ -526,7 +527,7 @@ export default function GoodsProductContainer({ token }) {
                   placeholder="은행"
                   name="husbandBank"
                   onChange={(e) => hasbandBankTextChange(e)}
-                  defaultValue={husbandAccountText}
+                  defaultValue={husbandBankText}
                 />
                 <GoodsWeddingaccountnumber
                   placeholder="계좌번호"
@@ -603,6 +604,7 @@ export default function GoodsProductContainer({ token }) {
               setFetchData={setFetchData}
               isOpen={isOpen}
               renderProduct={renderProduct}
+              deleteGoodsRender={deleteGoodsRender}
             />
           ) : (
             <></>

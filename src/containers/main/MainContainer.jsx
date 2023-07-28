@@ -137,18 +137,24 @@ const MainImage = styled.div`
 
 export default function MainContainer({ token }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
-  const [borderId, _] = useTokenDecode(token);
-  console.log(borderId);
-  console.log(_);
+  const [bodersIdState, setBodersIdState] = useState(false);
+
+  const borderId = useTokenDecode(token);
   useEffect(() => {
-    if (borderId === undefined || borderId === null || borderId === "") {
-      setBorderIdModal(true);
-      return;
-    } else {
-      setBorderIdModal(false);
-      return;
+    //로그인이 되어있을떄
+    if (token !== null) {
+      //bodersid가 없을때
+      if (borderId[0] === undefined && !bodersIdState) {
+        setBorderIdModal(true);
+        return;
+      }
+      if (borderId[0] !== undefined && bordorIdModal) {
+        setBorderIdModal(false);
+        return;
+      }
     }
-  }, [borderId]);
+    setBorderIdModal(false);
+  }, [borderId, token]);
 
   return (
     <>
@@ -184,7 +190,11 @@ export default function MainContainer({ token }) {
         </Weddingdiv>
       </Base>
       {bordorIdModal ? (
-        <BorderIdModal setBorderIdModal={setBorderIdModal} token={token} />
+        <BorderIdModal
+          setBorderIdModal={setBorderIdModal}
+          token={token}
+          setBodersIdState={setBodersIdState}
+        />
       ) : (
         <></>
       )}
