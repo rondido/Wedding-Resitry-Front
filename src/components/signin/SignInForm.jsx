@@ -127,7 +127,7 @@ function SignInForm() {
         placeholder="Email"
       />
       <StyledInput
-        type="text"
+        type="password"
         name="password"
         value={inputValue.password}
         onChange={onChangeInputValue}
