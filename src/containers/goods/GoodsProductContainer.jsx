@@ -449,7 +449,11 @@ export default function GoodsProductContainer({ token }) {
             />
             링크 공유하기
           </GoodsSharelink>
-          <div>{sharebox ? <ShareBox /> : null}</div>
+          <div>
+            {sharebox ? (
+              <ShareBox token={token} setSharebox={setSharebox} />
+            ) : null}
+          </div>
         </GoodsShareLinkdiv>
         {marriedWeddingData.data && (
           <>
