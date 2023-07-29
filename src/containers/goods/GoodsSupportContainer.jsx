@@ -256,17 +256,18 @@ function MarriedInforMation({ token }) {
       token,
       guestToken
     );
+    console.log(getMerriedInfoMationData);
     const getMrriedInforMationDataHusBand =
-      getMerriedInfoMationData.data.account[0];
+      getMerriedInfoMationData.data?.account[0];
     setMerriedHusbandNameData(getMrriedInforMationDataHusBand);
     const getMrriedInforMationDataHusWife =
-      getMerriedInfoMationData.data.account[1];
+      getMerriedInfoMationData.data?.account[1];
     setMerriedWifeNameData(getMrriedInforMationDataHusWife);
-    setAdressData(getMerriedInfoMationData.data.location);
+    setAdressData(getMerriedInfoMationData.data?.location);
     setDateTimeData(
-      getMerriedInfoMationData.data.weddingDate +
+      getMerriedInfoMationData.data?.weddingDate +
         "T" +
-        getMerriedInfoMationData.data.weddingTime
+        getMerriedInfoMationData.data?.weddingTime
     );
   }
 
@@ -276,83 +277,160 @@ function MarriedInforMation({ token }) {
 
   return (
     <>
-      <>
-        <TitleDiv>
-          {merriedHusbandNameData && merriedWifeNameData && (
-            <>
-              <TitleText>
-                {merriedHusbandNameData.name}님과 {merriedWifeNameData.name}
-                님의 결혼을 축하합니다.
-              </TitleText>
-            </>
-          )}
-        </TitleDiv>
-        <GoodsWeddingdiv>
-          {addressData && addressData && (
-            <GoodsInformationAddressandDateTimeDiv key={addressData}>
-              <GoodsWeddingadress
-                style={{
-                  marginBottom: "20px",
-                }}
-                disabled={true}
-                value={addressData || ""}
-              />
-              <input
-                type="datetime-local"
-                style={{
-                  width: "200px",
-                  borderRadius: "10px",
-                  backgroundColor: "#EBEBEB",
-                  height: "33px",
-                  border: "1px solid #EBEBEB",
-                }}
-                value={dateTimeData || ""}
-                disabled={true}
-              />
-            </GoodsInformationAddressandDateTimeDiv>
-          )}
-        </GoodsWeddingdiv>
-        <CenterTextdiv>
-          <WeddingAttendJudgment token={token} />
-          {merriedHusbandNameData && merriedWifeNameData && (
-            <div key={merriedWifeNameData}>
-              <div
-                style={{
-                  marginTop: "30px",
-                }}
-              >
-                <GoodsWeddingText
+      {merriedHusbandNameData ? (
+        <>
+          <TitleDiv>
+            {merriedHusbandNameData && merriedWifeNameData && (
+              <>
+                <TitleText>
+                  {merriedHusbandNameData.name}님과 {merriedWifeNameData.name}
+                  님의 결혼을 축하합니다.
+                </TitleText>
+              </>
+            )}
+          </TitleDiv>
+          <GoodsWeddingdiv>
+            {addressData && addressData && (
+              <GoodsInformationAddressandDateTimeDiv key={addressData}>
+                <GoodsWeddingadress
+                  style={{
+                    marginBottom: "20px",
+                  }}
                   disabled={true}
-                  value={merriedHusbandNameData.name || ""}
+                  value={addressData || ""}
                 />
-                <GoodsWeddingbank
+                <input
+                  type="datetime-local"
+                  style={{
+                    width: "200px",
+                    borderRadius: "10px",
+                    backgroundColor: "#EBEBEB",
+                    height: "33px",
+                    border: "1px solid #EBEBEB",
+                  }}
+                  value={dateTimeData || ""}
                   disabled={true}
-                  value={merriedHusbandNameData.bank || ""}
                 />
-                <GoodsWeddingaccountnumber
-                  disabled={true}
-                  value={merriedHusbandNameData.account || ""}
-                />
+              </GoodsInformationAddressandDateTimeDiv>
+            )}
+          </GoodsWeddingdiv>
+          <CenterTextdiv>
+            <WeddingAttendJudgment token={token} />
+            {merriedHusbandNameData && merriedWifeNameData && (
+              <div key={merriedWifeNameData}>
+                <div
+                  style={{
+                    marginTop: "30px",
+                  }}
+                >
+                  <GoodsWeddingText
+                    disabled={true}
+                    value={merriedHusbandNameData.name || ""}
+                  />
+                  <GoodsWeddingbank
+                    disabled={true}
+                    value={merriedHusbandNameData.bank || ""}
+                  />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={merriedHusbandNameData.account || ""}
+                  />
+                </div>
+                <br />
+                <div>
+                  <GoodsWeddingText
+                    disabled={true}
+                    value={merriedWifeNameData.name || ""}
+                  />
+                  <GoodsWeddingbank
+                    disabled={true}
+                    value={merriedWifeNameData.bank || ""}
+                  />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={merriedWifeNameData.account || ""}
+                  />
+                </div>
               </div>
-              <br />
-              <div>
-                <GoodsWeddingText
+            )}
+          </CenterTextdiv>
+        </>
+      ) : (
+        <>
+          <TitleDiv>
+            {merriedHusbandNameData && merriedWifeNameData && (
+              <>
+                <TitleText>부부의 정보를 아직 등록 하지 않았습니다.</TitleText>
+              </>
+            )}
+          </TitleDiv>
+          <GoodsWeddingdiv>
+            {addressData && addressData && (
+              <GoodsInformationAddressandDateTimeDiv key={addressData}>
+                <GoodsWeddingadress
+                  style={{
+                    marginBottom: "20px",
+                  }}
                   disabled={true}
-                  value={merriedWifeNameData.name || ""}
+                  value={addressData || ""}
                 />
-                <GoodsWeddingbank
+                <input
+                  type="datetime-local"
+                  style={{
+                    width: "200px",
+                    borderRadius: "10px",
+                    backgroundColor: "#EBEBEB",
+                    height: "33px",
+                    border: "1px solid #EBEBEB",
+                  }}
+                  value={dateTimeData || ""}
                   disabled={true}
-                  value={merriedWifeNameData.bank || ""}
                 />
-                <GoodsWeddingaccountnumber
-                  disabled={true}
-                  value={merriedWifeNameData.account || ""}
-                />
+              </GoodsInformationAddressandDateTimeDiv>
+            )}
+          </GoodsWeddingdiv>
+          <CenterTextdiv>
+            <WeddingAttendJudgment token={token} />
+            {merriedHusbandNameData && merriedWifeNameData && (
+              <div key={merriedWifeNameData}>
+                <div
+                  style={{
+                    marginTop: "30px",
+                  }}
+                >
+                  <GoodsWeddingText
+                    disabled={true}
+                    value={merriedHusbandNameData.name || ""}
+                  />
+                  <GoodsWeddingbank
+                    disabled={true}
+                    value={merriedHusbandNameData.bank || ""}
+                  />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={merriedHusbandNameData.account || ""}
+                  />
+                </div>
+                <br />
+                <div>
+                  <GoodsWeddingText
+                    disabled={true}
+                    value={merriedWifeNameData.name || ""}
+                  />
+                  <GoodsWeddingbank
+                    disabled={true}
+                    value={merriedWifeNameData.bank || ""}
+                  />
+                  <GoodsWeddingaccountnumber
+                    disabled={true}
+                    value={merriedWifeNameData.account || ""}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-        </CenterTextdiv>
-      </>
+            )}
+          </CenterTextdiv>
+        </>
+      )}
     </>
   );
 }
@@ -370,7 +448,6 @@ export default function GoodsSupportContainer({ token, guestToken }) {
     const goodsSupportData = await getGoodsSupportItemsList(token, guestToken);
     setGoodsSupportData(goodsSupportData.data);
   }
-  console.log(goodsSupportData);
   const nextSlide = () => {
     if (currentSlide >= TOTAL_SLIDES) {
       // 더 이상 넘어갈 슬라이드가 없으면 슬라이드를 초기화합니다.

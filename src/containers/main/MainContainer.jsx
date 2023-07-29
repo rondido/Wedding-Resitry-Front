@@ -92,12 +92,16 @@ const MainImage = styled.div`
   background-position: center;
 `;
 
-export default function MainContainer({ token }) {
+export default function MainContainer({ token, guestToken }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
   const [bodersIdState, setBodersIdState] = useState(false);
-
   const borderId = useTokenDecode(token);
+
   useEffect(() => {
+    if (guestToken !== null) {
+      setBorderIdModal(false);
+      return;
+    }
     //로그인이 되어있을떄
     if (token !== null) {
       //bodersid가 없을때
@@ -111,7 +115,7 @@ export default function MainContainer({ token }) {
       }
     }
     setBorderIdModal(false);
-  }, [borderId, token]);
+  }, [borderId, token, guestToken]);
 
   return (
     <>

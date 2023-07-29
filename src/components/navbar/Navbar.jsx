@@ -357,6 +357,13 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
 
   const removeAcctokenRender = () => {
     const tokenStatus = hasAccessToken();
+    if (uuid1 || uuid2) {
+      removeAccessToken();
+      navigate(`/Guest/${uuid1}/${uuid2}`);
+      setNavbar(false);
+      alert("로그아웃");
+      return;
+    }
     if (tokenStatus) {
       removeAccessToken();
       navigate("/");
@@ -392,7 +399,7 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
 
   return (
     <>
-      {uuid ? (
+      {!uuid1 ? (
         <Base>
           <Title>ZOLABAYO</Title>
           <NickNamediv>
@@ -407,26 +414,22 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
               )}
             </NickNameText>
           </NickNamediv>
-          {!uuid1 && (
-            <>
-              <TokenStateLink token={useLinkToken} />
-              <CenterItemDiv>
-                <div>
-                  <CenterItemTitle>알림 목록</CenterItemTitle>
-                </div>
-                <NotificationItemList
-                  notifications={navbarNotification}
-                  setNavbar={setNavbar}
-                />
-              </CenterItemDiv>
-              <BottomItemDiv>
-                <span style={{ fontSize: "13px" }} onClick={urlLinkClick}>
-                  링크 공유하기
-                </span>
-                <LogButton onClick={removeAcctokenRender}>Log out</LogButton>
-              </BottomItemDiv>
-            </>
-          )}
+          <TokenStateLink token={useLinkToken} />
+          <CenterItemDiv>
+            <div>
+              <CenterItemTitle>알림 목록</CenterItemTitle>
+            </div>
+            <NotificationItemList
+              notifications={navbarNotification}
+              setNavbar={setNavbar}
+            />
+          </CenterItemDiv>
+          <BottomItemDiv>
+            <span style={{ fontSize: "13px" }} onClick={urlLinkClick}>
+              링크 공유하기
+            </span>
+            <LogButton onClick={removeAcctokenRender}>Log out</LogButton>
+          </BottomItemDiv>
         </Base>
       ) : (
         <GuestBase>
@@ -443,14 +446,10 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
               )}
             </NickNameText>
           </NickNamediv>
-          {uuid1 && (
-            <>
-              <UUidIsTrueState uuid1={uuid1} uuid2={uuid2} />
-              <GuestBottomItemDiv>
-                <LogButton onClick={removeAcctokenRender}>Log out</LogButton>
-              </GuestBottomItemDiv>
-            </>
-          )}
+          <UUidIsTrueState uuid1={uuid1} uuid2={uuid2} />
+          <GuestBottomItemDiv>
+            <LogButton onClick={removeAcctokenRender}>Log out</LogButton>
+          </GuestBottomItemDiv>
         </GuestBase>
       )}
     </>
