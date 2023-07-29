@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 import CircleRadius from "@/assets/icons/radius.png";
 import FirstAnimation from "@/assets/icons/first.png";
-import SecoundAnimation from "@/assets/icons/secound.png";
-import ThreeAnimation from "@/assets/icons/three.png";
+
 import BorderIdModal from "../../components/borderid/BorderIdModal";
 import useTokenDecode from "../../hooks/useTokenDecode";
 
@@ -84,45 +83,6 @@ const ImgDiv = styled.div`
   left: 70%;
 `;
 
-const AniMove = keyframes`
-  0%{
-    background-image: url(${FirstAnimation});
-    background-size: cover;
-    width: 400px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-
-  }
-  25%{
-    background-image: url(${SecoundAnimation});
-    background-size: cover;
-    width: 400px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-
-  }
-  50%{
-    background-image: url(${ThreeAnimation});
-    background-size: cover;
-    width: 400px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-
-  }
-  100%{
-    background-image: url(${FirstAnimation});
-    background-size: cover;
-    width: 400px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-
-  }
-`;
-
 const MainImage = styled.div`
   filter: drop-shadow(0px 20px 5px rgba(85, 91, 102, 0.3));
   background: url(${FirstAnimation});
@@ -130,9 +90,6 @@ const MainImage = styled.div`
   height: 400px;
   background-size: cover;
   background-position: center;
-  &:hover {
-    animation: ${AniMove} 1s steps(4, end) infinite;
-  }
 `;
 
 export default function MainContainer({ token }) {

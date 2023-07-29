@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authTokenAtom } from "@/state/authState.js";
 import axios from "axios";
 // import { authStateAtom } from "../../state/authState";
-// import { prevUrlPathState } from "../../state/prevUrlPathState";
+import { prevUrlPathState } from "../../state/prevUrlPathState";
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -70,6 +70,8 @@ const StyledSpan = styled.span``;
 function SignInForm() {
   // const authToken = useRecoilValue(authTokenAtom);
   const setAuthToken = useSetRecoilState(authTokenAtom);
+  const urlPathState = useRecoilValue(prevUrlPathState);
+
   const navigate = useNavigate();
   const initInputValue = {
     email: "",
@@ -101,6 +103,10 @@ function SignInForm() {
         localStorage.setItem("refreshToken", accessToken);
         localStorage.setItem("accessToken", refreshToken);
 
+        if (urlPathState.length > 0) {
+          window.location.assign(urlPathState);
+          return;
+        }
         alert(`로그인 성공`);
         navigate("/");
       } else {
