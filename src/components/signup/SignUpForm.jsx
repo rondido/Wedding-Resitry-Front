@@ -155,6 +155,7 @@ function SignUpForm() {
                 );
                 localStorage.setItem("accessToken", res.data.data.accessToken);
                 if (urlPathState.length > 0) {
+                  console.log(123);
                   window.location.assign(urlPathState);
                   return;
                 }
