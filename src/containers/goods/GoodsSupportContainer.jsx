@@ -9,6 +9,7 @@ import {
   getWeddingAttendList,
   postWeddingAttendList,
 } from "../../apis/Api";
+import GoodsSupportModal from "../../components/goodssupportmodal/GoodsSupportModal";
 
 const GoodsContainer = styled.div`
   display: flex;
@@ -193,7 +194,6 @@ function WeddingAttendJudgment({ token }) {
       guestToken
     );
 
-    console.log(postAttendData);
     setAttendData(postAttendData.data.attend);
   }
   useEffect(() => {
@@ -256,7 +256,7 @@ function MarriedInforMation({ token }) {
       token,
       guestToken
     );
-    console.log(getMerriedInfoMationData);
+
     const getMrriedInforMationDataHusBand =
       getMerriedInfoMationData.data?.account[0];
     setMerriedHusbandNameData(getMrriedInforMationDataHusBand);
@@ -439,6 +439,8 @@ export default function GoodsSupportContainer({ token, guestToken }) {
   const [goodsSupportData, setGoodsSupportData] = useState([]);
   const [didMount, setDidMount] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [usersGoodsId, setUsersGoodsId] = useState("");
   const slideRef = useRef(null);
   const TOTAL_SLIDES = 1;
   const arrayLength = goodsSupportData ? goodsSupportData.length : 0;
@@ -490,7 +492,6 @@ export default function GoodsSupportContainer({ token, guestToken }) {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 애니메이션을 만듭니다.
   }, [currentSlide]);
-
   return (
     <>
       <GoodsContainer>
@@ -501,7 +502,13 @@ export default function GoodsSupportContainer({ token, guestToken }) {
             <BoxWapper ref={slideRef}>
               {goodsSupportData &&
                 goodsSupportData.map((value) => (
-                  <BoxItem key={value.id}>
+                  <BoxItem
+                    key={value.id}
+                    onClick={() => {
+                      setIsOpen(true);
+                      setUsersGoodsId(value.usersGoodsId);
+                    }}
+                  >
                     <Box url={value.usersGoodsImgUrl} />
                     <ItemDiv>
                       <StyledTrack>
@@ -518,6 +525,16 @@ export default function GoodsSupportContainer({ token, guestToken }) {
               {goodsElemntList()}
             </BoxWapper>
           </BoxSlider>
+          {isOpen && (
+            <GoodsSupportModal
+              setIsOpen={setIsOpen}
+              token={token}
+              getGoodsListRender={getGoodsListRender}
+              goodsSupportData={goodsSupportData}
+              usersGoodsId={usersGoodsId}
+              guestToken={guestToken}
+            />
+          )}
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
       </GoodsContainer>

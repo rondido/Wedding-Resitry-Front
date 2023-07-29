@@ -500,6 +500,31 @@ async function getGoodsUrlUUID(token) {
   }
 }
 
+//후원 금액 등록 하기
+async function postGoodsDonation(token, userGoodsId, donation, guestToken) {
+  try {
+    const res = await axios.post(
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/invitation/weddingHall/donation`,
+      {
+        usersGoodsId: userGoodsId,
+        donation: donation,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Guest-Info": `${guestToken}`,
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export {
   getGoodsProductApi,
   postGoodsProductApi,
@@ -525,4 +550,5 @@ export {
   addHusbandAccount,
   addWifeName,
   addWifeAccount,
+  postGoodsDonation,
 };

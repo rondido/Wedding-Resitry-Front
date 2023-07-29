@@ -608,7 +608,7 @@ export default function GoodsProductContainer({ token }) {
               </>
             </BoxWapper>
           </BoxSlider>
-          {isOpen.result ? (
+          {isOpen.result && (
             <GoodsModal
               setIsOpen={setIsOpen}
               token={token}
@@ -618,8 +618,6 @@ export default function GoodsProductContainer({ token }) {
               renderProduct={renderProduct}
               deleteGoodsRender={deleteGoodsRender}
             />
-          ) : (
-            <></>
           )}
           <RiArrowDropRightLine onClick={nextSlide} size="40" />
         </BoxContainer>
