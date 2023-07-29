@@ -69,6 +69,7 @@ const GoodsNameInput = styled.input`
   outline: none;
   width: 400px;
   height: 20px;
+  margin-bottom: 10px;
 `;
 
 const GoodsDonationInput = styled.input`
@@ -121,6 +122,7 @@ const GoodsText = styled.p`
   justify-content: center;
   display: flex;
 `;
+
 //등록 상태
 //상품 등록 전에 빈 text랑 등록 확인 취소
 // 등록후 값이 변경되고 등록 확인 취소 버튼만 보인다.
@@ -291,7 +293,7 @@ function UpdateGoodsState({
             postFilterGoodsData.map((v) => (
               <div key={v.usersGoodsId}>
                 <GoodsImage url={v.usersGoodsImgUrl} />
-                <div>
+                <GoodsDonationDiv>
                   <p>
                     상품 이름 :{" "}
                     <GoodsNameInput
@@ -300,18 +302,16 @@ function UpdateGoodsState({
                       onChange={updateGoodsNameChange}
                     />
                   </p>
-                  <GoodsDonationDiv>
-                    <p>
-                      후&nbsp; 원 &nbsp; 가
-                      <GoodsDonationInput
-                        name="price"
-                        value={editPriceText}
-                        onChange={updateGoodsPriceChange}
-                      />
-                      원
-                    </p>
-                  </GoodsDonationDiv>
-                </div>
+                  <p>
+                    후&nbsp; 원 &nbsp; 가
+                    <GoodsDonationInput
+                      name="price"
+                      value={editPriceText}
+                      onChange={updateGoodsPriceChange}
+                    />
+                    원
+                  </p>
+                </GoodsDonationDiv>
                 <div style={{ width: "100%" }}>
                   <OkorColsebuttonDiv>
                     <div
@@ -344,29 +344,27 @@ function UpdateGoodsState({
             postFilterGoodsData.map((v) => (
               <div key={v.usersGoodsId} id={v.usersGoodsId}>
                 <GoodsImage url={v.usersGoodsImgUrl} />
-                <div>
-                  <GoodsDonationDiv>
-                    <p>
-                      상품 이름 :{" "}
-                      <GoodsNameInput
-                        value={editNameText}
-                        onChange={updateGoodsNameChange}
-                        name="name"
-                        onFocus={() => setEditState({ state: true })}
-                      />
-                    </p>
-                    <p>
-                      후&nbsp; 원 &nbsp; 가
-                      <GoodsDonationInput
-                        value={editPriceText}
-                        onChange={updateGoodsPriceChange}
-                        name="price"
-                        onFocus={() => setEditState({ state: true })}
-                      />
-                      원
-                    </p>
-                  </GoodsDonationDiv>
-                </div>
+                <GoodsDonationDiv>
+                  <p>
+                    상품 이름 :{" "}
+                    <GoodsNameInput
+                      value={editNameText}
+                      onChange={updateGoodsNameChange}
+                      name="name"
+                      onFocus={() => setEditState({ state: true })}
+                    />
+                  </p>
+                  <p>
+                    후&nbsp; 원 &nbsp; 가
+                    <GoodsDonationInput
+                      value={editPriceText}
+                      onChange={updateGoodsPriceChange}
+                      name="price"
+                      onFocus={() => setEditState({ state: true })}
+                    />
+                    원
+                  </p>
+                </GoodsDonationDiv>
                 <div style={{ width: "100%" }}>
                   <OkorColsebuttonDiv>
                     <div
