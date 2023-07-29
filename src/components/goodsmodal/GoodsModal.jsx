@@ -154,7 +154,7 @@ function CreateGoodsState({
   return (
     <>
       {goodsData.length !== 0 && goodsData ? (
-        <div id={goodsData.usersGoodsId}>
+        <div id={goodsData.usersGoodsId} key={goodsData.usersGoodsId}>
           <GoodsImage url={goodsData.usersGoodsImgUrl} />
           <div>
             <p>상품 이름 :{goodsData.usersGoodsName}</p>
