@@ -36,7 +36,7 @@
   ![react-router-dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
   ![styled-components](https://img.shields.io/badge/styled--components%2Fcss-1.12.0-28A745?logo=styled-components)
   ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
-  ![Recoil](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=Recoil)
+  ![Recoil](https://img.shields.io/badge/recoil-^0.7.7?logo=Recoil)
 
 ## 폴더 구조
 
