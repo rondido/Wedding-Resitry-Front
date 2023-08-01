@@ -32,7 +32,8 @@
 
 - Development
 
-  ![React](https://img.shields.io/badge/Create--React--App-5.0.1-20232A?logo=react)
+  ![React](https://img.shields.io/badge/React-18.2.0-1E90FF?logo=React)
+  ![Vite](https://img.shields.io/badge/Vite-4.1.0-C8C8FF?logo=Vite)
   ![react-router-dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
   ![styled-components](https://img.shields.io/badge/styled--components%2Fcss-1.12.0-28A745?logo=styled-components)
   ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
