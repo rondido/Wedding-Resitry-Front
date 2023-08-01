@@ -36,8 +36,15 @@
   ![Vite](https://img.shields.io/badge/Vite-4.1.0-C8C8FF?logo=Vite)
   ![react-router-dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
   ![styled-components](https://img.shields.io/badge/styled--components%2Fcss-1.12.0-28A745?logo=styled-components)
-  ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
-  ![Recoil](https://img.shields.io/badge/Recoil--0.7.7-1E90FF?logo=Recoil&logoColor=white)
+  ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios)
+  ![Recoil](https://img.shields.io/badge/Recoil--0.7.7-1E90FF?logo=Recoil)
+  ![Msw](https://img.shields.io/badge/Msw--1.1.0-FF8C8C?logo=Msw)
+  ![Swiper](https://img.shields.io/badge/Swiper--9.1.0-0064FF?logo=Swiper)
+  ![Js-base64](https://img.shields.io/badge/Js-base64--3.7.5-FFB400?logo=Js-base64)
+  ![Eslint](https://img.shields.io/badge/Eslint--8.35.0-7B68EE?logo=Eslint)
+  ![Prettier](https://img.shields.io/badge/Prettier--2.8.8-483D8B?logo=Prettier)
+
+
 
 ## 폴더 구조
 
