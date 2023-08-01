@@ -20,7 +20,7 @@
   <tbody>
     <tr>            
        <td align="center"><a href="https://github.com/rondido"><img src="https://avatars.githubusercontent.com/u/55516901?v=4" width="100px;" alt=""/><br /><sub><b>박진현</b></sub></a><br /></td>
-       <td align="center"><a href="https://github.com/YunHeeW"><img src="https://avatars.githubusercontent.com/u/105530169?v=4" width="100px;" alt=""/><br /><sub><b>원윤희</b></sub></a><br /></td>            
+       <td align="center"><a href="https://github.com/YunHeeW"><img src="https://avatars.githubusercontent.com/u/102518144?v=4" width="100px;" alt=""/><br /><sub><b>원윤희</b></sub></a><br /></td>            
     </tr>
   </tbody>
 </table>
@@ -36,7 +36,7 @@
   ![react-router-dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
   ![styled-components](https://img.shields.io/badge/styled--components%2Fcss-1.12.0-28A745?logo=styled-components)
   ![axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios&logoColor=%23671DDF)
-  ![Recoil]((https://img.shields.io/badge/Recoil-0.7.7-%1E90FF?logo=Recoil))
+  ![Recoil](https://img.shields.io/badge/Recoil--0.7.7-1E90FF?logo=Recoil&logoColor=white)
 
 ## 폴더 구조
 
@@ -118,11 +118,11 @@ https://shell-barnacle-687.notion.site/TEAM-A-67efc05b8c2244ad8e438f22da89423e
 리팩토링 한 코드 올리기
    
 
-3. Recoil을 사용하기 위해 라이브러리를 사용할 수 있었지만 왜 사용하지 않았나?
-  1. 우선 기본적인 React hooks조차 제대로 활용하지 못한 생각이 들었다.
-  2. 현재 나의 기준에서 props drilling이 심한 편이 아니라고 생각했고 무작정 Recoil을 사용한다면 그것 또한 낭비라고 생각이 들었다.
-  3. 상태 자체를 전역적으로 관리해야할 경우에는 Recoil사용하여 상태를 관리하였다.
-  4. 추후 리팩토링 과정에서 props drilling이 심할 경우 Recoil로 바꿀 것이다.
+3. Recoil을 사용하기 위해 라이브러리를 사용할 수 있었지만 왜 사용하지 않았나?   
+  - 우선 기본적인 React hooks조차 제대로 활용하지 못한 생각이 들었다.
+  - 현재 나의 기준에서 props drilling이 심한 편이 아니라고 생각했고 무작정 Recoil을 사용한다면 그것 또한 낭비라고 생각이 들었다.
+  - 상태 자체를 전역적으로 관리해야할 경우에는 Recoil사용하여 상태를 관리하였다.
+  - 추후 리팩토링 과정에서 props drilling이 심할 경우 Recoil로 바꿀 것이다.
 
 
 리팩토링 진행,ts 추가
