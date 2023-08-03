@@ -82,7 +82,7 @@ yarn run build
 
 ---
 
-<a href="https://whimsical.com/wedding-AXkPY3swAd2tK6g4pmPmAr"></a>
+<p><a href="https://whimsical.com/wedding-AXkPY3swAd2tK6g4pmPmAr">work flow</a></p>
 
 ## 일정관리
 
@@ -97,6 +97,8 @@ yarn run build
 ---
 
 <p><a href="https://shell-barnacle-687.notion.site/TEAM-A-67efc05b8c2244ad8e438f22da89423e">노션 회의록 링크</a></p>
+
+<br/>
 
 ## 서비스 소개
 
