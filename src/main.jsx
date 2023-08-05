@@ -7,6 +7,7 @@ import { worker } from "./mocks/browsers";
 import { RecoilRoot, useRecoilSnapshot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthTokenRepository } from "./repository/AuthTokenRepository";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -44,3 +45,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </RecoilRoot>
   </React.StrictMode>
 );
+
+export const authToken = new AuthTokenRepository();
