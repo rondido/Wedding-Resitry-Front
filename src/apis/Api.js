@@ -1,5 +1,6 @@
 import axios from "axios";
 
+console.log(import.meta.env.VITE_HTTP_API_URL);
 //navbar 알림
 async function headerNavbarApi(token) {
   try {
