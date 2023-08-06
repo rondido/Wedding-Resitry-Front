@@ -1,8 +1,9 @@
 import axios from "axios";
-
-export class HttpClient {
-  constructor(baseURL) {
-    this.baseURL = baseURL;
+import { authToken } from "../repository/AuthTokenRepository";
+class HttpClient {
+  constructor(token) {
+    this.baseURL = import.meta.env.VITE_HTTP_API_URL;
+    this.token = token;
   }
   async create(endpoint, options) {
     const url = this.baseURL + endpoint;
@@ -10,7 +11,9 @@ export class HttpClient {
       const response = await axios(url, {
         ...options,
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: this.token.get() ? "Bearer " + this.token.get() : "",
         },
       });
       return response;
@@ -19,3 +22,5 @@ export class HttpClient {
     }
   }
 }
+
+export const httpClient = new HttpClient(authToken);

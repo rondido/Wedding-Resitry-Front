@@ -14,10 +14,10 @@ import {
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
-import { hasAccessToken, removeAccessToken } from "../../tokens/token";
-import { getGoodsUrlUUID, headerNavbarApi } from "../../apis/Api";
+import { getGoodsUrlUUID } from "../../apis/Api";
 
 import useTokenDecode from "../../hooks/useTokenDecode";
+import { authToken } from "../../repository/AuthTokenRepository";
 
 const Base = styled.div`
   display: flex;
@@ -308,26 +308,18 @@ function TokenStateLink({ token, setNavbar }) {
   }
 }
 
-function UUidIsTrueState({ setNavbar, uuid1, uuid2 }) {
-  const navbarClose = () => {
-    if (!uuid1 || !uuid2) {
-      alert("접속 할 수 없는 경로 입니다.");
-      setNavbar(false);
-      return;
-    }
-    setNavbar(false);
-  };
+function UUidIsTrueState({ uuid1, uuid2 }) {
   return (
     <GuestTopItem>
       <TopTitleText>카테고리</TopTitleText>
-      <LinkInput to={`/GoodsSupport/${uuid1}/${uuid2}`} onClick={navbarClose}>
+      <LinkInput to={`/GoodsSupport/${uuid1}/${uuid2}`}>
         <AiOutlineShoppingCart
           style={{ marginRight: "5px", marginLeft: "3px" }}
         />
         상품 리스트
         <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
       </LinkInput>
-      <LinkInput to={`/GallerySupport/${uuid1}/${uuid2}`} onClick={navbarClose}>
+      <LinkInput to={`/GallerySupport/${uuid1}/${uuid2}`}>
         <AiOutlinePicture style={{ marginRight: "5px", marginLeft: "3px" }} />
         갤러리 페이지
         <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
@@ -336,8 +328,13 @@ function UUidIsTrueState({ setNavbar, uuid1, uuid2 }) {
   );
 }
 
-export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
-  const [navbarNotification, setNavbarNotification] = useState([]);
+export default function Navbar({
+  setNavbar,
+  token,
+  uuid1,
+  uuid2,
+  navbarNotification,
+}) {
   const [_, nickName] = useTokenDecode(token);
   const [uuid, setUUID] = useState([]);
 
@@ -350,22 +347,24 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
   }
   console.log(_);
 
-  async function getNavibarNotificationRender(token) {
-    const navbarItemData = await headerNavbarApi(token);
-    setNavbarNotification(navbarItemData.data);
-  }
-
-  const removeAcctokenRender = () => {
-    const tokenStatus = hasAccessToken();
-    if (uuid1 || uuid2) {
-      removeAccessToken();
+  const tokenRemove = () => {
+    authToken.remove();
+  };
+  function guestStateRender() {
+    const uuidState = uuid1 || uuid2;
+    if (uuidState) {
+      tokenRemove();
       navigate(`/Guest/${uuid1}/${uuid2}`);
       setNavbar(false);
       alert("로그아웃");
       return;
     }
+  }
+  const removeAcctokenRender = () => {
+    const tokenStatus = authToken.hasAccessToken();
+    guestStateRender();
     if (tokenStatus) {
-      removeAccessToken();
+      tokenRemove();
       navigate("/");
       setNavbar(false);
       alert("로그아웃");
@@ -378,9 +377,7 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
       return;
     }
   };
-  useEffect(() => {
-    getNavibarNotificationRender(token);
-  }, []);
+
   useEffect(() => {
     getGoodsUrlUuidRender(token);
   }, []);
@@ -396,7 +393,6 @@ export default function Navbar({ setNavbar, token, uuid1, uuid2 }) {
       alert("다시 시도해주세요.");
     }
   };
-
   return (
     <>
       {!uuid1 ? (
