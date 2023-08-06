@@ -54,6 +54,8 @@
  ┣ 📂hooks
  ┣ 📂mocks
  ┣ 📂pages
+ ┣ 📂repository
+ ┣ 📂services 
  ┣ 📂state
  ┣ 📂tokens
  ┣ 📂utils
@@ -124,7 +126,61 @@ yarn run build
 
 2. 현재 나의 코드를 보면 api 통신을 할때 JWT 인증을 위해 token 값을 보내줘야 하는대 Page 폴더에서 tokens폴더에 있는 getAccessToken()이라는 함수를 통해 모든 Page에서 호출하여 props로 전달. 그렇다면 모든 페이지에서 호출하는것이 아니라 httpClient단에서 호출하면 모든 페이지에서 호출할 필요가 없지 않을까라는 결과를 도출
 
-리팩토링 한 코드 올리기
+```
+//navbar 알림
+async function headerNavbarApi(token) {
+  try {
+    const res = await axios(
+      `navbar/alarm/all`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+```
+import axios from "axios";
+import { authToken } from "../repository/AuthTokenRepository";
+class HttpClient {
+  constructor(token) {
+    this.baseURL = import.meta.env.VITE_HTTP_API_URL;
+    this.token = token;
+  }
+  async create(endpoint, options) {
+    const url = this.baseURL + endpoint;
+    try {
+      const response = await axios(url, {
+        ...options,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.token.get() ? "Bearer " + this.token.get() : "",
+        },
+      });
+      return response;
+    } catch (e) {
+      throw new Error();
+    }
+  }
+}
+
+export const httpClient = new HttpClient(authToken);
+
+```
+
+- 리팩토링 하기 전 코드에서는 api를 호출할때마다 매개변수로 token값을 받아와여했지만 httpClient에서 token을 값을 직접 주입하기 때문에 넣어 줄 필요가 없어졌다.
+
 
 3. Recoil을 사용하기 위해 라이브러리를 사용할 수 있었지만 왜 사용하지 않았나?
 
