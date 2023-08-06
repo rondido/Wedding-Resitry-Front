@@ -1,4 +1,4 @@
-export class AuthTokenRepository {
+class AuthTokenRepository {
   #ACCESSTOKEN_KEY = "accessToken";
   #REFRESHTOKEN_KEY = "refreshToken";
   save(accessToken, refreshToken) {
@@ -11,4 +11,9 @@ export class AuthTokenRepository {
   remove() {
     return localStorage.clear();
   }
+  hasAccessToken() {
+    return this.get() !== undefined && this.get() !== null;
+  }
 }
+
+export const authToken = new AuthTokenRepository();
