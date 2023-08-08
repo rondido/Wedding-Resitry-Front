@@ -6,6 +6,8 @@ import FirstAnimation from "@/assets/icons/first.png";
 
 import BorderIdModal from "../../components/borderid/BorderIdModal";
 import useTokenDecode from "../../hooks/useTokenDecode";
+import { authToken } from "../../repository/AuthTokenRepository";
+import { goodsProductService } from "../../services/goods/GoodsProductService";
 
 const Base = styled.div`
   display: flex;
@@ -92,12 +94,30 @@ const MainImage = styled.div`
   background-position: center;
 `;
 
-export default function MainContainer({ token, guestToken }) {
+export default function MainContainer({ guestToken }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
   const [bodersIdState, setBodersIdState] = useState(false);
+  const token = authToken.get();
   const borderId = useTokenDecode(token);
+  const setBorderStateFalse = () => setBorderIdModal(false);
 
-  useEffect(() => {
+  async function addBorderIdrender() {
+    const data = await goodsProductService.addBorderId(token);
+    if (data.data.accessToken && data.data.refreshToken) {
+      authToken.save(data.data.accessToken, data.data.refreshToken);
+      setBodersIdState(true);
+      setBorderStateFalse();
+      return;
+    }
+    if (data.data.accessToken === undefined) {
+      alert("로그인 정보가 없습니다.");
+      setBodersIdState(false);
+      setBorderStateFalse();
+      return;
+    }
+  }
+
+  const borderModalState = (borderId, token, guestToken) => {
     if (guestToken !== null) {
       setBorderIdModal(false);
       return;
@@ -115,6 +135,13 @@ export default function MainContainer({ token, guestToken }) {
       }
     }
     setBorderIdModal(false);
+  };
+  const borderAddButton = () => {
+    addBorderIdrender();
+  };
+
+  useEffect(() => {
+    borderModalState(borderId, token, guestToken);
   }, [borderId, token, guestToken]);
 
   return (
@@ -151,11 +178,7 @@ export default function MainContainer({ token, guestToken }) {
         </Weddingdiv>
       </Base>
       {bordorIdModal ? (
-        <BorderIdModal
-          setBorderIdModal={setBorderIdModal}
-          token={token}
-          setBodersIdState={setBodersIdState}
-        />
+        <BorderIdModal borderAddButton={borderAddButton} />
       ) : (
         <></>
       )}
