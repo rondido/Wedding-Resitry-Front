@@ -1,4 +1,4 @@
-# Wedding Resitry
+![image](https://github.com/Wedding-Registry/Front/assets/55516901/5e08a44b-503c-4780-b022-4dce8c699051)# Wedding Resitry
 
 <br />
 
@@ -188,5 +188,10 @@ export const httpClient = new HttpClient(authToken);
 - 현재 나의 기준에서 props drilling이 심한 편이 아니라고 생각했고 무작정 Recoil을 사용한다면 그것 또한 낭비라고 생각이 들었다.
 - 상태 자체를 전역적으로 관리해야할 경우에는 Recoil사용하여 상태를 관리하였다.
 - 추후 리팩토링 과정에서 props drilling이 심할 경우 Recoil로 바꿀 것이다.
+
+4. Localstorage의 token을 어떻게 관리하는 것이 좋은가?
+![image](https://github.com/Wedding-Registry/Front/assets/55516901/9d8a2981-2d5c-4f6d-8eb1-38623f9e2704)
+
+
 
 리팩토링 진행,ts 추가
