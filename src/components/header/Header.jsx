@@ -5,11 +5,10 @@ import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
 import Navbar from "../navbar/Navbar";
 import { Link, useLocation } from "react-router-dom";
-import { getAccessToken } from "../../tokens/token";
-import { navbarSerive } from "../../services/navbar/NavbarService";
+import { getAccessToken } from "../../repository/AuthTokenRepository";
 
 const HeaderDiv = styled.header`
-  height: 7vh;
+  height: 9vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,32 +76,24 @@ function TokenStatusLink({ token, setNavbar, navbar }) {
 }
 
 export default function Header({ border }) {
-  //여기서 navbar api 호출해서 넘겨주면 독립적으로 테스트를 할 수 있다.
   const [navbar, setNavbar] = useState(false);
-  const [navbarNotification, setNavbarNotification] = useState([]);
   const [urlPathUUid1, setUrlPathUUid1] = useState("");
   const [urlPathUUid2, setUrlPathUUid2] = useState("");
-  const token = getAccessToken();
+
   const path = useLocation();
-  console.log(path.pathname.trim().split("/"));
   const [_, url, uuid1, uuid2] = path.pathname.trim().split("/");
+  const token = getAccessToken();
+
   console.log(_);
   console.log(url);
 
-  async function getNavibarNotificationRender() {
-    const navbarData = await navbarSerive.get();
-    setNavbarNotification(navbarData.data);
-  }
   useEffect(() => {
     setUrlPathUUid1(uuid1);
   }, []);
-  useEffect(() => {
-    getNavibarNotificationRender();
-  }, []);
+
   useEffect(() => {
     setUrlPathUUid2(uuid2);
   }, []);
-
   return (
     <>
       <HeaderDiv isBoolean={border}>
@@ -123,18 +114,17 @@ export default function Header({ border }) {
           </div>
           <TokenStatusLink
             setNavbar={setNavbar}
-            token={token}
             navbar={navbar}
+            token={token}
           />
         </HeaderLogoDiv>
       </HeaderDiv>
       {navbar ? (
         <Navbar
           setNavbar={setNavbar}
-          token={token}
           uuid1={urlPathUUid1}
           uuid2={urlPathUUid2}
-          navbarNotification={navbarNotification}
+          token={token}
         />
       ) : null}
     </>

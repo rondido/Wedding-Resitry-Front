@@ -1,19 +1,18 @@
-class AuthTokenRepository {
-  #ACCESSTOKEN_KEY = "accessToken";
-  #REFRESHTOKEN_KEY = "refreshToken";
-  save(accessToken, refreshToken) {
-    localStorage.setItem(this.#ACCESSTOKEN_KEY, refreshToken);
-    localStorage.setItem(this.#REFRESHTOKEN_KEY, accessToken);
-  }
-  get() {
-    return localStorage.getItem(this.#ACCESSTOKEN_KEY);
-  }
-  remove() {
-    return localStorage.clear();
-  }
-  hasAccessToken() {
-    return this.get() !== undefined && this.get() !== null;
-  }
+const token = "accessToken";
+
+export function setAccessToken(refreshToken, accessToken) {
+  localStorage.setItem("refreshToken", refreshToken);
+  localStorage.setItem("accessToken", accessToken);
 }
 
-export const authToken = new AuthTokenRepository();
+export function getAccessToken() {
+  return localStorage.getItem(token);
+}
+
+export function removeAccessToken() {
+  return localStorage.clear();
+}
+
+export function hasAccessToken() {
+  return getAccessToken() !== undefined && getAccessToken() !== null;
+}

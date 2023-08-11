@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import {
   AiOutlineShoppingCart,
@@ -14,10 +13,11 @@ import {
 } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
-import { getGoodsUrlUUID } from "../../apis/Api";
 
+import { getGoodsUrlUUID } from "../../apis/Api";
 import useTokenDecode from "../../hooks/useTokenDecode";
-import { authToken } from "../../repository/AuthTokenRepository";
+import { removeAccessToken } from "../../repository/AuthTokenRepository";
+import { getAlarm } from "../../services/navbar/NavbarService";
 
 const Base = styled.div`
   display: flex;
@@ -236,16 +236,16 @@ function NotificationItem({ data }) {
 //로그인상태에따른 navbar click 행위 핸들링
 
 function TokenStateLink({ token, setNavbar }) {
+  const tokenState = token === null || token === undefined;
   const navbarClose = () => {
-    if (token === null || token === undefined || token === false) {
+    if (tokenState) {
       alert("로그인 정보가 올바르지 못합니다.");
       setNavbar(false);
       return;
     }
-    setNavbar(false);
   };
 
-  if (token === null || token === undefined || token === false) {
+  if (tokenState) {
     return (
       <TopItem>
         <TopTitleText>카테고리</TopTitleText>
@@ -328,18 +328,17 @@ function UUidIsTrueState({ uuid1, uuid2 }) {
   );
 }
 
-export default function Navbar({
-  setNavbar,
-  token,
-  uuid1,
-  uuid2,
-  navbarNotification,
-}) {
+export default function Navbar({ setNavbar, uuid1, uuid2, token }) {
   const [_, nickName] = useTokenDecode(token);
   const [uuid, setUUID] = useState([]);
+  const [navbarNotification, setNavbarNotification] = useState([]);
 
-  const useLinkToken = token;
   const navigate = useNavigate();
+
+  async function getNavibarNotificationRender() {
+    const navbarData = await getAlarm();
+    setNavbarNotification(navbarData.data);
+  }
 
   async function getGoodsUrlUuidRender(token) {
     const UUID = await getGoodsUrlUUID(token);
@@ -347,13 +346,10 @@ export default function Navbar({
   }
   console.log(_);
 
-  const tokenRemove = () => {
-    authToken.remove();
-  };
   function guestStateRender() {
     const uuidState = uuid1 || uuid2;
     if (uuidState) {
-      tokenRemove();
+      removeAccessToken();
       navigate(`/Guest/${uuid1}/${uuid2}`);
       setNavbar(false);
       alert("로그아웃");
@@ -361,16 +357,15 @@ export default function Navbar({
     }
   }
   const removeAcctokenRender = () => {
-    const tokenStatus = authToken.hasAccessToken();
     guestStateRender();
-    if (tokenStatus) {
-      tokenRemove();
+    if (token) {
+      removeAccessToken();
       navigate("/");
       setNavbar(false);
       alert("로그아웃");
       return;
     }
-    if (!tokenStatus) {
+    if (!token) {
       navigate("/");
       setNavbar(false);
       alert("로그인정보가 존재하지 않습니다.");
@@ -381,6 +376,10 @@ export default function Navbar({
   useEffect(() => {
     getGoodsUrlUuidRender(token);
   }, []);
+  useEffect(() => {
+    if (token) getNavibarNotificationRender();
+  }, []);
+
   const urlLinkClick = () => {
     try {
       navigator.clipboard.writeText(
@@ -410,7 +409,7 @@ export default function Navbar({
               )}
             </NickNameText>
           </NickNamediv>
-          <TokenStateLink token={useLinkToken} />
+          <TokenStateLink token={token} setNavbar={setNavbar} />
           <CenterItemDiv>
             <div>
               <CenterItemTitle>알림 목록</CenterItemTitle>
