@@ -1,4 +1,4 @@
-![image](https://github.com/Wedding-Registry/Front/assets/55516901/5e08a44b-503c-4780-b022-4dce8c699051)# Wedding Resitry
+# Wedding Resitry
 
 <br />
 
@@ -190,7 +190,7 @@ export const httpClient = new HttpClient(authToken);
 - 추후 리팩토링 과정에서 props drilling이 심할 경우 Recoil로 바꿀 것이다.
 
 4. Localstorage의 token을 어떻게 관리하는 것이 좋은가?
-![image](https://github.com/Wedding-Registry/Front/assets/55516901/9d8a2981-2d5c-4f6d-8eb1-38623f9e2704)
+![image](https://github.com/Wedding-Registry/Front/assets/55516901/013fa310-c7e2-44e1-81b0-97202f15d66c)
 
 
 
