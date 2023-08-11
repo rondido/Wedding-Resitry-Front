@@ -4,7 +4,7 @@ import axios from "axios";
 async function addBorderIdApi(token) {
   try {
     const res = await axios(
-      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/usersgoods/add/board`,
+      `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/`,
       {
         method: "GET",
         headers: {

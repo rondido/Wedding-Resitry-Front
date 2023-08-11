@@ -6,13 +6,17 @@ import FirstAnimation from "@/assets/icons/first.png";
 
 import BorderIdModal from "../../components/borderid/BorderIdModal";
 import useTokenDecode from "../../hooks/useTokenDecode";
-import { authToken } from "../../repository/AuthTokenRepository";
-import { goodsProductService } from "../../services/goods/GoodsProductService";
+
+import { addBorderId } from "../../services/goods/GoodsProductService";
+import {
+  getAccessToken,
+  setAccessToken,
+} from "../../repository/AuthTokenRepository";
 
 const Base = styled.div`
   display: flex;
   justify-content: center;
-  height: 92.8vh;
+  height: 91vh;
   align-items: center;
   margin-left: 10%;
   position: relative;
@@ -97,14 +101,14 @@ const MainImage = styled.div`
 export default function MainContainer({ guestToken }) {
   const [bordorIdModal, setBorderIdModal] = useState(false);
   const [bodersIdState, setBodersIdState] = useState(false);
-  const token = authToken.get();
+  const token = getAccessToken();
   const borderId = useTokenDecode(token);
   const setBorderStateFalse = () => setBorderIdModal(false);
 
   async function addBorderIdrender() {
-    const data = await goodsProductService.addBorderId(token);
+    const data = await addBorderId();
     if (data.data.accessToken && data.data.refreshToken) {
-      authToken.save(data.data.accessToken, data.data.refreshToken);
+      setAccessToken(data.data.accessToken, data.data.refreshToken);
       setBodersIdState(true);
       setBorderStateFalse();
       return;
@@ -139,7 +143,6 @@ export default function MainContainer({ guestToken }) {
   const borderAddButton = () => {
     addBorderIdrender();
   };
-
   useEffect(() => {
     borderModalState(borderId, token, guestToken);
   }, [borderId, token, guestToken]);
