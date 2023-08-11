@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
 import logo from "@/assets/icons/logo.png";
 import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
