@@ -243,6 +243,7 @@ function TokenStateLink({ token, setNavbar }) {
       setNavbar(false);
       return;
     }
+    setNavbar(false);
   };
 
   if (tokenState) {

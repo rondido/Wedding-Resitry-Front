@@ -38,6 +38,9 @@ async function addWifeName(name) {
 
 //신부 계좌 등록
 async function addWifeAccount(account, bank) {
+  console.log("신부 계좌");
+  console.log(account);
+  console.log(bank);
   try {
     const response = await HttpClient.post(`marriage/wife/account`, {
       account: account,
@@ -50,7 +53,7 @@ async function addWifeAccount(account, bank) {
   }
 }
 //신랑 계좌 등록
-async function addHusbandAccount(token, account, bank) {
+async function addHusbandAccount(account, bank) {
   try {
     const response = await HttpClient.post(`marriage/husband/account`, {
       account: account,
@@ -64,7 +67,7 @@ async function addHusbandAccount(token, account, bank) {
 }
 
 // 예식시간
-async function addWeddingHallTime(token, date, time) {
+async function addWeddingHallTime(date, time) {
   try {
     const response = await HttpClient.post(`weddingHall/time`, {
       date: date,
