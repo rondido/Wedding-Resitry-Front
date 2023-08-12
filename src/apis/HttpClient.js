@@ -1,6 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "../repository/AuthTokenRepository";
-const tokenHandler = () => getAccessToken();
+const tokenHandler = () => localStorage.getItem("accessToken");
 const baseURL = import.meta.env.VITE_HTTP_API_URL;
 // axios 생성
 const HttpClient = axios.create({
