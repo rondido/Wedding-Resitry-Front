@@ -151,35 +151,47 @@ async function headerNavbarApi(token) {
 
 ```
 import axios from "axios";
-import { authToken } from "../repository/AuthTokenRepository";
-class HttpClient {
-  constructor(token) {
-    this.baseURL = import.meta.env.VITE_HTTP_API_URL;
-    this.token = token;
-  }
-  async create(endpoint, options) {
-    const url = this.baseURL + endpoint;
-    try {
-      const response = await axios(url, {
-        ...options,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: this.token.get() ? "Bearer " + this.token.get() : "",
-        },
-      });
-      return response;
-    } catch (e) {
-      throw new Error();
-    }
-  }
-}
+const tokenHandler = () => localStorage.getItem("accessToken");
+const baseURL = import.meta.env.VITE_HTTP_API_URL;
+// axios 생성
+const HttpClient = axios.create({
+  baseURL: baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export const httpClient = new HttpClient(authToken);
+HttpClient.interceptors.request.use(
+  async (config) => {
+    config.headers["Content-Type"] = "application/json";
+    const token = tokenHandler();
+    if (token !== null || token !== undefined) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  async (error) => {
+    console.error("에러발생", error);
+    return Promise.reject(error);
+  }
+);
+
+HttpClient.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+export default HttpClient;
+
 
 ```
 
 - 리팩토링 하기 전 코드에서는 api를 호출할때마다 매개변수로 token값을 받아와여했지만 httpClient에서 token을 값을 직접 주입하기 때문에 넣어 줄 필요가 없어졌다.
+- axios Interceptors를 활용하여 http 통신 단계에서 중간에 가로채서 token값 직접 주입하기
 
 
 3. Recoil을 사용하기 위해 라이브러리를 사용할 수 있었지만 왜 사용하지 않았나?
