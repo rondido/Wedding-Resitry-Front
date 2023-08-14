@@ -11,7 +11,11 @@ const HttpClient = axios.create({
 
 HttpClient.interceptors.request.use(
   async (config) => {
-    config.headers["Content-Type"] = "application/json";
+    if (config.url === "gallery/img") {
+      config.headers["Content-Type"] = "multipart/form-data";
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
     const token = tokenHandler();
     if (token !== null || token !== undefined) {
       config.headers.Authorization = `Bearer ${token}`;

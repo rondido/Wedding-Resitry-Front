@@ -294,6 +294,7 @@ async function getGalleryWeddingImage(token) {
 
 //사진 등록
 async function postGalleryWeddingImageAdd(formData, token) {
+  console.log(formData);
   try {
     const res = await axios.post(
       `http://ec2-54-180-191-154.ap-northeast-2.compute.amazonaws.com:8081/gallery/img`,
