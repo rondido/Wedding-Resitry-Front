@@ -289,104 +289,100 @@ export default function GoodsProductContainer() {
           </GoodsSharelink>
           <div>{sharebox ? <ShareBox setSharebox={setSharebox} /> : null}</div>
         </GoodsShareLinkdiv>
-        {marriedWeddingData.data && (
-          <>
-            <div>
-              <GoodsText
-                placeholder="신부이름"
-                style={{
-                  marginBottom: "20px",
-                }}
-                onChange={(e) => {
-                  wifeTextChange(e);
-                  setIsEditing({ wife: true });
-                }}
-                defaultValue={wifeNameText}
+
+        <>
+          <div>
+            <GoodsText
+              placeholder="신부이름"
+              style={{
+                marginBottom: "20px",
+              }}
+              onChange={(e) => {
+                wifeTextChange(e);
+                setIsEditing({ wife: true });
+              }}
+              defaultValue={wifeNameText}
+            />
+            <br />
+            <GoodsText
+              placeholder="신랑 이름"
+              onChange={(e) => husbandTextChange(e)}
+              defaultValue={husbandNameText}
+            />
+          </div>
+          <GoodsWeddingdiv>
+            <GoodsWeddingadress
+              placeholder="예식장 주소(Enter키를 눌러 저장해주세요)"
+              style={{
+                marginBottom: "20px",
+              }}
+              onChange={(e) => addressChange(e)}
+              defaultValue={addressText || ""}
+              onKeyDown={(e) => activeEnter(e)}
+            />
+            <input
+              type="datetime-local"
+              style={{
+                width: "270px",
+                borderRadius: "10px",
+                backgroundColor: "#EBEBEB",
+                height: "33px",
+                border: "1px solid #EBEBEB",
+                textAlign: "center",
+              }}
+              onChange={(e) => dateTimeChange(e)}
+              value={dateText + "T" + timeText}
+            />
+          </GoodsWeddingdiv>
+          <CenterTextdiv>
+            <div
+              style={{
+                marginTop: "10px",
+              }}
+            >
+              <GoodsWeddingText
+                placeholder="신부 이름"
+                defaultValue={wifeNameText || ""}
               />
-              <br />
-              <GoodsText
-                placeholder="신랑 이름"
-                onChange={(e) => husbandTextChange(e)}
-                defaultValue={husbandNameText}
+              <GoodsWeddingbank
+                placeholder="은행"
+                onChange={(e) => wifBankTextChange(e)}
+                name="wifeBank"
+                defaultValue={wifeBankText}
+              />
+              <GoodsWeddingaccountnumber
+                placeholder="계좌번호"
+                onChange={(e) => wifeAccountTextChange(e)}
+                name="wifeAccount"
+                defaultValue={wifeAccountText}
               />
             </div>
-            <GoodsWeddingdiv>
-              <GoodsWeddingadress
-                placeholder="예식장 주소(Enter키를 눌러 저장해주세요)"
-                style={{
-                  marginBottom: "20px",
-                }}
-                onChange={(e) => addressChange(e)}
-                defaultValue={addressText || ""}
-                onKeyDown={(e) => activeEnter(e)}
+            <br />
+            <div>
+              <GoodsWeddingText
+                placeholder="신랑 이름"
+                defaultValue={husbandNameText}
               />
-              <input
-                type="datetime-local"
-                style={{
-                  width: "270px",
-                  borderRadius: "10px",
-                  backgroundColor: "#EBEBEB",
-                  height: "33px",
-                  border: "1px solid #EBEBEB",
-                  textAlign: "center",
-                }}
-                onChange={(e) => dateTimeChange(e)}
-                value={dateText + "T" + timeText}
+              <GoodsWeddingbank
+                placeholder="은행"
+                name="husbandBank"
+                onChange={(e) => hasbandBankTextChange(e)}
+                defaultValue={husbandBankText}
               />
-            </GoodsWeddingdiv>
-            <CenterTextdiv>
-              <div
-                style={{
-                  marginTop: "10px",
-                }}
-              >
-                <GoodsWeddingText
-                  placeholder="신부 이름"
-                  defaultValue={wifeNameText || ""}
-                />
-                <GoodsWeddingbank
-                  placeholder="은행"
-                  onChange={(e) => wifBankTextChange(e)}
-                  name="wifeBank"
-                  defaultValue={wifeBankText}
-                />
-                <GoodsWeddingaccountnumber
-                  placeholder="계좌번호"
-                  onChange={(e) => wifeAccountTextChange(e)}
-                  name="wifeAccount"
-                  defaultValue={wifeAccountText}
-                />
-              </div>
-              <br />
-              <div>
-                <GoodsWeddingText
-                  placeholder="신랑 이름"
-                  defaultValue={husbandNameText}
-                />
-                <GoodsWeddingbank
-                  placeholder="은행"
-                  name="husbandBank"
-                  onChange={(e) => hasbandBankTextChange(e)}
-                  defaultValue={husbandBankText}
-                />
-                <GoodsWeddingaccountnumber
-                  placeholder="계좌번호"
-                  onChange={(e) => husbandAccountTextChange(e)}
-                  name="husbandAccount"
-                  defaultValue={husbandAccountText}
-                />
-                <AddMarriedButtonDiv>
-                  <AddMarriedButton
-                    onClick={() => addMarriedInformationClick()}
-                  >
-                    저장하기
-                  </AddMarriedButton>
-                </AddMarriedButtonDiv>
-              </div>
-            </CenterTextdiv>
-          </>
-        )}
-
+              <GoodsWeddingaccountnumber
+                placeholder="계좌번호"
+                onChange={(e) => husbandAccountTextChange(e)}
+                name="husbandAccount"
+                defaultValue={husbandAccountText}
+              />
+              <AddMarriedButtonDiv>
+                <AddMarriedButton onClick={() => addMarriedInformationClick()}>
+                  저장하기
+                </AddMarriedButton>
+              </AddMarriedButtonDiv>
+            </div>
+          </CenterTextdiv>
+        </>
         <BoxContainer>
           <RiArrowDropLeftLine onClick={prevSlide} size="40" />
           <BoxSlider>
