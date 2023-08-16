@@ -4,9 +4,9 @@ import styled from "styled-components";
 import logo from "@/assets/icons/logo.png";
 import Person from "@/assets/icons/person.png";
 import Menu from "@/assets/icons/menu.png";
-import Navbar from "../navbar/Navbar";
+import Navbar from "../navbar/Navbar.jsx";
 import { Link, useLocation } from "react-router-dom";
-import { getAccessToken } from "../../repository/AuthTokenRepository";
+import { getAccessToken } from "../../repository/AuthTokenRepository.js";
 
 const HeaderDiv = styled.header`
   height: 9vh;

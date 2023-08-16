@@ -1,4 +1,4 @@
-import HttpClient from "../../apis/HttpClient";
+import HttpClient from "../../apis/HttpClient.js";
 
 //사진 조회
 async function getGalleryWeddingImage() {

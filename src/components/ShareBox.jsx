@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import kakaotalk from "@/assets/icons/kakaotalk.png";
 import sharelink from "@/assets/icons/sharelink.png";
-import { getGoodsUrlUUID } from "../apis/Api";
+import { getGoodsUrlUUID } from "../apis/Api.js";
 
 const Shareboxdiv = styled.div`
   background-color: #ebebeb;

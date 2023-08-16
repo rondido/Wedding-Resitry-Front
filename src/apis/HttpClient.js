@@ -4,9 +4,6 @@ const baseURL = import.meta.env.VITE_HTTP_API_URL;
 // axios 생성
 const HttpClient = axios.create({
   baseURL: baseURL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 HttpClient.interceptors.request.use(

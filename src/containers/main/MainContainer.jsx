@@ -4,14 +4,14 @@ import styled from "styled-components";
 import CircleRadius from "@/assets/icons/radius.png";
 import FirstAnimation from "@/assets/icons/first.png";
 
-import BorderIdModal from "../../components/borderid/BorderIdModal";
-import useTokenDecode from "../../hooks/useTokenDecode";
+import BorderIdModal from "../../components/borderid/BorderIdModal.jsx";
+import useTokenDecode from "../../hooks/useTokenDecode.jsx";
 
-import { addBorderId } from "../../services/goods/GoodsProductService";
+import { addBorderId } from "../../services/goods/GoodsProductService.js";
 import {
   getAccessToken,
   setAccessToken,
-} from "../../repository/AuthTokenRepository";
+} from "../../repository/AuthTokenRepository.js";
 
 const Base = styled.div`
   display: flex;
@@ -153,9 +153,9 @@ export default function MainContainer({ guestToken }) {
         <ZolabayoDiv>
           <ZolabayoText>ZOLABAYO</ZolabayoText>
           <ZolabayoMemoText>
-            ZOLABAYO의 Wedding Registry 서비스로
+            ZOLABAYO의 Wedding Registry
             <br />
-            새로운 인생을 시작하는 신혼부부에게
+            새로운 인생을 시작하는
             <br />
             축복을 선물 해보세요.
           </ZolabayoMemoText>

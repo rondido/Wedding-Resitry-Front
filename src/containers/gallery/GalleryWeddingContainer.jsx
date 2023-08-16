@@ -3,13 +3,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation } from "swiper";
 import styled from "styled-components";
 
-import { galleryWeddingImageState } from "../../state/galleryWeddingImageState";
+import { galleryWeddingImageState } from "../../state/galleryWeddingImageState.js";
 import { useRecoilState } from "recoil";
-import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox";
+import GalleryWeddingBox from "../../components/GalleryWeddingBox/GalleryWeddingBox.jsx";
 import {
   getGalleryWeddingImage,
   deleteGalleryWeddingImage,
-} from "../../services/weddingGallery/WeddingImgService";
+} from "../../services/weddingGallery/WeddingImgService.js";
 
 // Import Swiper styles
 

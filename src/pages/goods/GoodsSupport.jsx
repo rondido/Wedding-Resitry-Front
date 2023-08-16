@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import GoodsSupportContainer from "../../containers/goods/GoodsSupportContainer";
+import GoodsSupportContainer from "../../containers/goods/GoodsSupportContainer.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
-import { getAccessToken } from "../../tokens/token";
+import { prevUrlPathState } from "../../state/prevUrlPathState.js";
+import { getAccessToken } from "../../tokens/token.js";
 
 const token = getAccessToken();
 const guestToken = localStorage.getItem("Guest-Info");

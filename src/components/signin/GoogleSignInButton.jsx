@@ -6,7 +6,7 @@ import googlelogo from "../../assets/icons/google.svg";
 import { useNavigate } from "react-router-dom";
 import { authTokenAtom } from "@/state/authState.js";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
+import { prevUrlPathState } from "../../state/prevUrlPathState.js";
 
 const StyledButton = styled.button`
   border: none;

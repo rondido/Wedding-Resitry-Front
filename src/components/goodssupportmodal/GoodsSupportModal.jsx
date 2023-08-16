@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
-import { postGoodsDonation } from "../../apis/Api";
+import { postGoodsDonation } from "../../apis/Api.js";
 
 const Base = styled.div`
   background: rgba(228, 230, 232, 0.7);

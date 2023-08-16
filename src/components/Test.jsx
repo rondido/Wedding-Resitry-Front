@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GoodsModal from "./goodsmodal/GoodsModal";
+import GoodsModal from "./goodsmodal/GoodsModal.jsx";
 
 export default function Test() {
   const data = [{ id: 1 }, { id: 2 }, { id: 3 }];
@@ -30,4 +30,3 @@ export default function Test() {
     </>
   );
 }
-  

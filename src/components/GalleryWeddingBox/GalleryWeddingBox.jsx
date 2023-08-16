@@ -2,8 +2,8 @@ import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
 import Plus from "@/assets/icons/plus.png";
-import { addGalleryWeddingImage } from "../../services/weddingGallery/WeddingImgService";
-import { galleryWeddingImageState } from "../../state/galleryWeddingImageState";
+import { addGalleryWeddingImage } from "../../services/weddingGallery/WeddingImgService.js";
+import { galleryWeddingImageState } from "../../state/galleryWeddingImageState.js";
 import { useSetRecoilState } from "recoil";
 
 export default function GalleryWeddingBox({ url }) {

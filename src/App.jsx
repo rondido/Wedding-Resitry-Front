@@ -5,13 +5,13 @@ import { Reset } from "styled-reset";
 
 // 페이지 불러오기
 //import Layout from "./pages/Layout";
-import Home from "./pages/Home";
+import Home from "./pages/Home.jsx";
 // 절대경로 설정 예시 // @사용
-import NotFound from "@/pages/NotFound";
+import NotFound from "@/pages/NotFound.jsx";
 // import NotFound from './pages/NotFound'
 
 //메인 페이지
-import Main from "./pages/main/MainPage";
+import Main from "./pages/main/MainPage.jsx";
 
 // 관리자 페이지
 import AdminMain from "@/pages/admin/AdminMain.jsx";
@@ -21,13 +21,13 @@ import AdminDonationLists from "./pages/admin/AdminDonationLists.jsx";
 import AdminMemo from "./pages/admin/AdminMemo.jsx";
 
 // 상품 갤러리
-import GalleryWedding from "./pages/gallery/GalleryWedding";
-import GallerySupport from "./pages/gallery/GallerySupport";
-import GoodsSupport from "./pages/goods/GoodsSupport";
-import GoodsProduct from "./pages/goods/GoodsProduct";
+import GalleryWedding from "./pages/gallery/GalleryWedding.jsx";
+import GallerySupport from "./pages/gallery/GallerySupport.jsx";
+import GoodsSupport from "./pages/goods/GoodsSupport.jsx";
+import GoodsProduct from "./pages/goods/GoodsProduct.jsx";
 
 //상품 박스 Test
-import Header from "./components/header/Header";
+import Header from "./components/header/Header.jsx";
 import SignUp from "@/pages/signup/SignUp.jsx";
 import SignIn from "@/pages/signin/SignIn.jsx";
 import Callback from "@/containers/signin/CallBack.jsx";

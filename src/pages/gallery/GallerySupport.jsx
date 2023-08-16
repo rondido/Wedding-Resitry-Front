@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import GallerySupportContainer from "../../containers/gallery/GallerySupportContainer";
-import { getAccessToken } from "../../tokens/token";
+import GallerySupportContainer from "../../containers/gallery/GallerySupportContainer.jsx";
+import { getAccessToken } from "../../tokens/token.js";
 import { useSetRecoilState } from "recoil";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
+import { prevUrlPathState } from "../../state/prevUrlPathState.js";
 
 const token = getAccessToken();
 export default function GallerySupport() {

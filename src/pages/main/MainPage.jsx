@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MainContainer from "../../containers/main/MainContainer";
+import MainContainer from "../../containers/main/MainContainer.jsx";
 
 export default function MainPage() {
   const [getTokenData, setGuestTokenData] = useState();

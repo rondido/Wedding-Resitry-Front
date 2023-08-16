@@ -1,4 +1,4 @@
-import HttpClient from "../../apis/HttpClient";
+import HttpClient from "../../apis/HttpClient.js";
 
 //이름 계좌 시간 전체 조회
 async function getWeddingHall() {

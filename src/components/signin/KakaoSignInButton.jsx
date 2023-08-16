@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authTokenAtom } from "@/state/authState.js";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
+import { prevUrlPathState } from "../../state/prevUrlPathState.js";
 
 const StyledDiv = styled.div`
   border: none;

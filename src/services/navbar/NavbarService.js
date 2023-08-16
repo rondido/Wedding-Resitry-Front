@@ -1,4 +1,4 @@
-import HttpClient from "../../apis/HttpClient";
+import HttpClient from "../../apis/HttpClient.js";
 
 export async function getAlarm() {
   try {

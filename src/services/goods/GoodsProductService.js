@@ -1,4 +1,4 @@
-import HttpClient from "../../apis/HttpClient";
+import HttpClient from "../../apis/HttpClient.js";
 
 //상품 등록 게시판 생성
 async function addBorderId() {

@@ -5,7 +5,7 @@ import {
   postGoodsProductApi,
   updateGoodsname,
   updateGoodsPrice,
-} from "../../services/goods/GoodsProductService";
+} from "../../services/goods/GoodsProductService.js";
 
 import logo from "@/assets/icons/logo.png";
 

@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authStateAtom } from "@/state/authState.js";
 import axios from "axios";
-import { prevUrlPathState } from "../../state/prevUrlPathState";
+import { prevUrlPathState } from "../../state/prevUrlPathState.js";
 
 const signUpValidationSchema = Yup.object().shape({
   username: Yup.string()

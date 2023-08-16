@@ -14,10 +14,10 @@ import {
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
 
-import { getGoodsUrlUUID } from "../../apis/Api";
-import useTokenDecode from "../../hooks/useTokenDecode";
-import { removeAccessToken } from "../../repository/AuthTokenRepository";
-import { getAlarm } from "../../services/navbar/NavbarService";
+import { getGoodsUrlUUID } from "../../apis/Api.js";
+import useTokenDecode from "../../hooks/useTokenDecode.jsx";
+import { removeAccessToken } from "../../repository/AuthTokenRepository.js";
+import { getAlarm } from "../../services/navbar/NavbarService.js";
 
 const Base = styled.div`
   display: flex;
@@ -287,7 +287,7 @@ function TokenStateLink({ token, setNavbar }) {
           상품 리스트
           <MdKeyboardArrowRight style={{ marginLeft: "auto" }} />
         </LinkInput>
-        <LinkInput to="/admin/main" onClick={navbarClose}>
+        <LinkInput to="/admin" onClick={navbarClose}>
           <AiOutlineFileSync
             style={{ marginRight: "5px", marginLeft: "3px" }}
           />

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 //공유 이미지 가져오기
 import styled from "styled-components";
-import Box from "@/components/box/Box";
+import Box from "@/components/box/Box.jsx";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 import {
   getGoodsSupportItemsList,
   getInforMationList,
   getWeddingAttendList,
   postWeddingAttendList,
-} from "../../apis/Api";
-import GoodsSupportModal from "../../components/goodssupportmodal/GoodsSupportModal";
+} from "../../apis/Api.js";
+import GoodsSupportModal from "../../components/goodssupportmodal/GoodsSupportModal.jsx";
 
 const GoodsContainer = styled.div`
   display: flex;

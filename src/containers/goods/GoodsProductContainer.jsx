@@ -3,13 +3,13 @@ import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 
 //공유 이미지 가져오기
 import Share from "@/assets/icons/share.png";
-import ShareBox from "@/components/ShareBox";
+import ShareBox from "@/components/ShareBox.jsx";
 import styled from "styled-components";
-import Box from "@/components/box/Box";
+import Box from "@/components/box/Box.jsx";
 import {
   getGoodsProductList,
   deleteGoods,
-} from "../../services/goods/GoodsProductService";
+} from "../../services/goods/GoodsProductService.js";
 import {
   getWeddingHall,
   updateWeddingHallLocation,
@@ -18,8 +18,8 @@ import {
   addWifeAccount,
   addHusbandAccount,
   addWeddingHallTime,
-} from "../../services/goods/GoodsMarriedService";
-import GoodsModal from "../../components/goodsmodal/GoodsModal";
+} from "../../services/goods/GoodsMarriedService.js";
+import GoodsModal from "../../components/goodsmodal/GoodsModal.jsx";
 
 export default function GoodsProductContainer() {
   const [sharebox, setSharebox] = useState(false);
