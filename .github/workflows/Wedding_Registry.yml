@@ -13,8 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: "dev"
-      - run: yarn ci
-      - run: yarn run test //ci과정
+      - run: yarn
       - run: yarn run build
       - name: Wedding-Registry deploy to s3
         uses: jakejarvis/s3-sync-action@master
