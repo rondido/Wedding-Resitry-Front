@@ -153,7 +153,7 @@ export default function MainContainer({ guestToken }) {
         <ZolabayoDiv>
           <ZolabayoText>ZOLABAYO</ZolabayoText>
           <ZolabayoMemoText>
-            ZOLABAYO의 Wedding Registry
+            ZOLABAYO의 Wedding Registry 서비스로
             <br />
             새로운 인생을 시작하는
             <br />
